@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="FINN: what changed in your portfolio, why it matters, and the primary-source evidence behind it.">
+<meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121417" media="(prefers-color-scheme: dark)">
+<title>FINN · Signal Inbox</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="manifest" href="app.webmanifest">
+<link rel="stylesheet" href="styles.css">
+<script src="config.js"></script>
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="brand">
+    <span class="mark" aria-hidden="true">F</span>
+    <div>
+      <div class="word">FINN</div>
+      <div class="tag">Filings, filtered for an investor</div>
+    </div>
+  </div>
+  <a class="icon-btn" href="#/settings" aria-label="Alert settings" data-testid="settings-link">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="10" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+  </a>
+</header>
+<div id="fresh" class="fresh" aria-live="polite"></div>
+<main id="main" tabindex="-1">
+  <section class="boot" data-testid="boot">
+    <p class="boot-title">Loading FINN…</p>
+    <noscript><p>FINN needs JavaScript to load the signal data.</p></noscript>
+  </section>
+</main>
+<nav class="tabs" aria-label="Primary">
+  <a href="#/signals" data-tab="signals">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M4 13l2.5-7h11L20 13v5H4zM4 13h5l1 2h4l1-2h5"/></svg>
+    <span>Signals</span>
+  </a>
+  <a href="#/research" data-tab="research">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M15 15l5 5"/></svg>
+    <span>Research</span>
+  </a>
+</nav>
+</body>
+</html>

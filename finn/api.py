@@ -4,12 +4,20 @@ GET /health                                   snapshot identity and whether it v
 GET /api/v1/companies                         every company in the snapshot with its validation level
 GET /api/v1/companies/{SYMBOL}/results        results card; every number carries its source
 GET /api/v1/companies/{SYMBOL}/transcripts    earnings-call transcript inventory (metadata only)
-GET /api/v1/diagnostics/connectivity          live NSE / Yahoo reachability from THIS host (rate limited)
+GET /api/v1/companies/{SYMBOL}/filings        stored NSE announcements and the last completed EOD session
+GET /api/v1/signals?window=24h&move_pct=5&volume_x=2&lookback=20&watch=..&mute=..&symbols=..
+                                              ranked Signal Inbox over the snapshot (finn/signals.py)
+GET /api/v1/diagnostics/connectivity          live NSE / Yahoo reachability from THIS host; needs the
+                                              X-Finn-Diagnostics-Token header (FINN_DIAG_TOKEN), never CORS-enabled
+GET /                                         the mobile web app (web/), served from the same origin
 
 Requests never call an LLM and never fetch live data, except the diagnostics endpoint, which is explicit about it.
+Cross-origin reads are allowed only for origins listed in FINN_CORS_ORIGINS (comma-separated, exact match);
+FINN_CORS_DEV=1 additionally allows http://localhost:<port> and http://127.0.0.1:<port> for local development.
 """
 from __future__ import annotations
 
+import hmac
 import json
 import os
 import re
@@ -18,25 +26,62 @@ import time
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Callable
+from urllib.parse import parse_qsl
 
-from finn import http, service, snapshot
+from finn import http, service, signals, snapshot
 from finn.adapters import nse_filings, nse_results, prices
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 SYMBOL = re.compile(r"^[A-Z0-9&\-]{1,20}$")
 DIAG_TTL_S = 600
+WEB_DIR = Path(__file__).resolve().parent.parent / "web"
+STATIC = re.compile(r"^/([a-z0-9][a-z0-9_-]*\.(?:js|css|svg|webmanifest))$")
+CONTENT_TYPES = {"js": "text/javascript; charset=utf-8", "css": "text/css; charset=utf-8", "svg": "image/svg+xml",
+                 "webmanifest": "application/manifest+json", "html": "text/html; charset=utf-8"}
+DEV_ORIGIN = re.compile(r"^http://(localhost|127\.0\.0\.1):\d{1,5}$")
 
 
 def snapshot_path() -> Path:
     return Path(os.environ.get("FINN_SNAPSHOT", snapshot.DEFAULT_OUT))
 
 
-def _json(start_response, status: str, body: dict, extra: list[tuple[str, str]] = ()) -> list[bytes]:
+def allowed_origin(origin: str | None) -> str | None:
+    """Exact-match allowlist; never '*'. Returns the origin to echo, or None for no CORS headers."""
+    if not origin:
+        return None
+    allow = {o.strip().rstrip("/") for o in os.environ.get("FINN_CORS_ORIGINS", "").split(",") if o.strip()}
+    if origin in allow or (os.environ.get("FINN_CORS_DEV") == "1" and DEV_ORIGIN.match(origin)):
+        return origin
+    return None
+
+
+def _cors(origin: str | None) -> list[tuple[str, str]]:
+    return [("Access-Control-Allow-Origin", origin), ("Vary", "Origin")] if origin else [("Vary", "Origin")]
+
+
+def _json(start_response, status: str, body: dict, extra: list[tuple[str, str]] = (), origin: str | None = None,
+          cache: str = "public, max-age=300") -> list[bytes]:
     data = json.dumps(body, default=str, indent=1).encode()
     start_response(status, [("Content-Type", "application/json; charset=utf-8"), ("Content-Length", str(len(data))),
-                            ("Cache-Control", "public, max-age=300"), ("X-Content-Type-Options", "nosniff"),
-                            ("Access-Control-Allow-Origin", "*"), *extra])
+                            ("Cache-Control", cache), ("X-Content-Type-Options", "nosniff"),
+                            *_cors(origin), *extra])
     return [data]
+
+
+def _static(start_response, name: str, method: str) -> list[bytes]:
+    path = WEB_DIR / name
+    if not path.is_file() or path.resolve().parent != WEB_DIR.resolve():
+        return _json(start_response, "404 Not Found", {"error": "no such file"})
+    data = path.read_bytes()
+    headers = [("Content-Type", CONTENT_TYPES[name.rsplit(".", 1)[1]]), ("Content-Length", str(len(data))),
+               ("Cache-Control", "no-cache"), ("X-Content-Type-Options", "nosniff")]
+    if name.endswith(".html"):
+        headers += [("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self'; "
+                                                "script-src 'self'; connect-src 'self'; base-uri 'none'; "
+                                                "frame-ancestors 'none'; form-action 'none'"),
+                    ("Referrer-Policy", "no-referrer")]
+    start_response("200 OK", headers)
+    return [b""] if method == "HEAD" else [data]
 
 
 def _meta(con) -> dict:
@@ -52,7 +97,7 @@ def _snapshot_ref(meta: dict) -> dict:
 
 # --- handlers -------------------------------------------------------------------------------------------------
 
-def health(con, _sym=None):
+def health(con, _sym=None, _q=None):
     meta = _meta(con)
     digest = snapshot.content_digest(con)
     ok = digest == meta.get("content_digest")
@@ -60,17 +105,22 @@ def health(con, _sym=None):
         "status": "ok" if ok else "degraded", "version": VERSION,
         "commit": os.environ.get("RENDER_GIT_COMMIT"),
         "snapshot": {**_snapshot_ref(meta), "verified": ok, "companies": len(meta["symbols"]),
-                     "schema_version": meta.get("schema_version")},
+                     "schema_version": meta.get("schema_version"),
+                     "announcements_retrieved_at": meta.get("announcements_retrieved_at") or None,
+                     "prices_retrieved_at": meta.get("prices_retrieved_at") or None},
         "llm": "disabled (no model is called in this phase)",
         "live_fetch": "only /api/v1/diagnostics/connectivity touches the network",
     }
 
 
-def companies(con, _sym=None):
+def companies(con, _sym=None, _q=None):
+    meta = _meta(con)
     rows = [dict(r) for r in con.execute("SELECT * FROM companies ORDER BY symbol")]
     for r in rows:
         r["groups"], r["integrity"] = json.loads(r["groups"]), json.loads(r["integrity"])
-    return "200 OK", {"snapshot": _snapshot_ref(_meta(con)), "count": len(rows), "companies": rows}
+        r["transcripts_audited"] = r["symbol"] in meta["transcript_symbols"]
+    return "200 OK", {"snapshot": _snapshot_ref(meta), "count": len(rows), "companies": rows,
+                      "sector_note": "sector is FINN's own portfolio grouping, not a classification from a source"}
 
 
 def _company(con, sym):
@@ -83,7 +133,7 @@ def _not_in_snapshot(con, sym):
                                        "tickers is not served by this phase of the API"}
 
 
-def results(con, sym):
+def results(con, sym, _q=None):
     c = _company(con, sym)
     if c is None:
         return _not_in_snapshot(con, sym)
@@ -97,7 +147,23 @@ def results(con, sym):
     return ("200 OK" if card["status"] == "ok" else "404 Not Found"), card
 
 
-def transcripts(con, sym):
+def filings(con, sym, _q=None):
+    if _company(con, sym) is None:
+        return _not_in_snapshot(con, sym)
+    return "200 OK", {**signals.company_filings(con, sym), "snapshot": _snapshot_ref(_meta(con)),
+                      "note": "NSE subject and headline verbatim; FINN has not read the attached documents"}
+
+
+def signal_inbox(con, _sym=None, q=None):
+    try:
+        settings = signals.parse_settings(q or {})
+        body = signals.inbox(con, settings)
+    except ValueError as e:
+        return "400 Bad Request", {"error": str(e)}
+    return "200 OK", {**body, "snapshot": _snapshot_ref(_meta(con))}
+
+
+def transcripts(con, sym, _q=None):
     meta = _meta(con)
     if sym not in meta["transcript_symbols"]:
         if _company(con, sym) is None:
@@ -144,7 +210,7 @@ def _nonempty(n: int, what: str) -> str:
     return f"{n} {what}"
 
 
-def connectivity(con, _sym=None):
+def connectivity(con, _sym=None, _q=None):
     with _diag_lock:
         cached = _diag_cache.get("result")
         if cached and time.monotonic() - _diag_cache["at"] < DIAG_TTL_S:
@@ -179,39 +245,71 @@ ROUTES = [
     (re.compile(r"^/api/v1/companies/?$"), companies),
     (re.compile(r"^/api/v1/companies/([^/]+)/results/?$"), results),
     (re.compile(r"^/api/v1/companies/([^/]+)/transcripts/?$"), transcripts),
+    (re.compile(r"^/api/v1/companies/([^/]+)/filings/?$"), filings),
+    (re.compile(r"^/api/v1/signals/?$"), signal_inbox),
     (re.compile(r"^/api/v1/diagnostics/connectivity/?$"), connectivity),
 ]
+DIAG_HEADER = "HTTP_X_FINN_DIAGNOSTICS_TOKEN"
+
+
+def _diag_denied(environ) -> tuple[str, dict] | None:
+    """The live probe hits NSE and Yahoo from this host, so only an operator holding the token may trigger it."""
+    token = os.environ.get("FINN_DIAG_TOKEN", "")
+    if not token:
+        return "403 Forbidden", {"error": "diagnostics are disabled: FINN_DIAG_TOKEN is not configured on this host"}
+    if not hmac.compare_digest(environ.get(DIAG_HEADER, "").encode(), token.encode()):
+        return "401 Unauthorized", {"error": "diagnostics need the X-Finn-Diagnostics-Token header"}
+    return None
 
 
 def app(environ, start_response):
     path = environ.get("PATH_INFO") or "/"
     method = environ.get("REQUEST_METHOD", "GET")
-    if path == "/":
+    if path in ("/", "/index.html") and method in ("GET", "HEAD"):
+        return _static(start_response, "index.html", method)
+    sm = STATIC.match(path)
+    if sm and method in ("GET", "HEAD"):
+        return _static(start_response, sm.group(1), method)
+    if path.rstrip("/") == "/api/v1":
         return _json(start_response, "200 OK", {"service": "FINN API", "version": VERSION,
                                                  "endpoints": [r.pattern for r, _ in ROUTES]})
     for rx, handler in ROUTES:
         m = rx.match(path)
         if not m:
             continue
+        is_diag = handler is connectivity
+        origin = None if is_diag else allowed_origin(environ.get("HTTP_ORIGIN"))
+        if method == "OPTIONS":                 # CORS preflight: answered only for allowlisted origins
+            if origin is None:
+                return _json(start_response, "403 Forbidden", {"error": "origin not allowed"})
+            start_response("204 No Content", [*_cors(origin), ("Access-Control-Allow-Methods", "GET, HEAD"),
+                                              ("Access-Control-Allow-Headers", "Accept"), ("Access-Control-Max-Age", "600"),
+                                              ("Content-Length", "0")])
+            return [b""]
         if method not in ("GET", "HEAD"):
-            return _json(start_response, "405 Method Not Allowed", {"error": "read-only API: GET only"}, [("Allow", "GET, HEAD")])
+            return _json(start_response, "405 Method Not Allowed", {"error": "read-only API: GET only"}, [("Allow", "GET, HEAD")],
+                         origin=origin)
+        if is_diag and (denied := _diag_denied(environ)):
+            return _json(start_response, *denied, cache="no-store")
         sym = None
         if m.groups():
             sym = m.group(1).upper()
             if not SYMBOL.match(sym):
-                return _json(start_response, "400 Bad Request", {"error": "symbol must be 1-20 of A-Z, 0-9, & or -"})
+                return _json(start_response, "400 Bad Request", {"error": "symbol must be 1-20 of A-Z, 0-9, & or -"},
+                             origin=origin)
+        q = dict(parse_qsl(environ.get("QUERY_STRING", ""), keep_blank_values=False))
         try:
             con = snapshot.open_readonly(snapshot_path())
         except Exception as e:
             return _json(start_response, "503 Service Unavailable",
-                         {"status": "unavailable", "reason": f"snapshot cannot be opened: {type(e).__name__}"})
+                         {"status": "unavailable", "reason": f"snapshot cannot be opened: {type(e).__name__}"}, origin=origin)
         try:
-            status, body = handler(con, sym)
+            status, body = handler(con, sym, q)
         except Exception as e:                  # never leak a traceback; say what failed
             status, body = "500 Internal Server Error", {"error": f"{type(e).__name__} while serving {path}"}
         finally:
             con.close()
-        out = _json(start_response, status, body)
+        out = _json(start_response, status, body, origin=origin, cache="no-store" if is_diag else "public, max-age=300")
         return [b""] if method == "HEAD" else out
     return _json(start_response, "404 Not Found", {"error": "no such endpoint", "endpoints": [r.pattern for r, _ in ROUTES]})
 

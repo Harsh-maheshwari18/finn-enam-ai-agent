@@ -4,5 +4,20 @@
                 "ASIANPAINT", "TITAN", "PAGEIND", "LT", "POLYCAB", "SUNPHARMA", "MARUTI", "DEEPAKNTR", "DIXON"],
   "research": ["KAYNES", "ASTRAL", "LALPATHLAB", "HAL"],
   "transcript_audit": ["TCS", "POLYCAB", "HDFCBANK"],
-  "transcript_quarters": 4
+  "transcript_quarters": 4,
+  "_sectors_about": "FINN's own portfolio grouping (product-spec.md section I), not a classification taken from a source.",
+  "sectors": {
+    "TCS": "IT services", "PERSISTENT": "IT services", "KPITTECH": "IT services",
+    "HDFCBANK": "Banks & financials", "BAJFINANCE": "Banks & financials", "CDSL": "Banks & financials",
+    "RELIANCE": "Energy & conglomerate", "BHARTIARTL": "Telecom",
+    "ITC": "Consumer", "ASIANPAINT": "Consumer", "TITAN": "Consumer", "PAGEIND": "Consumer",
+    "LT": "Capital goods", "POLYCAB": "Capital goods", "SUNPHARMA": "Pharma", "MARUTI": "Auto",
+    "DEEPAKNTR": "Chemicals", "DIXON": "Electronics manufacturing",
+    "KAYNES": "Electronics manufacturing", "ASTRAL": "Building materials", "LALPATHLAB": "Diagnostics", "HAL": "Defence"
+  },
+  "signals": {
+    "_about": "Bounded real dataset for the Signal Inbox: NSE announcements for the last announcement_days and the last price_sessions completed EOD bars per company.",
+    "announcement_days": 30,
+    "price_sessions": 90
+  }
 }

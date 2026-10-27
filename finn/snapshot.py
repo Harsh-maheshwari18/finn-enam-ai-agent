@@ -27,14 +27,15 @@ ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_OUT = ROOT / "snapshot" / "finn_snapshot.db"
 DEFAULT_UNIVERSE = ROOT / "config" / "universe.json"
 DEFAULT_GOLDEN = ROOT / "tests" / "fixtures" / "real" / "golden_set.json"
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2       # 2: announcements (filings), completed EOD price bars, company name and sector
 IST = timezone(timedelta(hours=5, minutes=30))
 
 EXTRA_SCHEMA = """
 CREATE TABLE IF NOT EXISTS snapshot_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS companies (
   symbol TEXT PRIMARY KEY, groups TEXT NOT NULL, status TEXT NOT NULL, validation TEXT NOT NULL,
-  latest_period_end TEXT, basis TEXT, taxonomy TEXT, golden_checked INTEGER NOT NULL, integrity TEXT NOT NULL
+  latest_period_end TEXT, basis TEXT, taxonomy TEXT, golden_checked INTEGER NOT NULL, integrity TEXT NOT NULL,
+  name TEXT, sector TEXT
 );
 CREATE TABLE IF NOT EXISTS transcript_filings (
   symbol TEXT NOT NULL, seq_id TEXT NOT NULL, broadcast_at TEXT, url TEXT, nse_headline TEXT, status TEXT NOT NULL,
@@ -49,7 +50,7 @@ CREATE TABLE IF NOT EXISTS transcript_coverage (
 );
 """
 DIGEST_TABLES = ["sources", "observations", "integrity", "filings", "unavailable", "companies",
-                 "transcript_filings", "transcript_coverage"]
+                 "transcript_filings", "transcript_coverage", "price_bars"]
 
 
 class BuildError(RuntimeError):
@@ -63,10 +64,13 @@ def load_universe(path: Path = DEFAULT_UNIVERSE) -> dict:
 def content_digest(con: sqlite3.Connection) -> str:
     """sha256 over a canonical dump of the data tables (rows sorted, ids excluded where they are surrogate)."""
     h = hashlib.sha256()
+    present = {r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type = 'table'")}
     for t in DIGEST_TABLES:
+        if t not in present:                   # schema-1 snapshots have no price_bars; their digest is unchanged
+            continue
         cols = [r[1] for r in con.execute(f"PRAGMA table_info({t})") if not (t in ("sources", "unavailable") and r[1] == "id")]
         sel = ", ".join(cols)
-        if t == "observations":     # source_id is a surrogate key: digest the source it points at instead
+        if t in ("observations", "filings", "price_bars"):   # source_id is a surrogate key: digest the source it points at
             sel = sel.replace("source_id", "(SELECT url || '|' || IFNULL(content_hash,'') FROM sources s WHERE s.id = source_id)")
         h.update(f"#{t}:{','.join(cols)}\n".encode())
         for row in sorted(json.dumps(list(r), default=str) for r in con.execute(f"SELECT {sel} FROM {t}")):
@@ -95,7 +99,15 @@ def _golden_check(con, golden: dict, symbols: set[str]) -> tuple[dict[str, int],
 def _provenance_check(con) -> list[str]:
     bad = con.execute("SELECT o.symbol, o.metric, o.period_end FROM observations o LEFT JOIN sources s ON s.id = o.source_id "
                       "WHERE s.url IS NULL OR s.url = '' OR s.content_hash IS NULL OR o.location IS NULL").fetchall()
-    return [f"{r[0]} {r[2]} {r[1]}: observation without a full source reference" for r in bad]
+    errors = [f"{r[0]} {r[2]} {r[1]}: observation without a full source reference" for r in bad]
+    for sym, seq in con.execute("SELECT f.symbol, f.seq_id FROM filings f LEFT JOIN sources s ON s.id = f.source_id "
+                                "WHERE s.url IS NULL OR s.content_hash IS NULL OR f.broadcast_at IS NULL "
+                                "OR f.broadcast_at NOT LIKE '%+05:30'"):
+        errors.append(f"{sym} announcement {seq}: no source reference or no IST publication time")
+    for sym, day in con.execute("SELECT p.symbol, p.day FROM price_bars p LEFT JOIN sources s ON s.id = p.source_id "
+                                "WHERE s.url IS NULL OR s.content_hash IS NULL"):
+        errors.append(f"{sym} price bar {day}: no source reference")
+    return errors
 
 
 def _insert(con, table: str, row: dict) -> None:
@@ -109,9 +121,13 @@ def _insert(con, table: str, row: dict) -> None:
 
 def build(out: Path = DEFAULT_OUT, *, universe: Optional[dict] = None, symbols: Optional[Iterable[str]] = None,
           transcript_symbols: Optional[Iterable[str]] = None, as_of: Optional[date] = None, offline: bool = False,
-          golden_path: Path = DEFAULT_GOLDEN, manifest_path: Optional[Path] = None, refresh: bool = False) -> dict:
+          golden_path: Path = DEFAULT_GOLDEN, manifest_path: Optional[Path] = None, refresh: bool = False,
+          refresh_signals: bool = False, results_offline: Optional[bool] = None) -> dict:
     """refresh=True re-fetches NSE results listings and announcement searches (new quarters, new transcripts);
-    filed XBRL and PDFs are immutable and are reused from the cache."""
+    filed XBRL and PDFs are immutable and are reused from the cache.
+    refresh_signals=True re-fetches only the Signal Inbox inputs (announcements, EOD prices).
+    results_offline=True rebuilds the results from the cache only, so already-verified numbers cannot change."""
+    results_offline = offline if results_offline is None else (results_offline or offline)
     universe = universe if universe is not None else load_universe()
     as_of = as_of or datetime.now(IST).date()
     groups: dict[str, list[str]] = {}
@@ -129,7 +145,14 @@ def build(out: Path = DEFAULT_OUT, *, universe: Optional[dict] = None, symbols: 
     con.executescript(EXTRA_SCHEMA)
 
     for s in syms:
-        service.ingest_results(con, s, offline=offline, **({"listing_max_age_s": 0} if refresh else {}))
+        service.ingest_results(con, s, offline=results_offline, **({"listing_max_age_s": 0} if refresh else {}))
+    # Signal Inbox inputs: a bounded, real window. None = any cached copy (reproducible rebuilds); 0 = fetch live.
+    sig_cfg = universe.get("signals", {})
+    sig_age = 0 if (refresh or refresh_signals) else None
+    for s in syms:
+        service.ingest_filings(con, s, days=int(sig_cfg.get("announcement_days", 30)), end=as_of, offline=offline,
+                               max_age_s=sig_age)
+        service.ingest_prices(con, s, offline=offline, max_age_s=sig_age, keep=int(sig_cfg.get("price_sessions", 90)))
     # Build time must not leak into the digest: an unavailable source is stamped with the snapshot date instead.
     con.execute("UPDATE unavailable SET at = ?", (as_of.isoformat(),))
 
@@ -165,9 +188,12 @@ def build(out: Path = DEFAULT_OUT, *, universe: Optional[dict] = None, symbols: 
             validation = "golden_verified"
         else:
             validation = "integrity_checked"
+        name = con.execute("SELECT company FROM filings WHERE symbol = ? AND company != '' ORDER BY broadcast_at DESC "
+                           "LIMIT 1", (s,)).fetchone()          # NSE's own company name, from its announcements
         row = {"symbol": s, "groups": groups.get(s, ["adhoc"]), "status": card["status"], "validation": validation,
                "latest_period_end": card.get("period_end"), "basis": card.get("basis"), "taxonomy": card.get("taxonomy"),
-               "golden_checked": golden_counts.get(s, 0), "integrity": statuses}
+               "golden_checked": golden_counts.get(s, 0), "integrity": statuses,
+               "name": name[0] if name else None, "sector": universe.get("sectors", {}).get(s)}
         _insert(con, "companies", row)
         summary[s] = {k: row[k] for k in ("validation", "latest_period_end", "basis", "taxonomy", "golden_checked", "integrity")}
     # How the builder obtained a file (live vs its own cache) is not a property of the data; inside the snapshot
@@ -177,8 +203,12 @@ def build(out: Path = DEFAULT_OUT, *, universe: Optional[dict] = None, symbols: 
     con.commit()
 
     digest = content_digest(con)
+    retrieved = {t: con.execute("SELECT MAX(retrieved_at) FROM sources WHERE doc_type = ?", (t,)).fetchone()[0]
+                 for t in ("announcement", "price_feed")}
     meta = {"schema_version": str(SCHEMA_VERSION), "as_of": as_of.isoformat(), "content_digest": digest,
-            "symbols": json.dumps(syms), "transcript_symbols": json.dumps(tsyms), "llm": "none"}
+            "symbols": json.dumps(syms), "transcript_symbols": json.dumps(tsyms), "llm": "none",
+            "portfolio": json.dumps([s for s in universe.get("portfolio", []) if s in syms]),
+            "announcements_retrieved_at": retrieved["announcement"] or "", "prices_retrieved_at": retrieved["price_feed"] or ""}
     con.executemany("INSERT OR REPLACE INTO snapshot_meta VALUES (?,?)", list(meta.items()))
     con.commit()
     con.execute("VACUUM")
@@ -193,7 +223,7 @@ def build(out: Path = DEFAULT_OUT, *, universe: Optional[dict] = None, symbols: 
         "db_file": out.name, "db_bytes": out.stat().st_size, "llm": "none",
         "sources": {"rows": sources[0], "distinct_urls": sources[1]},
         "golden_values_checked": sum(golden_counts.values()), "companies": summary,
-        "transcripts": _transcript_summary(out),
+        "transcripts": _transcript_summary(out), "signals": _signals_summary(out),
     }
     (manifest_path or out.with_name("manifest.json")).write_text(json.dumps(manifest, indent=1, default=str) + "\n")
     return manifest
@@ -205,6 +235,18 @@ def _transcript_summary(path: Path) -> dict:
     for sym, fq, st in con.execute("SELECT symbol, fiscal_quarter, status FROM transcript_coverage ORDER BY symbol, period_end DESC"):
         out.setdefault(sym, {})[fq] = st
     return out
+
+
+def _signals_summary(path: Path) -> dict:
+    con = sqlite3.connect(path)
+    f = con.execute("SELECT COUNT(*), COUNT(DISTINCT symbol), MIN(broadcast_at), MAX(broadcast_at) FROM filings").fetchone()
+    p = con.execute("SELECT COUNT(*), COUNT(DISTINCT symbol), MIN(day), MAX(day) FROM price_bars").fetchone()
+    meta = dict(con.execute("SELECT key, value FROM snapshot_meta").fetchall())
+    con.close()
+    return {"announcements": {"rows": f[0], "companies": f[1], "first": f[2], "last": f[3],
+                              "retrieved_at": meta.get("announcements_retrieved_at")},
+            "price_bars": {"rows": p[0], "companies": p[1], "first_session": p[2], "last_session": p[3],
+                           "retrieved_at": meta.get("prices_retrieved_at")}}
 
 
 def open_readonly(path: Path = DEFAULT_OUT) -> sqlite3.Connection:
@@ -233,6 +275,8 @@ def main(argv=None) -> int:
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
     ap.add_argument("--symbols", nargs="*", help="override the universe (default: config/universe.json)")
     ap.add_argument("--refresh", action="store_true", help="re-fetch NSE listings and announcement searches")
+    ap.add_argument("--refresh-signals", action="store_true", help="re-fetch only announcements and EOD prices")
+    ap.add_argument("--results-offline", action="store_true", help="results from the raw cache only (numbers frozen)")
     a = ap.parse_args(argv)
     if a.command == "verify":
         ok, msg = verify(a.out)
@@ -240,7 +284,7 @@ def main(argv=None) -> int:
         return 0 if ok else 1
     try:
         m = build(a.out, symbols=[s.upper() for s in a.symbols] if a.symbols else None, as_of=a.as_of, offline=a.offline,
-                  refresh=a.refresh)
+                  refresh=a.refresh, refresh_signals=a.refresh_signals, results_offline=a.results_offline)
     except BuildError as e:
         print(e, file=sys.stderr)
         return 2

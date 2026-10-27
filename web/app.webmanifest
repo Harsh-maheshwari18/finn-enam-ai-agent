@@ -1,0 +1,9 @@
+{
+  "name": "FINN Signal Inbox",
+  "short_name": "FINN",
+  "start_url": "./#/signals",
+  "display": "standalone",
+  "background_color": "#f6f5f1",
+  "theme_color": "#1d3b45",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

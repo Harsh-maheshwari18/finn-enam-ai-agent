@@ -85,6 +85,27 @@ def eod_signals(bars: list[PriceBar], lookback: int = 20) -> Optional[dict]:
     }
 
 
+def session_stats(bars: list[PriceBar], lookback: int = 20) -> list[dict]:
+    """Per completed session: close-to-close move and volume vs. the average of the prior `lookback` usable sessions.
+    Same rules as eod_signals: provisional bars are dropped, zero-volume bars never enter an average, and a ratio
+    needs at least max(5, lookback // 2) prior sessions, otherwise it is None (cannot be evaluated, not zero)."""
+    final = [b for b in bars if not b.provisional]
+    need = max(5, lookback // 2)
+    out = []
+    for i in range(1, len(final)):
+        b, prev = final[i], final[i - 1]
+        hist = [x.volume for x in final[:i] if x.volume and not x.volume_suspect][-lookback:]
+        avg = sum(hist) / len(hist) if len(hist) >= need else None
+        out.append({
+            "day": b.day, "close": b.close, "prev_close": prev.close, "prev_day": prev.day,
+            "move_pct": round((b.close - prev.close) / prev.close * 100, 2),
+            "volume": b.volume, "avg_volume": round(avg) if avg else None, "lookback_used": len(hist),
+            "lookback_needed": need,
+            "volume_ratio": round(b.volume / avg, 2) if avg and b.volume is not None and not b.volume_suspect else None,
+        })
+    return out
+
+
 def check_alerts(sig: Optional[dict], *, move_pct: float = 5.0, volume_x: float = 2.0) -> list[str]:
     """Threshold rules; >= is a breach. Thresholds are user settings, defaults from the brief."""
     if not sig:

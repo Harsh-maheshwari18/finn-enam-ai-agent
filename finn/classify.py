@@ -27,6 +27,7 @@ DESC_MAP = {
     "Change in Directors/ Key Managerial Personnel/ Auditor/ Compliance Officer/ Share Transfer Agent": "management_change",
     "Resignation of Director": "management_change", "Appointment of Director": "management_change",
     "Corporate Insolvency Resolution Process": "litigation", "Litigation / Dispute / Regulatory Action(s)": "litigation",
+    "Action(s) taken or orders passed": "litigation", "Preferential issue": "fund_raise",
     "Insider Trading / SAST": "insider_trading", "Disclosure under SEBI Takeover Regulations": "insider_trading",
     "Analysts/Institutional Investor Meet/Con. Call Updates": None,   # transcript vs. meeting: decide on text
     "Credit Rating": "credit_rating",
@@ -44,11 +45,12 @@ DESC_MAP = {
 TEXT_RULES: list[tuple[str, str]] = [
     (r"financial results for the (period|quarter)|unaudited .*financial (results|statements)|earnings presentation", "results"),
     (r"\btranscript\b|link of recording|audio recording|earnings call|conference call", "earnings_call"),
-    (r"analyst\(s\)/investor\(s\) meet|investor meet|analyst meet|investor conference", "investor_meetings"),
+    (r"analyst\(s\)/investor\(s\) meet|investor meet|analyst meet|investor conference|schedule of meet|"
+     r"institutional investors meet", "investor_meetings"),
     (r"acqui|amalgamat|merger|demerger|joint venture|stake in", "M&A"),
     (r"\bnclt\b|\bnclat\b|insolvency|tribunal|show cause|penalty|regulatory action|litigation|court", "litigation"),
     (r"credit rating|rating agency|reaffirm", "credit_rating"),
-    (r"qualified institutional|\bqip\b|rights issue|preferential allotment|buyback|commercial paper|non-convertible debenture", "fund_raise"),
+    (r"qualified institution(al)? placement|qualified institutional|\bqip\b|rights issue|preferential allotment|buyback|commercial paper|non-convertible debenture", "fund_raise"),
     (r"dividend|record date", "dividend"),
     (r"resign|appoint|cessation|chief executive|chief financial|managing director|key managerial", "management_change"),
     (r"capacity expansion|new plant|capex|capital expenditure|greenfield|brownfield", "capex"),

@@ -131,20 +131,48 @@ def results_card(con, symbol: str) -> dict:
     })
 
 
-def ingest_filings(con, symbol: str, *, days: int = 7, offline: bool = False) -> list[Unavailable]:
-    end = datetime.now(timezone(timedelta(hours=5, minutes=30))).date()
+def ingest_filings(con, symbol: str, *, days: int = 7, offline: bool = False, end: Optional[date] = None,
+                   max_age_s: Optional[float] = 15 * 60) -> list[Unavailable]:
+    end = end or datetime.now(timezone(timedelta(hours=5, minutes=30))).date()
     url = nse_filings.ANN_URL.format(symbol=symbol, start=end - timedelta(days=days), end=end)
-    f = http.fetch(url, offline=offline, max_age_s=15 * 60)
+    f = http.fetch(url, offline=offline, max_age_s=max_age_s)
     if not f.ok:
         u = Unavailable("nse_announcements", f.reason or "unknown", url, f.status)
         store.put_unavailable(con, symbol, u)
         con.commit()
         return [u]
-    for fl in nse_filings.parse_announcements(f.body, fetched_at=f.fetched_at, url=url, sha=f.sha256, provenance=_prov(f)):
+    try:
+        filings = nse_filings.parse_announcements(f.body, fetched_at=f.fetched_at, url=url, sha=f.sha256, provenance=_prov(f))
+    except (ValueError, KeyError) as e:                   # e.g. an HTML block page with status 200
+        u = Unavailable("nse_announcements", f"unparseable: {e}", url, f.status)
+        store.put_unavailable(con, symbol, u)
+        con.commit()
+        return [u]
+    for fl in filings:
         c = classify(fl)
         store.put_filing(con, fl, c.category, c.method)
     con.commit()
     return []
+
+
+def ingest_prices(con, symbol: str, *, offline: bool = False, max_age_s: Optional[float] = 3600, keep: int = 90) -> list[Unavailable]:
+    """Completed EOD sessions only: a bar still open when fetched (provisional) is never stored."""
+    url = prices.CHART_URL.format(symbol=prices.yahoo_symbol(symbol), range="6mo")
+    f = http.fetch(url, offline=offline, max_age_s=max_age_s)
+    problems: list[Unavailable] = []
+    if not f.ok:
+        problems.append(Unavailable("yahoo_chart", f.reason or "unknown", url, f.status))
+    else:
+        try:
+            bars = prices.parse_chart(f.body, fetched_at=f.fetched_at, url=url, sha=f.sha256, provenance=_prov(f))
+        except prices.PriceParseError as e:
+            problems.append(Unavailable("yahoo_chart", str(e), url, f.status))
+        else:
+            store.put_price_bars(con, symbol, [b for b in bars if not b.provisional][-keep:])
+    for p in problems:
+        store.put_unavailable(con, symbol, p)
+    con.commit()
+    return problems
 
 
 def price_signals(symbol: str, *, offline: bool = False, move_pct: float = 5.0, volume_x: float = 2.0) -> dict:

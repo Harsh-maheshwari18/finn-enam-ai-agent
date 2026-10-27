@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Optional
 
 from finn import tz
-from finn.models import Filing, Observation, SourceRef, Unavailable
+from finn.models import Filing, Observation, PriceBar, SourceRef, Unavailable
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS sources (
@@ -32,6 +32,10 @@ CREATE TABLE IF NOT EXISTS integrity (
 );
 CREATE TABLE IF NOT EXISTS unavailable (
   id INTEGER PRIMARY KEY, symbol TEXT, source TEXT, reason TEXT, url TEXT, http_status INTEGER, at TEXT
+);
+CREATE TABLE IF NOT EXISTS price_bars (
+  symbol TEXT NOT NULL, day TEXT NOT NULL, open REAL, high REAL, low REAL, close REAL NOT NULL, volume INTEGER,
+  volume_suspect INTEGER NOT NULL, source_id INTEGER NOT NULL REFERENCES sources(id), PRIMARY KEY (symbol, day)
 );
 """
 
@@ -75,6 +79,22 @@ def put_filing(con, f: Filing, category: Optional[str], method: str) -> None:
     con.execute("INSERT OR REPLACE INTO filings VALUES (?,?,?,?,?,?,?,?,?,?,?)", (
         f.seq_id, f.symbol, f.isin, f.company, f.nse_desc, f.headline, f.broadcast_at.isoformat(), f.attachment_url,
         category, method, sid))
+
+
+def put_price_bars(con, symbol: str, bars: list[PriceBar]) -> None:
+    for b in bars:
+        sid = put_source(con, b.source)
+        con.execute("INSERT OR REPLACE INTO price_bars VALUES (?,?,?,?,?,?,?,?,?)", (
+            symbol, b.day.isoformat(), b.open, b.high, b.low, b.close, b.volume, int(b.volume_suspect), sid))
+
+
+def get_price_bars(con, symbol: str) -> list[PriceBar]:
+    rows = con.execute("SELECT p.*, s.url, s.retrieved_at, s.content_hash, s.provenance, s.title FROM price_bars p "
+                       "JOIN sources s ON s.id = p.source_id WHERE p.symbol = ? ORDER BY p.day", (symbol,)).fetchall()
+    return [PriceBar(symbol=symbol, day=date.fromisoformat(r["day"]), open=r["open"], high=r["high"], low=r["low"],
+                     close=r["close"], volume=r["volume"], provisional=False, volume_suspect=bool(r["volume_suspect"]),
+                     source=SourceRef("price_feed", r["url"], datetime.fromisoformat(r["retrieved_at"]), r["content_hash"],
+                                      r["provenance"], r["title"])) for r in rows]
 
 
 def put_unavailable(con, symbol: str, u: Unavailable) -> None:
