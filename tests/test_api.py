@@ -200,3 +200,35 @@ def test_excise_netted_revenue_served_for_itc():
     rev = next(r for r in card["rows"] if r["metric"] == "revenue")
     assert rev["value_cr"] == "19114.37" and rev["formula"] == "revenue_from_operations - excise_duty"
     assert rev["qoq"]["status"] == rev["yoy"]["status"] == "ok"
+
+
+def test_served_timestamps_carry_offsets():
+    """published_at is NSE time (IST, +05:30); retrieved_at is our clock (UTC). Neither may be naive."""
+    _, _, card = call("/api/v1/companies/TCS/results")
+    rev = next(r for r in card["rows"] if r["metric"] == "revenue")
+    assert rev["source"]["published_at"] == "2026-10-08T22:07:33+05:30"     # NSE broadcast_Date '08-Oct-2026 22:07:33'
+    for r in card["rows"]:
+        assert r["source"]["published_at"].endswith("+05:30") and r["source"]["retrieved_at"].endswith("+00:00")
+
+
+def test_transcript_broadcast_at_carries_ist_offset():
+    _, _, body = call("/api/v1/companies/POLYCAB/transcripts")
+    q2 = next(q for q in body["quarters"] if q["fiscal_quarter"] == "Q2 FY27")
+    assert q2["document"]["broadcast_at"] == "2026-10-19T16:39:28+05:30"     # NSE an_dt '19-Oct-2026 16:39:28'
+
+
+@pytest.mark.parametrize("sym", ["TCS", "POLYCAB", "HDFCBANK"])
+def test_four_quarter_transcript_coverage(sym):
+    """Availability only: says nothing about whether the calls contain checkable guidance."""
+    _, _, body = call(f"/api/v1/companies/{sym}/transcripts")
+    assert [q["fiscal_quarter"] for q in body["quarters"]] == ["Q2 FY27", "Q1 FY27", "Q4 FY26", "Q3 FY26"]
+    seen = set()
+    for q in body["quarters"]:
+        d = q["document"]
+        assert q["status"] == "available" and q["duplicates"] == []
+        assert d["is_earnings_call"] and not d["scanned"] and d["fiscal_quarter"] == q["fiscal_quarter"] and d["date_agrees"]
+        assert d["url"].startswith("https://nsearchives.nseindia.com/corporate/") and len(d["sha256"]) == 64
+        assert d["retrieved_at"].endswith("+00:00") and d["broadcast_at"].endswith("+05:30")
+        assert d["pages"] > 0 and d["text_chars"] > 10_000 and d["speaker_turns"] > 0 and d["quarter_phrase"]
+        seen.add(d["sha256"])
+    assert len(seen) == 4                                                    # four distinct documents

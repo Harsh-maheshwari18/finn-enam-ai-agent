@@ -29,19 +29,20 @@ def pick_periods(refs: list[ResultFilingRef]) -> tuple[Optional[str], list[Resul
     return None, []
 
 
-def ingest_results(con, symbol: str, *, offline: bool = False) -> list[Unavailable]:
-    """Every problem, including an unreachable listing, is stored so the card can say why data is missing."""
-    problems = _ingest_results(con, symbol, offline=offline)
+def ingest_results(con, symbol: str, *, offline: bool = False, listing_max_age_s: float = 6 * 3600) -> list[Unavailable]:
+    """Every problem, including an unreachable listing, is stored so the card can say why data is missing.
+    listing_max_age_s=0 forces a fresh results listing (new quarters); filed XBRL is immutable and stays cached."""
+    problems = _ingest_results(con, symbol, offline=offline, listing_max_age_s=listing_max_age_s)
     for p in problems:
         store.put_unavailable(con, symbol, p)
     con.commit()
     return problems
 
 
-def _ingest_results(con, symbol: str, *, offline: bool) -> list[Unavailable]:
+def _ingest_results(con, symbol: str, *, offline: bool, listing_max_age_s: float) -> list[Unavailable]:
     problems: list[Unavailable] = []
     url = nse_results.LIST_URL.format(symbol=symbol)
-    f = http.fetch(url, offline=offline, max_age_s=6 * 3600)
+    f = http.fetch(url, offline=offline, max_age_s=listing_max_age_s)
     if not f.ok:
         problems.append(Unavailable("nse_results_listing", f.reason or "unknown", url, f.status))
         return problems

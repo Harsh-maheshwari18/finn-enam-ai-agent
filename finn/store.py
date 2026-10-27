@@ -8,6 +8,7 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Optional
 
+from finn import tz
 from finn.models import Filing, Observation, SourceRef, Unavailable
 
 SCHEMA = """
@@ -91,7 +92,7 @@ def get_observations(con, symbol: str) -> list[sqlite3.Row]:
 def row_to_observation(r) -> Observation:
     src = SourceRef(doc_type="xbrl_result", url=r["source_url"], retrieved_at=datetime.fromisoformat(r["retrieved_at"]),
                     content_hash=r["content_hash"], provenance=r["provenance"], title=r["source_title"],
-                    published_at=datetime.fromisoformat(r["published_at"]) if r["published_at"] else None,
+                    published_at=tz.as_ist(datetime.fromisoformat(r["published_at"])) if r["published_at"] else None,   # NSE time; older DBs stored it naive
                     location=r["location"])
     return Observation(symbol=r["symbol"], metric=r["metric"], value=Decimal(r["value"]) if r["value"] is not None else None,
                        period_start=date.fromisoformat(r["period_start"]), period_end=date.fromisoformat(r["period_end"]),

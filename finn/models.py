@@ -54,7 +54,7 @@ class Filing:
     company: str
     nse_desc: str                 # NSE's own subject label, kept verbatim
     headline: str                 # attchmntText, kept verbatim
-    broadcast_at: datetime        # IST, naive
+    broadcast_at: datetime        # timezone-aware, Asia/Kolkata (NSE sends naive IST; see finn/tz.py)
     attachment_url: Optional[str]
     attachment_size: Optional[str]
     has_xbrl: bool

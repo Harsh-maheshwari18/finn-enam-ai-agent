@@ -1,6 +1,10 @@
 # FINN: Deployment (Render Free)
 
-**Status as of 2026-10-27: not deployed.** Everything below has been run locally under gunicorn. Nothing has run on Render yet, so **connectivity from Render is untested**.
+**Status 2026-10-27: deployed** at https://finn-api-9z4q.onrender.com (commit `c9ccac0`, snapshot `3c15b9d5…` verified). Smoke test from outside: every endpoint gave the expected status; POST 405; first request after idle took 23.6 s (cold start), later ones 0.34–0.45 s.
+
+**Connectivity from Render, measured:** 2026-10-27 08:29 UTC, one probe from Render (`finn-api-9z4q`, Singapore, commit `c9ccac0`): NSE announcements 200 (19 filings / 30 days, 1,232 ms), NSE results listing 200 (14 filings, 188 ms), NSE archives XBRL 200 (280 facts, 124 ms), Yahoo chart 200 (5 bars, 45 ms). All parsed. This is a single sample: it shows the Render IP was not blocked at that moment, not that it never will be.
+
+**Pending redeploy:** the timestamp fix and snapshot `ff4868ac…` exist locally only. The live service still serves `3c15b9d5…`, whose `published_at` / `broadcast_at` values have no offset. Push to redeploy (autoDeploy is on).
 
 ## What gets deployed
 A read-only JSON API (`finn/api.py`, plain WSGI, served by gunicorn) that serves the committed snapshot `snapshot/finn_snapshot.db`. Requests never fetch live data and never call an LLM, with one exception: `/api/v1/diagnostics/connectivity` is a deliberate live probe, rate limited to one run per 10 minutes per worker.
@@ -21,14 +25,14 @@ A read-only JSON API (`finn/api.py`, plain WSGI, served by gunicorn) that serves
 ## Manual steps (need your Render account)
 1. **Review and push** the Phase 3 changes. Render deploys from GitHub, so the snapshot, `render.yaml` and `requirements.txt` must be on `main`. You asked to review before any push.
 2. Render dashboard → **New → Blueprint** → connect GitHub → pick `Harsh-maheshwari18/finn-enam-ai-agent` → Render reads `render.yaml` → **Apply**. If the repo is private, grant Render's GitHub app access to it.
-3. Wait for the build. The log should end with `OK recomputed 3c15b9d5437d9589 …` from the verify step.
+3. Wait for the build. The log should end with `OK recomputed <digest> …` from the verify step, where `<digest>` is `content_digest` in `snapshot/manifest.json` (currently `ff4868acfaa6c15c…`).
 4. Smoke test, replacing the host:
    ```
    curl -s https://<service>.onrender.com/health
    curl -s https://<service>.onrender.com/api/v1/companies/TCS/results
    curl -s https://<service>.onrender.com/api/v1/diagnostics/connectivity
    ```
-   Expected: `/health` shows `"verified": true` and digest `3c15b9d5…`; TCS revenue is `73188.00` with QoQ `1.26`.
+   Expected: `/health` shows `"verified": true` and the manifest's digest; TCS revenue is `73188.00` with QoQ `1.26`; every `published_at` ends in `+05:30`.
 5. Send me the connectivity JSON, or the service URL so I can call it. That JSON is the first real evidence of whether NSE and Yahoo work from a cloud host. Each check reports HTTP status, latency, bytes and whether the body parsed. An empty NSE list counts as a failure, because a silently blocked host may get one.
 
 ## Free-plan behaviour to expect

@@ -1,6 +1,6 @@
 # FINN: Transcript Coverage Audit
 
-Run 2026-10-27 from the local development machine. Source: NSE `api/corporate-announcements`, label "Analysts/Institutional Investor Meet/Con. Call Updates", headline containing "Transcript". Searched in 90-day windows from 2025-12-31 (the end of the oldest target quarter) to 2026-10-27. Reproduce with `python -m finn.snapshot build` (the `transcript_audit` list in `config/universe.json`).
+Run 2026-10-27 from the local development machine; announcement search re-run live with `--refresh` at 08:39 UTC (same 13 filings). Source: NSE `api/corporate-announcements`, label "Analysts/Institutional Investor Meet/Con. Call Updates", headline containing "Transcript". Searched in 90-day windows from 2025-12-31 (the end of the oldest target quarter) to 2026-10-27. Reproduce with `python -m finn.snapshot build` (the `transcript_audit` list in `config/universe.json`).
 
 **Result: 12 of 12 target quarters available** (4 quarters × TCS, POLYCAB, HDFCBANK). No quarter is missing, and none is scanned or unreadable.
 
@@ -13,20 +13,24 @@ Run 2026-10-27 from the local development machine. Source: NSE `api/corporate-an
 
 ## Coverage
 
-| Company | Quarter | Status | Filed on NSE | Pages | Text chars | Speaker turns | Quarter evidence (verbatim, page) | Date cross-check |
-|---|---|---|---|---|---|---|---|---|
-| HDFCBANK | Q2 FY27 | available | 2026-10-23 | 17 | 54,471 | 82 | "quarter and half-year ended September 30, 2026" (p.1) | agrees |
-| HDFCBANK | Q1 FY27 | available | 2026-07-24 | 17 | 54,121 | 76 | "quarter ended June 30, 2026" (p.1) | agrees |
-| HDFCBANK | Q4 FY26 | available | 2026-04-24 | 16 | 50,877 | 78 | "quarter and year ended March 31, 2026" (p.1) | agrees |
-| HDFCBANK | Q3 FY26 | available | 2026-01-23 | 18 | 57,171 | 99 | "quarter and nine-months ended December 31, 2025" (p.1) | agrees |
-| POLYCAB | Q2 FY27 | available | 2026-10-19 | 20 | 54,238 | 97 | "Q2 FY27" (p.2) | agrees |
-| POLYCAB | Q1 FY27 | available | 2026-07-20 | 19 | 53,960 | 82 | "Q1 FY27" (p.2) | agrees |
-| POLYCAB | Q4 FY26 | available | 2026-05-08 | 19 | 53,689 | 85 | "Q4 FY26" (p.2) | agrees |
-| POLYCAB | Q3 FY26 | available | 2026-01-22 | 20 | 52,503 | 111 | "Q3 FY26" (p.2) | agrees |
-| TCS | Q2 FY27 | available | 2026-10-14 | 29 | 52,217 | 91 | "quarter and six-month period ended September 30, 2026" (p.1) | agrees |
-| TCS | Q1 FY27 | available | 2026-07-15 | 25 | 46,388 | 66 | "quarter ended June 30, 2026" (p.1) | agrees |
-| TCS | Q4 FY26 | available | 2026-04-14 | 35 | 57,548 | 65 | "quarter and year ended March 31, 2026" (p.1) | agrees |
-| TCS | Q3 FY26 | available | 2026-01-16 | 33 | 48,112 | 60 | "quarter and nine -month period ended December 31, 2025" (p.1) | agrees |
+Filed times are NSE broadcast times (IST, `+05:30`); retrieval times are UTC. **No missing quarters and no duplicates.**
+
+| # | Company | Quarter | Status | Filed (IST) | Pages | Text extraction | Earnings call | Quarter from text (page) | Date check | Speaker turns | Duplicates | sha256 | Retrieved (UTC) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | TCS | Q2 FY27 | available | 2026-10-14T16:00:08+05:30 | 29 | 52,217 chars; text layer | yes | "quarter and six-month period ended September 30, 2026" (p.1) | agrees | 91 | none | `13033ccd2b71…` | 2026-10-27T07:20:59 |
+| 2 | TCS | Q1 FY27 | available | 2026-07-15T19:37:13+05:30 | 25 | 46,388 chars; text layer | yes | "quarter ended June 30, 2026" (p.1) | agrees | 66 | none | `c47e71290e80…` | 2026-10-27T07:20:58 |
+| 3 | TCS | Q4 FY26 | available | 2026-04-14T20:02:19+05:30 | 35 | 57,548 chars; text layer | yes | "quarter and year ended March 31, 2026" (p.1) | agrees | 65 | none | `5298f07b0181…` | 2026-10-27T07:20:57 |
+| 4 | TCS | Q3 FY26 | available | 2026-01-16T16:38:43+05:30 | 33 | 48,112 chars; text layer | yes | "quarter and nine -month period ended December 31, 2025" (p.1) | agrees | 60 | none | `699bbfb4697e…` | 2026-10-27T07:20:55 |
+| 5 | POLYCAB | Q2 FY27 | available | 2026-10-19T16:39:28+05:30 | 20 | 54,238 chars; text layer | yes | "Q2 FY27" (p.2) | agrees | 97 | none | `2119d33fa2af…` | 2026-10-27T07:21:08 |
+| 6 | POLYCAB | Q1 FY27 | available | 2026-07-20T12:11:37+05:30 | 19 | 53,960 chars; text layer | yes | "Q1 FY27" (p.2) | agrees | 82 | none | `59ed4c668970…` | 2026-10-27T07:21:07 |
+| 7 | POLYCAB | Q4 FY26 | available | 2026-05-08T18:59:43+05:30 | 19 | 53,689 chars; text layer | yes | "Q4 FY26" (p.2) | agrees | 85 | none | `ffed5ff85c25…` | 2026-10-27T07:21:06 |
+| 8 | POLYCAB | Q3 FY26 | available | 2026-01-22T19:37:01+05:30 | 20 | 52,503 chars; text layer | yes | "Q3 FY26" (p.2) | agrees | 111 | none | `a329cd206e93…` | 2026-10-27T07:21:05 |
+| 9 | HDFCBANK | Q2 FY27 | available | 2026-10-23T22:50:22+05:30 | 17 | 54,471 chars; text layer | yes | "quarter and half-year ended September 30, 2026" (p.1) | agrees | 82 | none | `07c34082f55e…` | 2026-10-27T07:21:18 |
+| 10 | HDFCBANK | Q1 FY27 | available | 2026-07-24T15:52:03+05:30 | 17 | 54,121 chars; text layer | yes | "quarter ended June 30, 2026" (p.1) | agrees | 76 | none | `d6c19e7d4f74…` | 2026-10-27T07:21:17 |
+| 11 | HDFCBANK | Q4 FY26 | available | 2026-04-24T15:44:52+05:30 | 16 | 50,877 chars; text layer | yes | "quarter and year ended March 31, 2026" (p.1) | agrees | 78 | none | `461640336351…` | 2026-10-27T07:21:16 |
+| 12 | HDFCBANK | Q3 FY26 | available | 2026-01-23T16:00:19+05:30 | 18 | 57,171 chars; text layer | yes | "quarter and nine-months ended December 31, 2025" (p.1) | agrees | 99 | none | `3013668b1592…` | 2026-10-27T07:21:14 |
+
+Excluded: HDFCBANK 2026-03-19T22:16:04+05:30 14 pp, earnings call=False, quarter named=None, https://nsearchives.nseindia.com/corporate/HDFCBANK_19032026221513_SEintimationTranscriptofearningscall19Mar2026.pdf
 
 URLs and sha256 for every file: `GET /api/v1/companies/{SYMBOL}/transcripts`, or the `transcript_filings` table in `snapshot/finn_snapshot.db`.
 
@@ -35,6 +39,12 @@ URLs and sha256 for every file: `GET /api/v1/companies/{SYMBOL}/transcripts`, or
 - **The first detector got TCS Q3 FY26 wrong.** It read "Q2FY26" (a comparison on p.3) as the call's quarter. Three real phrasings defeated its patterns: "nine -month" with a stray hyphen space, "fiscal year FY2026", and "December 31st". These phrases are now regression tests (`tests/test_transcript_inventory.py`).
 - **Management-name extraction is weak.** The `MANAGEMENT:` header block is parsed for HDFCBANK and POLYCAB in some quarters (1–5 names) and never for TCS, whose transcripts have no such block. Speaker turns (60–111 per call) are always found. Attributing a statement to a speaker therefore still relies on turns plus the IR introduction, as in the Prompt 2 guidance experiment.
 - **Out of scope:** TCS also filed a transcript on 2025-12-23. That is before the oldest target quarter ended, so it cannot be one of these four calls, and it was not audited.
+
+## Availability is not guidance quality
+These 12 transcripts are **available and readable**. That says nothing about how many measurable, checkable commitments they contain.
+- **Guidance labelled so far:** only the 10 statements in the Prompt 2 experiment (`tests/fixtures/real/guidance_experiment.json`), all from the latest quarter. Only **1 of 10** can be checked against filed numbers.
+- **Not yet extracted:** the other 9 transcripts (Q1 FY27 to Q3 FY26) have had no guidance pulled from them, by hand or by model.
+- **No LLM is used in this phase.** Promise Ledger extraction is **not verified**; the quote gate (exact or reversible-normalisation matching only) is unchanged.
 
 ## Limits
 - Covers the 3 companies × 4 quarters requested. The other 19 companies in the snapshot have `status: not_audited` in the API.

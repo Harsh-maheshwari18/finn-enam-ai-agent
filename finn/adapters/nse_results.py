@@ -13,6 +13,7 @@ from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
 from typing import Optional
 
+from finn import tz
 from finn.models import ResultFilingRef, SourceRef
 
 LIST_URL = ("https://www.nseindia.com/api/integrated-filing-results?index=equities&symbol={symbol}"
@@ -43,7 +44,7 @@ def parse_listing(body: bytes, symbol: str) -> list[ResultFilingRef]:
             basis="consolidated" if x.get("consolidated", "").lower().startswith("consol") else "standalone",
             audited=x.get("audited", "").lower() == "audited",
             taxonomy=tax,
-            broadcast_at=_d(x.get("broadcast_Date", ""), "%d-%b-%Y %H:%M:%S"),
+            broadcast_at=tz.parse_nse(x.get("broadcast_Date", ""), "%d-%b-%Y %H:%M:%S"),   # naive IST on the wire
             xbrl_url=url if url.endswith(".xml") else None,
             html_url=x.get("ixbrl"),
             seq_id=str(x.get("seq_Id")) if x.get("seq_Id") else None,

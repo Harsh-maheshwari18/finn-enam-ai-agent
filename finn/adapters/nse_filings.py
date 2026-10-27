@@ -5,6 +5,7 @@ import json
 from datetime import date, datetime
 from typing import Optional
 
+from finn import tz
 from finn.models import Filing, SourceRef
 
 ANN_URL = ("https://www.nseindia.com/api/corporate-announcements?index=equities&symbol={symbol}"
@@ -23,10 +24,9 @@ def parse_announcements(body: bytes, *, fetched_at: datetime, url: str, sha: Opt
         at = x.get("an_dt") or x.get("sort_date")
         if not seq or not at:
             continue
-        try:
-            when = datetime.strptime(at, "%d-%b-%Y %H:%M:%S")
-        except ValueError:
-            when = datetime.strptime(at, "%Y-%m-%d %H:%M:%S")
+        when = tz.parse_nse(at, "%d-%b-%Y %H:%M:%S", "%Y-%m-%d %H:%M:%S")   # naive IST on the wire
+        if when is None:
+            raise ValueError(f"unrecognised NSE timestamp {at!r} (seq_id {seq})")
         att = x.get("attchmntFile") or None
         f = Filing(
             seq_id=seq, symbol=x.get("symbol", ""), isin=x.get("sm_isin"), company=x.get("sm_name", ""),

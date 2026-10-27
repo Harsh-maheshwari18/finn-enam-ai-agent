@@ -1,6 +1,6 @@
 # FINN: API and Data Verification Report
 
-Run 2026-10-27, local development machine, gunicorn 23.0.0 with the exact Render start command. Snapshot digest `3c15b9d5437d9589…`, 22 companies. **Not yet run on Render.**
+Run 2026-10-27. Sections 1–3: local development machine, gunicorn 23.0.0 with the exact Render start command, snapshot `3c15b9d5…`. Section 4: the deployed Render service. Section 5: timestamp correction, snapshot `ff4868ac…` (local; **not yet deployed**).
 
 ## 1. Does the API work?
 
@@ -66,3 +66,37 @@ The BAJFINANCE regrouping is the one place where FINN still shows a different Yo
 .venv/bin/gunicorn finn.api:app --bind 127.0.0.1:8000
 ```
 The screener cross-check script and its output are kept outside the repo, because screener is not a primary source (ADR-005).
+
+## 4. Render deployment (observed 2026-10-27)
+
+Service https://finn-api-9z4q.onrender.com, commit `c9ccac0`, snapshot `3c15b9d5…` (the version before the timestamp fix).
+
+| Request (from the development machine) | Result |
+|---|---|
+| `GET /health` | 200, `verified: true`. First call after idle took **23.6 s** (cold start); later calls 0.34–0.53 s |
+| Companies, TCS / ITC / HDFCBANK results, POLYCAB transcripts | 200; values identical to the local run and the golden set |
+| Unknown ticker / POST | 404 / 405 |
+
+**Connectivity measured from the Render host at 2026-10-27 08:29:57 UTC** (`/api/v1/diagnostics/connectivity`, one sample):
+
+| Source | HTTP | Latency | Parsed |
+|---|---|---|---|
+| NSE announcements | 200 | 1,232 ms | 19 filings in 30 days |
+| NSE results listing | 200 | 188 ms | 14 filings |
+| NSE archives XBRL | 200 | 124 ms | 280 facts |
+| Yahoo chart | 200 | 45 ms | 5 bars |
+
+A point-in-time observation: the Render IP was not blocked at that moment. It is not a guarantee against rate- or time-dependent blocking.
+
+## 5. Timestamp correction (local, snapshot `ff4868ac…`)
+
+**Defect:** `published_at` (results) and `broadcast_at` (announcements and transcripts) were served without an offset, e.g. `2026-10-08T22:07:33`, while `retrieved_at` was UTC.
+
+**Source representation:** NSE sends naive wall-clock strings (`broadcast_Date: "08-Oct-2026 22:07:33"`, `an_dt: "23-Oct-2026 22:50:22"`). These are IST. HDFCBANK's 22:50:22 broadcast carries a covering letter dated October 23, 2026, which would be wrong if the time were UTC (04:20 IST on the 24th). NSE's own upload stamp in the file name (`…_23102026224657_…`) agrees to within 3.5 minutes.
+
+**Fix (`finn/tz.py`, ADR-024):** attach Asia/Kolkata to the naive value, keeping the wall clock. No UTC reinterpretation; values that already have an offset pass through unchanged.
+
+**Evidence:**
+- **Served response:** TCS revenue `published_at` = `2026-10-08T22:07:33+05:30`; POLYCAB Q2 FY27 transcript `broadcast_at` = `2026-10-19T16:39:28+05:30`.
+- **Snapshot diff (old against new):** the only changed columns are `sources.published_at` (66 rows) and `transcript_filings.broadcast_at` (13 rows). Every new value equals the old wall clock plus `+05:30`. 0 values lack an offset. All 942 observations, 66 integrity rows, 22 company rows and 12 coverage rows are unchanged.
+- **Tests:** `tests/test_timezones.py` (9 tests, including a UTC-aware value that must not be shifted, and a legacy naive database row), plus 5 API tests.

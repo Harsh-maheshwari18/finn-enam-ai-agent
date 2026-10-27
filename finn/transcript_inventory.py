@@ -190,7 +190,7 @@ def audit_filing(f: Filing, *, offline: bool = False) -> TranscriptAudit:
 
 
 def find_transcript_filings(symbol: str, start: date, end: date, *, offline: bool = False,
-                            window_days: int = 90) -> tuple[list[Filing], list[str]]:
+                            window_days: int = 90, max_age_s: float = 12 * 3600) -> tuple[list[Filing], list[str]]:
     """NSE announcements in windows of <= window_days (the 60-90 day windows used in testing all returned 200)."""
     found: dict[str, Filing] = {}
     problems = []
@@ -198,7 +198,7 @@ def find_transcript_filings(symbol: str, start: date, end: date, *, offline: boo
     while s <= end:
         e = min(s + timedelta(days=window_days - 1), end)
         url = nse_filings.ANN_URL.format(symbol=symbol, start=s, end=e)
-        r = http.fetch(url, offline=offline, max_age_s=12 * 3600)
+        r = http.fetch(url, offline=offline, max_age_s=max_age_s)
         if not r.ok:
             problems.append(f"announcements {s}..{e}: {r.reason}")
         else:
@@ -210,11 +210,11 @@ def find_transcript_filings(symbol: str, start: date, end: date, *, offline: boo
     return sorted(found.values(), key=lambda f: f.broadcast_at), problems
 
 
-def coverage(symbol: str, as_of: date, *, quarters: int = 4, offline: bool = False) -> dict:
+def coverage(symbol: str, as_of: date, *, quarters: int = 4, offline: bool = False, max_age_s: float = 12 * 3600) -> dict:
     """Up to `quarters` most recent quarters, each matched to an audited earnings-call transcript or marked missing."""
     targets = recent_quarter_ends(as_of, quarters)
     # Calls for the oldest target happen weeks after it ends; search from its quarter end onwards.
-    filings, problems = find_transcript_filings(symbol, targets[-1], as_of, offline=offline)
+    filings, problems = find_transcript_filings(symbol, targets[-1], as_of, offline=offline, max_age_s=max_age_s)
     audits = [audit_filing(f, offline=offline) for f in filings]
     used: set[str] = set()
     rows = []

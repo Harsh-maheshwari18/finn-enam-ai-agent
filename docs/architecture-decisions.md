@@ -1,6 +1,6 @@
 # FINN — Architecture Decision Records
 
-ADR-001 to 004 are carried over from `architecture.md` (Prompt 1). ADR-005 to 015 are from Prompt 2 and ADR-016 to 023 from Prompt 3. All were driven by evidence.
+ADR-001 to 004 are carried over from `architecture.md` (Prompt 1). ADR-005 to 015 are from Prompt 2 and ADR-016 to 024 from Prompt 3. All were driven by evidence.
 
 | ADR | Date | Decision | Evidence | Status |
 |---|---|---|---|---|
@@ -27,3 +27,4 @@ ADR-001 to 004 are carried over from `architecture.md` (Prompt 1). ADR-005 to 01
 | 021 | 10-27 | Ind-AS filers in the NBFC (Division III) format get **EBITDA = not applicable**, like banks (ADR-008). Detected from P&L tags (`ImpairmentOnFinancialInstruments` and `InterestEarned`), not from tickers | BAJFINANCE showed a 71% "EBITDA margin"; only it carries those tags among the 19 Ind-AS companies; NSE names the file `INTEGRATED_FILING_NBFC_INDAS_…` | New |
 | 022 | 10-27 | Ind-AS revenue is shown **net of excise duty** when the filing itemises excise inside other expenses (gross kept as `revenue_gross`; net is never compared with gross). PBT stays **as filed** (before associates/JVs) with the amount in the note. A lending finance cost inside expenses stays an operating cost and is disclosed on the EBITDA row | Screener cross-check of 22 companies: 42 differences, all traced to these conventions. ITC revenue YoY +27.6% gross vs −11.07% net; signed ITC PDF p.6 excise 10,408.93 cr | New |
 | 023 | 10-27 | QoQ/YoY compare with prior quarters **as originally filed**, and every card says so (`comparison_basis`) | NSE's latest XBRL has no comparatives; BAJFINANCE regrouped Sep-25 revenue (20,178.90 → 19,990.42) and its XBRL notes do not say so, so a notes-based detector would miss the one real case | New; correcting it needs parsing comparatives from the PDF |
+| 024 | 10-27 | NSE timestamps are **naive IST**: attach Asia/Kolkata (stdlib `zoneinfo`, fixed +05:30 fallback; India has no DST) keeping the wall clock; never reinterpret as UTC; values already carrying an offset pass through. Our own clocks (`retrieved_at`) stay UTC | HDFCBANK broadcast 22:50:22 with a letter dated Oct 23 (UTC reading would be Oct 24 IST); upload stamp in the file name agrees | New |

@@ -109,7 +109,9 @@ def _insert(con, table: str, row: dict) -> None:
 
 def build(out: Path = DEFAULT_OUT, *, universe: Optional[dict] = None, symbols: Optional[Iterable[str]] = None,
           transcript_symbols: Optional[Iterable[str]] = None, as_of: Optional[date] = None, offline: bool = False,
-          golden_path: Path = DEFAULT_GOLDEN, manifest_path: Optional[Path] = None) -> dict:
+          golden_path: Path = DEFAULT_GOLDEN, manifest_path: Optional[Path] = None, refresh: bool = False) -> dict:
+    """refresh=True re-fetches NSE results listings and announcement searches (new quarters, new transcripts);
+    filed XBRL and PDFs are immutable and are reused from the cache."""
     universe = universe if universe is not None else load_universe()
     as_of = as_of or datetime.now(IST).date()
     groups: dict[str, list[str]] = {}
@@ -127,12 +129,13 @@ def build(out: Path = DEFAULT_OUT, *, universe: Optional[dict] = None, symbols: 
     con.executescript(EXTRA_SCHEMA)
 
     for s in syms:
-        service.ingest_results(con, s, offline=offline)
+        service.ingest_results(con, s, offline=offline, **({"listing_max_age_s": 0} if refresh else {}))
     # Build time must not leak into the digest: an unavailable source is stamped with the snapshot date instead.
     con.execute("UPDATE unavailable SET at = ?", (as_of.isoformat(),))
 
     for s in tsyms:
-        cov = transcript_inventory.coverage(s, as_of, quarters=int(universe.get("transcript_quarters", 4)), offline=offline)
+        cov = transcript_inventory.coverage(s, as_of, quarters=int(universe.get("transcript_quarters", 4)), offline=offline,
+                                            **({"max_age_s": 0} if refresh else {}))
         for a in cov["audits"]:
             _insert(con, "transcript_filings", a)
         for r in cov["quarters"]:
@@ -229,13 +232,15 @@ def main(argv=None) -> int:
     ap.add_argument("--as-of", type=date.fromisoformat, help="snapshot date (IST); default today")
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
     ap.add_argument("--symbols", nargs="*", help="override the universe (default: config/universe.json)")
+    ap.add_argument("--refresh", action="store_true", help="re-fetch NSE listings and announcement searches")
     a = ap.parse_args(argv)
     if a.command == "verify":
         ok, msg = verify(a.out)
         print(("OK " if ok else "MISMATCH ") + msg)
         return 0 if ok else 1
     try:
-        m = build(a.out, symbols=[s.upper() for s in a.symbols] if a.symbols else None, as_of=a.as_of, offline=a.offline)
+        m = build(a.out, symbols=[s.upper() for s in a.symbols] if a.symbols else None, as_of=a.as_of, offline=a.offline,
+                  refresh=a.refresh)
     except BuildError as e:
         print(e, file=sys.stderr)
         return 2
