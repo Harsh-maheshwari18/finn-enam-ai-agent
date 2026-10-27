@@ -1,0 +1,21 @@
+# Render Blueprint for the FINN read-only API (free plan). See docs/deployment.md.
+services:
+  - type: web
+    name: finn-api
+    runtime: python
+    plan: free
+    region: singapore              # nearest Render region to NSE; NSE access from it is still unverified
+    branch: main
+    buildCommand: pip install -r requirements.txt && python -m finn.snapshot verify
+    startCommand: gunicorn finn.api:app --bind 0.0.0.0:$PORT --workers 2 --timeout 60 --access-logfile -
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
+      - key: FINN_SNAPSHOT
+        value: snapshot/finn_snapshot.db
+      - key: FINN_LLM_DISABLED
+        value: "1"
+      - key: FINN_CACHE_DIR
+        value: /tmp/finn_raw

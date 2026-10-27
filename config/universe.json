@@ -1,0 +1,8 @@
+{
+  "_about": "Company universe for the snapshot build. Tickers live here (and in tests), never in engine code. Chosen in docs/product-spec.md (Prompt 1).",
+  "portfolio": ["TCS", "PERSISTENT", "KPITTECH", "HDFCBANK", "BAJFINANCE", "CDSL", "RELIANCE", "BHARTIARTL", "ITC",
+                "ASIANPAINT", "TITAN", "PAGEIND", "LT", "POLYCAB", "SUNPHARMA", "MARUTI", "DEEPAKNTR", "DIXON"],
+  "research": ["KAYNES", "ASTRAL", "LALPATHLAB", "HAL"],
+  "transcript_audit": ["TCS", "POLYCAB", "HDFCBANK"],
+  "transcript_quarters": 4
+}

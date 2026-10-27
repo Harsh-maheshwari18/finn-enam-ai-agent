@@ -30,6 +30,15 @@ def pick_periods(refs: list[ResultFilingRef]) -> tuple[Optional[str], list[Resul
 
 
 def ingest_results(con, symbol: str, *, offline: bool = False) -> list[Unavailable]:
+    """Every problem, including an unreachable listing, is stored so the card can say why data is missing."""
+    problems = _ingest_results(con, symbol, offline=offline)
+    for p in problems:
+        store.put_unavailable(con, symbol, p)
+    con.commit()
+    return problems
+
+
+def _ingest_results(con, symbol: str, *, offline: bool) -> list[Unavailable]:
     problems: list[Unavailable] = []
     url = nse_results.LIST_URL.format(symbol=symbol)
     f = http.fetch(url, offline=offline, max_age_s=6 * 3600)
@@ -67,9 +76,6 @@ def ingest_results(con, symbol: str, *, offline: bool = False) -> list[Unavailab
         obs = metrics.extract(parsed, ctx, ref.taxonomy, symbol=symbol, basis=ref.basis, source=src, rounding=rounding)
         store.put_observations(con, list(obs.values()), ref.taxonomy)
         store.put_integrity(con, symbol, ref.period_end, ref.basis, metrics.integrity_checks(obs, ref.taxonomy))
-    for p in problems:
-        store.put_unavailable(con, symbol, p)
-    con.commit()
     return problems
 
 
@@ -115,6 +121,10 @@ def results_card(con, symbol: str) -> dict:
     return to_jsonable({
         "symbol": symbol, "status": "ok", "period_end": cur_end, "basis": basis, "taxonomy": taxonomy,
         "rows": out_rows, "ebitda_margin_pct": margin,
+        # NSE's latest XBRL carries no comparative columns, so prior quarters come from their own original filings.
+        # Observed: BAJFINANCE Sep-25 revenue 20,178.90 cr as filed vs 19,990.42 cr regrouped in the Sep-26 PDF.
+        "comparison_basis": "QoQ and YoY use each prior quarter as originally filed; later regrouping or restatement "
+                            "shown in the current results PDF is not reflected",
         "exceptional_cr": metrics.to_crore(exc.value) if exc and exc.value else None,
         "integrity": json.loads(chk["checks"]) if chk else [], "unavailable": unav,
     })

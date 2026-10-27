@@ -94,3 +94,66 @@ def test_missing_input_makes_ebitda_missing_not_zero():
     src = SourceRef("xbrl_result", "fixture", datetime(2026, 10, 27, tzinfo=timezone.utc), None, "fixture")
     o = metrics.extract(p, "OneD", "indas", symbol="TCS", basis="consolidated", source=src)
     assert o["ebitda"].status == "missing" and o["ebitda"].value is None and "finance_costs" in o["ebitda"].note
+
+
+def test_nbfc_format_gets_no_ebitda():
+    """BAJFINANCE files in the Ind-AS NBFC (Division III) format; adding back finance costs gave a 71% 'margin'."""
+    p = nse_results.parse_instance((FIX / "xbrl_BAJFINANCE_30-SEP-2026_C.xml").read_bytes())
+    ctx = nse_results.quarter_context(p, date(2026, 9, 30))
+    src = SourceRef("xbrl_result", "fixture", datetime(2026, 10, 27, tzinfo=timezone.utc), None, "fixture")
+    o = metrics.extract(p, ctx, "indas", symbol="BAJFINANCE", basis="consolidated", source=src)
+    assert o["ebitda"].status == "not_applicable" and o["ebitda"].value is None and "NBFC" in o["ebitda"].note
+    assert o["revenue"].status == o["pbt"].status == o["pat"].status == "extracted"
+    assert metrics.margin(o["ebitda"].value, o["revenue"].value) is None
+
+
+@pytest.mark.parametrize("sym", ["TCS", "POLYCAB"])
+def test_non_lenders_are_not_flagged_as_nbfc(sym):
+    assert extracted(sym, "2026-09-30")["ebitda"].status == "derived"
+
+
+def _fixture(sym, qe, pe):
+    p = nse_results.parse_instance((FIX / f"xbrl_{sym}_{qe}_C.xml").read_bytes())
+    ctx = nse_results.quarter_context(p, pe)
+    src = SourceRef("xbrl_result", "fixture", datetime(2026, 10, 27, tzinfo=timezone.utc), None, "fixture")
+    return metrics.extract(p, ctx, "indas", symbol=sym, basis="consolidated", source=src)
+
+
+def test_excise_duty_is_netted_from_revenue():
+    """ITC signed results PDF (ITC_31072026162945_Results.pdf, consolidated, p.6): Excise duty 10,408.93 cr.
+    The XBRL files it only as an itemised 'other expense'; revenue growth on the gross line mixes in the
+    Feb-2026 duty increase (note 5 of the same PDF)."""
+    o = _fixture("ITC", "30-JUN-2026", date(2026, 6, 30))
+    assert metrics.to_crore(o["excise_duty"].value) == D("10408.93")
+    assert metrics.to_crore(o["revenue_gross"].value) == D("29523.30")
+    assert metrics.to_crore(o["revenue"].value) == D("19114.37")          # screener "Sales": 19,114
+    assert o["revenue"].formula == metrics.NET_REVENUE_FORMULA and "excise" in o["revenue"].note
+    checks = {c["check"]: c["status"] for c in metrics.integrity_checks(o, "indas")}
+    assert checks["total_income = revenue + other_income"] == "pass"    # identity holds on the filed gross line
+
+
+def test_net_and_gross_revenue_are_never_compared():
+    cur = _fixture("ITC", "30-JUN-2026", date(2026, 6, 30))["revenue"]
+    gross_prev = extracted("TCS", "2026-06-30")["revenue"]                # any as-reported revenue of the right shape
+    gross_prev = type(gross_prev)(**{**gross_prev.__dict__, "symbol": "ITC", "period_end": date(2026, 3, 31),
+                                     "period_start": date(2026, 1, 1)})
+    ch = metrics.compare(cur, gross_prev, "qoq")
+    assert ch.status == "misaligned" and "excise" in ch.note
+
+
+def test_pbt_note_states_associates_share():
+    """ITC PDF p.8: 'Share of Profit/(Loss) of associates and joint ventures' 85.91 cr, added after tax."""
+    o = _fixture("ITC", "30-JUN-2026", date(2026, 6, 30))
+    assert metrics.to_crore(o["pbt"].value) == D("5774.94") and "85.91" in o["pbt"].note
+
+
+def test_lending_cost_inside_expenses_is_disclosed():
+    """LT XBRL itemises 'Finance cost of financial services business and finance lease activity' (2,032.66 cr)
+    inside other expenses. The LT results PDF is image-only, so this value is checked against XBRL only."""
+    o = _fixture("LT", "30-JUN-2026", date(2026, 6, 30))
+    assert o["ebitda"].status == "derived" and "2032.66" in o["ebitda"].note
+
+
+def test_tcs_unaffected_by_new_conventions():
+    o = extracted("TCS", "2026-09-30")
+    assert "excise_duty" not in o and o["revenue"].status == "extracted" and o["revenue"].formula is None

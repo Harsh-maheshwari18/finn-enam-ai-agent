@@ -119,3 +119,36 @@ def _fail(url: str, status: Optional[int], reason: str, cached: Optional[Fetched
         cached.reason = f"live fetch failed ({reason}); serving cached copy from {cached.fetched_at.isoformat()}"
         return cached
     return Fetched(False, url, status, None, datetime.now(timezone.utc), False, None, reason)
+
+
+@dataclass
+class Probe:
+    url: str
+    ok: bool
+    status: Optional[int]
+    latency_ms: int
+    bytes: int
+    content_type: Optional[str]
+    body: bytes
+    reason: Optional[str]
+
+
+def probe(url: str, *, timeout: float = 15) -> Probe:
+    """One live request for connectivity diagnostics: no cache read or write, no retry, no stale fallback,
+    so the result says exactly what this host saw. Same headers and per-host throttle as fetch()."""
+    host = urlparse(url).netloc
+    headers = {"User-Agent": UA, "Accept": "*/*"}
+    if host in REFERERS:
+        headers["Referer"] = REFERERS[host]
+    _throttle(host)
+    t0 = time.monotonic()
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=timeout) as r:
+            body = r.read()
+            return Probe(url, True, r.status, int((time.monotonic() - t0) * 1000), len(body),
+                         r.headers.get("Content-Type"), body, None)
+    except urllib.error.HTTPError as e:
+        return Probe(url, False, e.code, int((time.monotonic() - t0) * 1000), 0, None, b"", f"HTTP {e.code}")
+    except (urllib.error.URLError, TimeoutError, OSError) as e:
+        return Probe(url, False, None, int((time.monotonic() - t0) * 1000), 0, None, b"",
+                     f"network error: {getattr(e, 'reason', e)}")

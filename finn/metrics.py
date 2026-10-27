@@ -4,6 +4,7 @@ Definitions: docs/data-and-evidence-standard.md §3-4.
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from datetime import date, timedelta
 from decimal import Decimal, ROUND_HALF_UP
@@ -29,6 +30,7 @@ TAGS = {
         "pat_continuing": ["ProfitLossForPeriodFromContinuingOperations"],
         "pat": ["ProfitLossForPeriod"],
         "pat_owners": ["ProfitOrLossAttributableToOwnersOfParent"],
+        "associates_share": ["ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod"],
     },
     "banking": {
         "interest_earned": ["InterestEarned"],
@@ -63,6 +65,9 @@ LABELS = {
 EBITDA_FORMULA = "pbt_pre_exceptional + finance_costs + dna - other_income"
 NII_FORMULA = "interest_earned - interest_expended"
 BANK_PBT_FORMULA = "ppop - provisions"
+NET_REVENUE_FORMULA = "revenue_from_operations - excise_duty"
+EXCISE = re.compile(r"\bexcise\b", re.I)
+LENDING_COST = re.compile(r"\bfinance cost", re.I)
 
 
 def extract(parsed: dict, ctx: str, taxonomy: str, *, symbol: str, basis: str,
@@ -93,6 +98,12 @@ def extract(parsed: dict, ctx: str, taxonomy: str, *, symbol: str, basis: str,
         return o.value if o is not None and o.status in ("extracted", "derived") else None
 
     if taxonomy == "indas":
+        _indas_adjustments(out, obs, v, [i for i in parsed.get("expense_items", [])
+                                         if (i["start"], i["end"]) == (c["start"], c["end"])])
+
+    if taxonomy == "indas" and is_lender_format(facts, ctx):
+        out["ebitda"] = obs("ebitda", None, "not_applicable", note=LENDER_NOTE)
+    elif taxonomy == "indas":
         # EBITDA excludes exceptional items. Verified: TCS Jun-26 has a -668 cr exceptional item;
         # pre-exceptional EBITDA (18,556) reconciles to screener, post-exceptional (17,888) does not.
         base, base_note = v("pbt_pre_exceptional"), None
@@ -115,7 +126,49 @@ def extract(parsed: dict, ctx: str, taxonomy: str, *, symbol: str, basis: str,
         else:
             out["nii"] = obs("nii", None, "missing", formula=NII_FORMULA, note="interest lines missing")
         out["pbt"] = _bank_pbt(out, obs, v, basis)
+    if taxonomy == "indas" and out.get("ebitda") and out["ebitda"].status == "derived":
+        lending = [i for i in parsed.get("expense_items", [])
+                   if (i["start"], i["end"]) == (c["start"], c["end"]) and LENDING_COST.search(i["description"])]
+        if lending:
+            e = out["ebitda"]
+            extra = "; ".join(f"'{i['description']}' ({to_crore(i['value'])} cr)" for i in lending)
+            out["ebitda"] = Observation(**{**e.__dict__, "note": f"{e.note}. Treats {extra} as an operating cost, "
+                                           "like a lender's interest; sources that add it back show EBITDA higher by that amount"})
     return out
+
+
+def _indas_adjustments(out, obs, v, items) -> None:
+    """Two filing conventions that otherwise mislead (found 2026-10-27 by cross-checking 22 companies):
+    1. Excise duty is inside Revenue from operations and again inside expenses (ITC, RELIANCE). Revenue is shown
+       net of it, so growth is not driven by duty changes (ITC: excise 1,635 -> 10,409 cr YoY after the Feb-2026
+       duty increase). The reported gross figure is kept as revenue_gross.
+    2. NSE's ProfitBeforeTax is before the share of associates/JVs, which is added after tax. PBT stays as filed,
+       with the amount in the note, because the golden set reproduces the filed line."""
+    excise = [i for i in items if EXCISE.search(i["description"])]
+    if excise and v("revenue") is not None:
+        duty = sum(i["value"] for i in excise)
+        gross = out["revenue"]
+        out["revenue_gross"] = Observation(**{**gross.__dict__, "metric": "revenue_gross"})
+        out["excise_duty"] = obs("excise_duty", duty, "extracted", tag="OtherExpenses[" + " + ".join(i["description"] for i in excise) + "]")
+        out["revenue"] = obs("revenue", gross.value - duty, "derived", formula=NET_REVENUE_FORMULA,
+                             note=f"Net of excise duty ({to_crore(duty)} cr), which the filing includes in Revenue from "
+                                  f"operations ({to_crore(gross.value)} cr) and again in expenses")
+    share = v("associates_share")
+    if share and out.get("pbt") is not None and out["pbt"].value is not None:
+        p = out["pbt"]
+        out["pbt"] = Observation(**{**p.__dict__, "note": f"As filed: before share of profit of associates/JVs ({to_crore(share)} cr), "
+                                    "which the filing adds after tax; PAT includes it"})
+
+
+# Ind-AS Schedule III Division III (NBFC) P&L lines. Among the 19 Ind-AS companies in the 2026-10-27 snapshot only
+# BAJFINANCE reports these; adding finance costs back would show a 71% "EBITDA margin" for a lender.
+LENDER_TAGS = ("ImpairmentOnFinancialInstruments", "InterestEarned")
+LENDER_NOTE = ("EBITDA is not meaningful for this filer: its results use the Ind-AS NBFC (Division III) format, where "
+               "finance costs are the cost of the lending business. Revenue, PBT and PAT are shown as reported.")
+
+
+def is_lender_format(facts: dict, ctx: str) -> bool:
+    return all(isinstance(facts.get((t, ctx)), Decimal) for t in LENDER_TAGS)
 
 
 def _bank_pbt(out, obs, v, basis) -> Observation:
@@ -137,12 +190,14 @@ def _bank_pbt(out, obs, v, basis) -> Observation:
 def integrity_checks(o: dict[str, Observation], taxonomy: str) -> list[dict]:
     """Arithmetic identities that must hold inside one filing. A failure is shown, not hidden."""
     def val(k):
+        if k == "revenue_reported":            # the identity holds on the filed line, before any excise netting
+            k = "revenue_gross" if "revenue_gross" in o else "revenue"
         x = o.get(k)
         return x.value if x is not None and x.status in ("extracted", "derived") else None
 
     rules = {
         "indas": [
-            ("total_income = revenue + other_income", "total_income", ["revenue", "other_income"], [1, 1]),
+            ("total_income = revenue + other_income", "total_income", ["revenue_reported", "other_income"], [1, 1]),
             ("pbt = pbt_pre_exceptional + exceptional", "pbt", ["pbt_pre_exceptional", "exceptional"], [1, 1]),
             ("pat_continuing = pbt - tax", "pat_continuing", ["pbt", "tax"], [1, -1]),
         ],
@@ -234,6 +289,8 @@ def align(curr: Observation, prev: Optional[Observation], kind: Literal["qoq", "
         return f"basis mismatch {curr.basis} vs {prev.basis}"
     if curr.months != 3 or prev.months != 3:
         return "both periods must be single quarters (YTD never used)"
+    if (curr.formula == NET_REVENUE_FORMULA) != (prev.formula == NET_REVENUE_FORMULA):
+        return "revenue definitions differ: one period is net of excise duty, the other as reported"
     if prev.period_end != expected_prior(curr.period_end, kind):
         return f"expected period ending {expected_prior(curr.period_end, kind)}, got {prev.period_end}"
     return None

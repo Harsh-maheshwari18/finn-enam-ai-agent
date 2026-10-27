@@ -10,3 +10,4 @@ data/llm_cache/
 data/*.db
 *.pdf
 !tests/fixtures/**/*.pdf
+snapshot/*.building

@@ -103,5 +103,23 @@
   "retrieved": "2026-10-27",
   "provenance": "fixture (real, TRIMMED to last 30 bars; not redistributable at scale)",
   "url": "https://query1.finance.yahoo.com/v8/finance/chart/TCS.NS?range=2y&interval=1d"
+ },
+ "xbrl_BAJFINANCE_30-SEP-2026_C.xml": {
+  "sha256": "3de881019f229f5fde8d2aa113ea1c71304f5225ebe6a4d192b5f4a65f54ea34",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_NBFC_INDAS_1742040_19102026075918_WEB.xml"
+ },
+ "xbrl_ITC_30-JUN-2026_C.xml": {
+  "sha256": "251a20e96060a164871536fcf2b0bebfc5a0d76dc6faa35245fbb187eae4b06c",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1706108_31072026052353_WEB.xml"
+ },
+ "xbrl_LT_30-JUN-2026_C.xml": {
+  "sha256": "50737f577af7a44d6fea51e824e497ce43867c9ccee2586ad7e779f9fab8daaf",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1703294_28072026061959_WEB.xml"
  }
 }

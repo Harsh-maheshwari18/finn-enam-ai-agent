@@ -56,8 +56,9 @@ def parse_listing(body: bytes, symbol: str) -> list[ResultFilingRef]:
 def parse_instance(body: bytes) -> dict:
     """Parse an XBRL instance into {"contexts": {id: {...}}, "facts": {(local_name, ctx): Decimal|str}}.
 
-    Only non-dimensional facts are kept: dimensional contexts (segments, expense breakdowns)
-    are never mixed into headline metrics.
+    Only non-dimensional facts go into "facts": dimensional contexts (segments, expense breakdowns)
+    are never mixed into headline metrics. The itemised other-expenses breakdown is returned
+    separately as "expense_items" ({description, value, context, start, end}).
     """
     root = ET.fromstring(body)
     contexts = {}
@@ -75,8 +76,19 @@ def parse_instance(body: bytes) -> dict:
             "dimensional": has_dims,
         }
     facts = {}
+    desc, amount = {}, {}
     for el in root.iter():
         ctx = el.get("contextRef")
+        name = el.tag.split("}")[-1]
+        # The "other expenses" breakdown (e.g. ITC "Excise Duty", LT "Finance cost of financial services business")
+        # lives in per-item contexts. It is returned separately so it can never leak into headline facts.
+        if ctx and name == "DescriptionOfOtherExpenses":
+            desc[ctx] = (el.text or "").strip()
+        elif ctx and name == "OtherExpenses" and el.get("unitRef") is not None:
+            try:
+                amount[ctx] = Decimal((el.text or "").strip())
+            except InvalidOperation:
+                pass
         if not ctx or ctx not in contexts or contexts[ctx]["dimensional"]:
             continue
         name = el.tag.split("}")[-1]
@@ -88,7 +100,10 @@ def parse_instance(body: bytes) -> dict:
                 continue
         else:
             facts[(name, ctx)] = text
-    return {"contexts": contexts, "facts": facts}
+    items = [{"description": desc[c], "value": amount[c], "context": c,
+              "start": contexts.get(c, {}).get("start"), "end": contexts.get(c, {}).get("end")}
+             for c in desc if c in amount and c in contexts]
+    return {"contexts": contexts, "facts": facts, "expense_items": items}
 
 
 def quarter_context(parsed: dict, period_end: date) -> Optional[str]:

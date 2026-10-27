@@ -6,7 +6,7 @@ from datetime import date, datetime
 from decimal import Decimal
 from typing import Literal, Optional
 
-Provenance = Literal["live", "cached", "fixture", "unavailable"]
+Provenance = Literal["live", "cached", "fixture", "snapshot", "unavailable"]
 Basis = Literal["consolidated", "standalone"]
 
 

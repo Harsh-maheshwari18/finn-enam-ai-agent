@@ -19,7 +19,7 @@ SPEAKER = re.compile(r"(?m)^\s*([A-Z][A-Za-z.'\-]+(?: [A-Z][A-Za-z.'\-]+){0,3}|M
 
 def pdf_pages(path) -> list[str]:
     import pypdf
-    reader = pypdf.PdfReader(str(path))
+    reader = pypdf.PdfReader(path if hasattr(path, "read") else str(path))   # path or in-memory bytes
     out = []
     for p in reader.pages:
         try:
@@ -45,10 +45,15 @@ def fix_numeric_o(s: str) -> str:
     return re.sub(r"\b[\dO][\dO,.]*\b", fix, s)
 
 
-def normalise(s: str) -> str:
+def normalise_glyphs(s: str) -> str:
+    """Glyph repairs only; case and spacing are kept (used for reading quarter labels)."""
     s = unicodedata.normalize("NFKC", s)
     s = re.sub(r"\s?Ư", "ff", s)          # "taper o Ư or" -> "taper off or"
-    s = s.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
+    return s.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
+
+
+def normalise(s: str) -> str:
+    s = normalise_glyphs(s)
     s = re.sub(r"\s*-\s*", "-", s)
     s = re.sub(r"\s+", " ", s)
     return s.strip().lower()

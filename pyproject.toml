@@ -10,3 +10,4 @@ dev = ["pytest>=8"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = ["allow_network_attempts: test may attempt (blocked) network calls"]
