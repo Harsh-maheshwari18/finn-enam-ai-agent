@@ -245,13 +245,13 @@
   {
    "id": "POLYCAB-working-capital-days",
    "symbol": "POLYCAB",
-   "title": "Working-capital cycle back to a long-term range (now 45 to 50 days)",
+   "title": "Working-capital cycle back to a long-term range of 50 to 55 days (stated as 45 to 50 days from Q4 FY26)",
    "kind": "measurable_qualitative",
    "scope": "company-wide working-capital cycle",
    "metric": "working_capital_days",
    "target": {
-    "low": 45,
-    "high": 50,
+    "low": 50,
+    "high": 55,
     "unit": "days"
    },
    "horizon": {
@@ -272,7 +272,7 @@
      "speaker": "Shashank Yagnick",
      "stance": "tightened",
      "quote": "On a normalized basis, we expect the working capital cycle to revert to our steady-state range of 45 to 50 days.",
-     "note": "The stated range moved from 50-55 days to 45-50 days without comment."
+     "note": "First statement of 45 to 50 days, one call after 50 to 55 days (Q3 FY26 p.5). Management calls it 'our steady-state range' and does not mention the earlier range or give a reason for the change. FINN reads a lower range in days as a tighter target; that the target was revised, rather than restated on a different basis, is FINN's reading."
     },
     {
      "quarter": "Q1 FY27",
@@ -289,7 +289,8 @@
      "quote": "As these benefits gradually normalize, we expect the working capital cycle to trend towards our long-term operating range of 45 to 50 days."
     }
    ],
-   "interpretation": "Expressed in days and never dated. FINN has no receivable, inventory or payable days in the snapshot and does not substitute a balance-sheet ratio, so it cannot be judged."
+   "interpretation": "Expressed in days and never dated. The target field holds the range as first stated (50 to 55 days, Q3 FY26); from Q4 FY26 onwards management gives 45 to 50 days, recorded as a tightening in the follow-ups. FINN has no receivable, inventory or payable days in the snapshot and does not substitute a balance-sheet ratio, so neither range can be judged.",
+   "audit_note": "Chronology: Q3 FY26 p.5, 50 to 55 days; Q4 FY26 p.5, 45 to 50 days (tightened); Q1 FY27 p.5 and Q2 FY27 p.6, 45 to 50 days (restated). No call mentions 50 to 55 days again or explains the change. Corrected 2026-10-27: an earlier version put 45 to 50 days in the target field, which hid the original range."
   },
   {
    "id": "POLYCAB-ehv-commissioning",
@@ -428,7 +429,7 @@
     }
    ],
    "interpretation": "Management puts FY26 at 5.4% against a 10% FY30 target. Export revenue is not in the snapshot, so FINN does not check either figure. Not restated by management in Q2 FY27; FINN does not read that silence as a change.",
-   "audit_note": "The p.5 sentence was missed by the candidate filter (no topic keyword for 'exports') and found while checking for later mentions."
+   "audit_note": "The p.8 sentence was missed by the candidate filter (no topic keyword for 'exports') and found while checking for later mentions."
   },
   {
    "id": "POLYCAB-epc-margin",

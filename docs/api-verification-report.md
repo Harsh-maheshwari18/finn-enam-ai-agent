@@ -57,7 +57,10 @@ The BAJFINANCE regrouping is the one place where FINN still shows a different Yo
 - **19 of 22 companies** are checked by identities and against screener, not against their signed PDFs by hand.
 - **LT's results PDF is image-only.** Its lending-cost line is checked against XBRL and screener, not the PDF.
 - **Insurers, and restatements other than the one found,** are not tested.
-- **Promise Ledger: validated locally, not deployed.** `GET /api/v1/companies/{SYM}/promises` (API 0.4.0) serves 16 records for TCS, POLYCAB and HDFCBANK. Every quote is re-checked against the cited PDF page and speaker (`promise-ledger.md`). The ledger is labelled `stale` if it was built from a different snapshot. It is tested offline (`tests/test_promises.py`, 27) and in the browser (3 new UI tests), **not on Render**. The audit was done by Claude and has not been reviewed by a person.
+- **Promise Ledger: deployed and checked live (commit `8b4db28`, 2026-10-27).** `GET /api/v1/companies/{SYM}/promises` (API 0.4.0) serves 16 records for TCS, POLYCAB and HDFCBANK. Every quote is re-checked against the cited PDF page and speaker (`promise-ledger.md`). The ledger is labelled `stale` if it was built from a different snapshot. It is tested offline (`tests/test_promises.py`, 31) and in the browser (3 UI tests).
+  - **Live check:** the API returned records identical to the committed ledger. The live `index.html`, `app.js` and `styles.css` were byte-identical to `web/`. The cards showed 50 source links (one per statement and follow-up). The 10 cited transcripts and 3 XBRL filings each returned HTTP 200 on a single GET, and every transcript matched its recorded sha256.
+  - **Not yet deployed:** two later local corrections (the POLYCAB working-capital target and the exports audit note; see `promise-ledger.md`).
+  - **Review:** the audit was done by Claude and has not been reviewed by a person. The review pack is `promise-ledger-human-review.md`.
 - **Large swings are reproduced, not explained.** Some cards show them: DEEPAKNTR PAT +207% YoY; DIXON PBT +140% while EBITDA is −4%. Both match screener. The card does not yet explain why; that is the job of the filings and transcript layers.
 
 ## Reproduce

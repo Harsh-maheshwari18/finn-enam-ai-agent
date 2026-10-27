@@ -14,6 +14,7 @@ For each company: what did management commit to on an earnings call, what did th
 | 2. Labels | written by hand | `config/promise_audit.json`: hash, page, speaker and label for each candidate. No text. Also the relabel log and the known misses | Yes |
 | 3. Records | written by hand | `config/promise_ledger.json`: 16 records with short quotes | Yes |
 | 4. Build | `python -m finn.promises build` | `snapshot/promise_ledger.json` | Yes |
+| 5. Review pack | `python scripts/promise_review_pack.py` (`--check` to verify) | `docs/promise-ledger-human-review.md`, generated from step 4 plus the hand-written prompts in `config/promise_review_questions.json` | Yes |
 
 ## Audit structure
 | Layer | Count | What it is |
@@ -102,6 +103,8 @@ No record is met or missed.
 | POLYCAB C&W 1.5× | 2 follow-ups | 4 | Added Q4 FY26 p.15 (base is GDP growth, a different benchmark) and Q1 FY27 p.9 (hedged "maybe 2-3 next quarters" horizon) |
 | POLYCAB capex | 1 follow-up | 2 | Added the ~90% Cables & Wires allocation (Q4 FY26 p.16) as part of this record |
 | POLYCAB dividend payout | not in the ledger | **new record**, pending | Meets every criterion (appendix item 4) |
+| POLYCAB working-capital days | target field 45–50 days | target **50–55 days**, as in the statement; 45–50 recorded as the Q4 FY26 tightening | The statement (Q3 FY26 p.5) says 50 to 55 days. Putting the later range in the target hid the original. Verdict unchanged (unverifiable) |
+| POLYCAB exports audit note | "The p.5 sentence was missed" | "The p.8 sentence" | The sentence is on Q4 FY26 p.8, which the statement and `known_misses` both cite. No POLYCAB transcript has an export target on p.5 |
 | Every record | — | `scope` field | Scope is explicit and enforced by the build |
 
 The relabelling is logged in `promise_audit.json` (`relabels`, `record_kind_changes`):
@@ -127,14 +130,15 @@ The relabelling is logged in `promise_audit.json` (`relabels`, `record_kind_chan
 Other commitment-labelled candidates are restatements already attached to a record as follow-ups. The exceptions are a few minor items not made into records: POLYCAB's ₹60–80 bn five-year capex programme and its "₹6,000 to ₹8,000 crores by FY2030" form (both restate the capex record), the FMEG "1.5x to 2x of industry growth" target, and the W&C "12% to 14%" near-to-mid-term range (noted on the W&C record). They are labelled in `promise_audit.json` and can be promoted later by the same criteria.
 
 ## Who audited it
-The labels, records, relabels and this selection were written by **Claude (AI assistant)** from the extracted PDF text on 2026-10-27. The build checks quotes, pages, speakers and roles, but **no person has reviewed the judgements** (labels, stances, scopes, selection). The UI and the data both say so.
+The labels, records, relabels and this selection were written by **Claude (AI assistant)** from the extracted PDF text on 2026-10-27. The build checks quotes, pages, speakers and roles, but **no person has reviewed the judgements** (labels, stances, scopes, selection). The UI and the data both say so. `docs/promise-ledger-human-review.md` sets out every record, with a checklist and a question for the reviewer. It is generated from the ledger, and every record in it is marked pending.
 
 ## Tests
-- `tests/test_promises.py`: 27 tests.
+- `tests/test_promises.py`: 31 tests.
   - Committed artefacts: digest and input hashes match, no exclusions, every quote is management speech with a page and an NSE URL, no confidence fields, the TCS series is right, segment and days guidance is never computed, the verdict table holds, the relabel log matches the labels, the HDFCBANK verdicts do not rest on omission, every record has a scope and only consolidated scope is computed.
   - Verdict rules on SYNTHETIC records: neutral stances never withdraw or clear; a segment-scope record with a computable metric name is not computed.
   - API: ok, not_audited, 404, stale, missing.
   - Five tests use the real PDFs and skip without `data/raw`: the build reproduces the committed ledger exactly; the quote check rejects a paraphrase, a wrong page, a wrong speaker and an analyst cited as management; roles; analyst labels against roles; a tampered record is excluded.
+  - Review pack: the committed pack equals a fresh generation and contains every quote and page link; every record is marked pending, and no box is ticked. The working-capital record keeps its original range, and the exports note cites p.8.
 - `tests/test_guidance_llm.py`: a new test pins the Prompt 2 fixture's corrected segment label for the POLYCAB 11–13% band. The 14.37% cases in the band-logic test are kept and marked as synthetic inputs, not POLYCAB outcomes.
 - `tests/test_ui.py`: 3 new browser tests:
   - the TCS evidence chain;

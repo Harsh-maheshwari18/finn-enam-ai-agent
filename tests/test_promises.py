@@ -134,6 +134,20 @@ def test_verdicts_on_the_real_records():
     assert "met" not in v.values() and "missed" not in v.values()
 
 
+def test_working_capital_record_keeps_the_original_range_and_its_revision():
+    wc = next(r for _, r in ALL if r["id"] == "POLYCAB-working-capital-days")
+    assert "50 to 55 days" in wc["statement"]["quote"] and (wc["target"]["low"], wc["target"]["high"]) == (50, 55)
+    first = wc["follow_ups"][0]
+    assert first["stance"] == "tightened" and "45 to 50 days" in first["quote"] and "50 to 55" in first["note"]
+    assert wc["verdict"]["status"] == "unverifiable"                # undated, and days are not in the snapshot
+
+
+def test_audit_notes_cite_the_statement_page_they_describe():
+    ex = next(r for _, r in ALL if r["id"] == "POLYCAB-exports-10pct")
+    assert ex["statement"]["page"] == 8 and "p.8 sentence" in ex["audit_note"]
+    assert any(m["symbol"] == "POLYCAB" and m["page"] == 8 and "exports" in m["why"] for m in AUDIT["known_misses"])
+
+
 def test_audit_labels_cover_every_candidate():
     a = LEDGER["audit"]
     assert a["candidates"] == a["labelled"] == 164
@@ -279,6 +293,34 @@ def test_stale_and_missing_ledger(monkeypatch, tmp_path):
 def test_promises_endpoint_is_listed():
     _, b = call("/api/v1")
     assert any("promises" in e for e in b["endpoints"])
+
+
+# --- human-review pack ------------------------------------------------------------------------------------------
+
+def _review_pack():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("promise_review_pack", ROOT / "scripts" / "promise_review_pack.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_review_pack_is_generated_from_the_current_ledger():
+    pack = _review_pack()
+    text = pack.render()
+    assert pack.OUT.read_text(encoding="utf-8") == text, "run python scripts/promise_review_pack.py"
+    for _, r in ALL:
+        for q in [r["statement"], *r["follow_ups"], *[f["prompted_by"] for f in r["follow_ups"] if f.get("prompted_by")]]:
+            assert q["quote"].replace("|", "\\|") in text and f"({q['url']}#page={q['page']})" in text
+
+
+def test_review_pack_leaves_every_record_pending():
+    text = _review_pack().render()
+    prompts = json.loads((ROOT / "config" / "promise_review_questions.json").read_text(encoding="utf-8"))
+    assert set(prompts["questions"]) == {r["id"] for _, r in ALL}
+    assert text.count("**Status: PENDING. Not reviewed by a person.**") == len(ALL)
+    assert "☑" not in text and "[x]" not in text.lower()           # no box is ticked on anyone's behalf
+    assert "not yet reviewed by a person" in LEDGER["audited_by"]
 
 
 # --- real transcripts (raw cache) ------------------------------------------------------------------------------

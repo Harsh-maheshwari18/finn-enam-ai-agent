@@ -1,0 +1,66 @@
+{
+ "about": "Hand-written prompts for the Promise Ledger human-review pack (scripts/promise_review_pack.py). These are questions for a reviewer and notes by the preparer, written by Claude (AI assistant) on 2026-10-27. They are not source facts and record no review outcome: every fact in the pack comes from snapshot/promise_ledger.json and config/promise_audit.json.",
+ "questions": {
+  "TCS-ebit-exit-25": "Does \"While it's an uphill task, we'll continue to endeavor to inch up on our margins\" (Q2 FY27 p.16) weaken the 25% exit commitment, which is the only basis for **not reaffirmed**? Or is it an answer that simply does not repeat the target (`not_restated`)? In that case the verdict would be **pending**. Also decide whether (EBITDA − D&A) / revenue is an acceptable stand-in for TCS's \"operating margin\", and whether \"exit\" means Q4 FY27.",
+  "TCS-aspiration-26-28": "Is \"our long-term aspiration remains unchanged, continues to be 26% to 28%\" correctly treated as **commentary** (never scored) rather than as an explicit numeric commitment with no date?",
+  "POLYCAB-wc-ebitda-11-13": "The quoted sentence (Q3 FY26 p.15) names neither the segment nor EBITDA. Is it right to take **Wires & Cables** and **EBITDA** from the later statements (Q4 FY26 p.13, Q1 FY27 p.5, Q2 FY27 p.7)? And is it right to refuse to compare the target with the segment's reported **EBIT** (13.3%, 14.2%) or with the consolidated margin?",
+  "POLYCAB-fmeg-ebitda-8-10": "Is the Q1 FY27 p.6 follow-up a restatement, given that it sets an EBIT result beside an EBITDA target? Is it right not to treat that 8% EBIT figure as progress against the target?",
+  "POLYCAB-capex-12-16bn": "Is the unit (₹ bn per year, through FY30) right? Is it right to show management's own FY26 figure (INR 14.8 bn) without checking it, and to keep the ~90% Cables & Wires split as a follow-up rather than a separate commitment?",
+  "POLYCAB-working-capital-days": "The target field holds the range as first stated, **50 to 55 days** (Q3 FY26 p.5). From Q4 FY26 management gives **45 to 50 days** without mentioning the earlier range, and FINN records that as `tightened`. Is a revised target the right reading, rather than the same target stated on a different basis? Is \"in the coming quarters\" too vague to date the record, which leaves it **unverifiable**?",
+  "POLYCAB-ehv-commissioning": "Does the Q2 FY27 p.18 statement move the EHV plant from end-CY2026 to FY28, making the stance `delayed` and the verdict **not reaffirmed**? Is it right not to call it missed while the original date (31 Dec 2026) has not passed?",
+  "POLYCAB-cw-growth-1.5x": "Is the GDP-based statement (Q4 FY26 p.15) correctly kept apart (`explained`) rather than treated as a restatement of the market-growth target? Is the record correctly undated even though Q1 FY27 p.9 adds \"maybe 2-3 next quarters\"?",
+  "POLYCAB-exports-10pct": "Is \"greater than 10% contribution from exports by financial year 2030\" correctly read as \"more than 10% of revenue by FY30\"? Management's FY26 figure of 5.4% is shown unchecked. Is it right not to treat the lack of a Q2 FY27 mention as a change?",
+  "POLYCAB-epc-margin": "Is \"high single digits over mid- to long term\" measurable enough to be `measurable_qualitative` rather than commentary? Is \"widened\" (to \"mid- to high\") followed by \"restated\" the right stance sequence?",
+  "POLYCAB-dividend-payout-30": "The payout base (dividend over which profit) is not stated. Should the record stand as a commitment that is **pending** until FY2030? Is it right that no later mention exists in Q1 or Q2 FY27?",
+  "HDFCBANK-ldr-85-90": "Given the hedges (\"maybe\", \"I think\", \"somewhere around\"), is this an explicit numeric commitment? Is the revised verdict **pending** right? The earlier version called the Q4 FY26 \"not a constraint\" remark softening, which would make it **not reaffirmed**.",
+  "HDFCBANK-growth-vs-system-fy26": "Should one sentence produce two records (FY26 and FY27)? For FY26, management's own figures (12% credit growth against a system it puts at 13.5–13.9%) are shown but not scored. Is **unverifiable** the honest verdict, given that \"top line growth\" is undefined?",
+  "HDFCBANK-growth-vs-system-fy27": "Are the Q4 FY26 p.6 and Q1 FY27 p.14 answers neutral (`not_restated`), as revised, or do they weaken the commitment (`softened`), as the earlier version said? That decision moves the verdict between **pending** and **not reaffirmed**.",
+  "HDFCBANK-msme-growth": "Management said \"in that range of 18% to 20%, 21%\". Is the widest reading (18–21%) the right target? Should the record be **unverifiable** because it is undated and conditional? Is \"business banking\" the right segment label?",
+  "HDFCBANK-margin-change-2q": "The sentence's label was changed from `measurable_qualitative` to `commentary` while the ledger was being built. Is \"you will see that change\" commentary? What it refers to comes only from the analyst's question."
+ },
+ "flags": {
+  "HDFCBANK-growth-vs-system-fy26": "This record and HDFCBANK-growth-vs-system-fy27 quote the same sentence (Q3 FY26 p.4), so the 55 quotes contain 54 distinct texts."
+ },
+ "corrections_before_review": [
+  {
+   "record": "POLYCAB-exports-10pct",
+   "what": "`audit_note` cited \"p.5\" for the sentence the filter missed; the sentence is on Q4 FY26 p.8, and no POLYCAB transcript has an export target on p.5. The note now says p.8. Quote, page, speaker and verdict unchanged."
+  },
+  {
+   "record": "POLYCAB-working-capital-days",
+   "what": "The target field held 45 to 50 days, the later range, although the record's statement says 50 to 55 days. It now holds 50 to 55 days. The title, interpretation, audit note and the Q4 FY26 follow-up note set out the chronology. Verdict unchanged (unverifiable: undated, and working-capital days are not in the snapshot)."
+  }
+ ],
+ "omitted_commitments": [
+  [
+   "POLYCAB \"we've given a guidance that we want to spend around 3% to 5% of B2C top-line every year on A&P\" (Q3 FY26 p.14)",
+   "Omitted",
+   "The same answer adds \"it will be difficult to say that this will be every year\". It allocates an operating cost, and its base is not a reported figure"
+  ],
+  [
+   "POLYCAB \"around 90% of that will go into Cable & Wire capacity expansion alone\" (Q4 FY26 p.16)",
+   "Follow-up of «POLYCAB-capex-12-16bn»",
+   "It is a split of the capex record, not a separate commitment"
+  ],
+  [
+   "TCS \"progressively inch up closer, at least to the FY26 levels\" (Q1 FY27 p.23)",
+   "Omitted",
+   "Aspiration with no number or date. The 25% exit from the same call is «TCS-ebit-exit-25»"
+  ],
+  [
+   "POLYCAB ₹60–80 bn five-year capex programme and \"₹6,000 to ₹8,000 crores by FY2030\"",
+   "Not separate",
+   "Restate «POLYCAB-capex-12-16bn»"
+  ],
+  [
+   "POLYCAB FMEG \"1.5x to 2x of industry growth\"",
+   "Not separate",
+   "Minor; it is in the same sentence as «POLYCAB-fmeg-ebitda-8-10». Can be promoted by the same criteria"
+  ],
+  [
+   "POLYCAB W&C \"12% to 14%\" near-to-mid-term EBITDA",
+   "Noted on «POLYCAB-wc-ebitda-11-13»",
+   "Given in the same answer as the 11–13% restatement"
+  ]
+ ]
+}
