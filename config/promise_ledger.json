@@ -1,0 +1,715 @@
+{
+ "about": "Management Promise Ledger records. Each record was chosen during a manual read of the 12 audited transcripts (candidates from `python -m finn.promises audit`) and is re-validated by `python -m finn.promises build`: every quote must be found in the cited PDF by transcripts.locate_quote, the speaker must own the turn that contains it, and the role must come out of the same document. Pages are PDF page numbers (the printed 'Page n of m' footer is often one lower). Fields named `interpretation` and `audit_note` are FINN's reading, not a source statement. The audit was performed by Claude (AI assistant) reading the extracted text, then checked by this build; it has not been reviewed by an analyst.",
+ "audited_by": "Claude (AI assistant), 2026-10-27, from extracted PDF text; not yet reviewed by a person",
+ "records": [
+  {
+   "id": "TCS-ebit-exit-25",
+   "symbol": "TCS",
+   "title": "Exit FY27 at an operating margin of 25% or more",
+   "kind": "explicit_numeric",
+   "scope": "consolidated",
+   "metric": "ebit_margin",
+   "target": {
+    "low": 25,
+    "high": null,
+    "unit": "%"
+   },
+   "horizon": {
+    "label": "exit FY27 (Q4 FY27)",
+    "period_end": "2027-03-31",
+    "stated": false,
+    "basis": "'exit' read as the last quarter of the fiscal year; the question was about FY27. Analysts later restate it as 'exiting FY27' (Q2 FY27 p.16) and 'by 4Q' (Q2 FY27 p.21)."
+   },
+   "statement": {
+    "quarter": "Q1 FY27",
+    "page": 23,
+    "speaker": "Samir Seksaria",
+    "quote": "We want to exit at 25% plus and strive to achieve it sooner rather than later."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q2 FY27",
+     "page": 16,
+     "speaker": "Samir Seksaria",
+     "stance": "softened",
+     "quote": "While it's an uphill task, we'll continue to endeavor to inch up on our margins.",
+     "prompted_by": {
+      "page": 16,
+      "speaker": "Ruchi Mukhija",
+      "quote": "In that context, how do we think about the margin commitment we had made around exiting FY27, at 25% plus EBIT margin range?"
+     },
+     "note": "Asked directly about the 25% exit, the CFO did not restate the number."
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 21,
+     "speaker": "Samir Seksaria",
+     "stance": "not_restated",
+     "quote": "So, on an overall basis, we will balance our investment priorities and our disciplined execution, and we will work towards inching margins higher from here.",
+     "prompted_by": {
+      "page": 21,
+      "speaker": "Sandeep Shah",
+      "quote": "Sir, on an organic basis, is it fair to assume that the guidance is still intact for reaching 25% by 4Q, if I exclude the 50 bps kind of adverse impact from MHP consolidation?"
+     },
+     "note": "Second direct question. The answer gives direction ('inching margins higher') but does not repeat 25%; FINN counts that as not restated, not as weakening."
+    }
+   ],
+   "interpretation": "Stated once (Q1 FY27). Asked about it in the next call, the CFO called it 'an uphill task' and spoke of endeavouring to inch margins up, without repeating 25%; a second answer also gave no number. FINN records the explicit 'uphill task' answer as softening and the commitment as not reaffirmed. It is not a miss: Q4 FY27 has not been reported.",
+   "audit_note": "The quoted sentence does not name the margin; it answers a question about 'margins' going back to FY26 levels, and TCS's prepared remarks call the figure its 'operating margin' (24% in Q1 and Q2 FY27). The analyst's word 'EBIT' is not management's. FINN's (EBITDA - D&A) / revenue on the consolidated filing gives 23.96% and 23.98% for those quarters, which matches the 24% TCS states; TCS's own definition is not published in the snapshot, so the match is the only basis for the formula."
+  },
+  {
+   "id": "TCS-aspiration-26-28",
+   "symbol": "TCS",
+   "title": "Long-term operating margin aspiration of 26% to 28%",
+   "kind": "commentary",
+   "scope": "consolidated",
+   "metric": "ebit_margin",
+   "target": {
+    "low": 26,
+    "high": 28,
+    "unit": "%"
+   },
+   "horizon": {
+    "label": "long term, no date",
+    "period_end": null,
+    "stated": false
+   },
+   "statement": {
+    "quarter": "Q2 FY27",
+    "page": 15,
+    "speaker": "Samir Seksaria",
+    "quote": "Overall, our long-term aspiration remains unchanged, continues to be 26% to 28%."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q2 FY27",
+     "page": 27,
+     "speaker": "Samir Seksaria",
+     "stance": "restated",
+     "quote": "See, we have always called 26%-28% as our guiding beacon, and we would not want to shift away from that."
+    }
+   ],
+   "interpretation": "Called an aspiration and a 'guiding beacon', with no date. It cannot be met or missed, so FINN shows the latest computed margin for context only.",
+   "audit_note": "An analyst also refers to the band in Q3 FY26 (p.23); that is a pointer, not management guidance."
+  },
+  {
+   "id": "POLYCAB-wc-ebitda-11-13",
+   "symbol": "POLYCAB",
+   "title": "Wires & Cables EBITDA margin of 11% to 13% (Project Spring, FY30)",
+   "kind": "explicit_numeric",
+   "scope": "segment: Wires & Cables",
+   "metric": "segment_ebitda_margin:wires_and_cables",
+   "target": {
+    "low": 11,
+    "high": 13,
+    "unit": "%"
+   },
+   "horizon": {
+    "label": "FY30 (Project Spring)",
+    "period_end": "2030-03-31",
+    "stated": true,
+    "basis": "Q2 FY27 p.11: 'that is the reason why we stick to our long-term guidance for FY30'."
+   },
+   "statement": {
+    "quarter": "Q3 FY26",
+    "page": 15,
+    "speaker": "Shashank Yagnick",
+    "quote": "And if I had to add to that, to refer to our Project Spring guidance, we've given a long-term guidance of 11% to 13%."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q4 FY26",
+     "page": 13,
+     "speaker": "Shashank Yagnick",
+     "stance": "restated",
+     "quote": "So again, that's a very calibrated guidance which we have given that over long term, we should expect 11% to 13% EBITDA margin.",
+     "note": "The same answer adds a nearer range: 'in the near to mid term, we may expect 12% to 14% EBITDA'."
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 5,
+     "speaker": "Shashank Yagnick",
+     "stance": "restated",
+     "quote": "Consistent with our Project Spring roadmap, we continue to maintain our medium- to long-term margin guidance of 11% to 13% for this business."
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 7,
+     "speaker": "Aditya Nathany",
+     "stance": "restated",
+     "quote": "In line with our Project Spring roadmap, we remain confident of sustaining medium - to long -term EBITDA margins within our guided range of 11% to 13%."
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 11,
+     "speaker": "Aditya Nathany",
+     "stance": "restated",
+     "quote": "But as you know, Umang, there are different seasonalities, there are different periods of years where fluctuations will happen, and that is the reason why we stick to our long-term guidance for FY30."
+    }
+   ],
+   "interpretation": "Restated in every later call. This is a segment margin (Wires & Cables), not the consolidated margin: the Q1 FY27 and Q2 FY27 statements sit in the Wires & Cables paragraph. FINN's snapshot has no segment results, so it does not compare it with anything.",
+   "audit_note": "An earlier FINN label (Prompt 2 experiment) mapped this to the consolidated EBITDA margin. That was wrong and is corrected here. The Q3 FY26 sentence names neither the segment nor EBITDA; the segment comes from the Project Spring band and the Q1/Q2 FY27 statements, and 'EBITDA' from Q4 FY26 p.13 and Q2 FY27 p.7. Management reports this segment at EBIT (13.3% in Q1 FY27, 14.2% in Q2 FY27), which is a different measure: FINN will not compare a segment EBIT figure with this EBITDA target."
+  },
+  {
+   "id": "POLYCAB-fmeg-ebitda-8-10",
+   "symbol": "POLYCAB",
+   "title": "FMEG EBITDA margin of 8% to 10% by FY30",
+   "kind": "explicit_numeric",
+   "scope": "segment: FMEG",
+   "metric": "segment_ebitda_margin:fmeg",
+   "target": {
+    "low": 8,
+    "high": 10,
+    "unit": "%"
+   },
+   "horizon": {
+    "label": "by FY30",
+    "period_end": "2030-03-31",
+    "stated": true
+   },
+   "statement": {
+    "quarter": "Q3 FY26",
+    "page": 7,
+    "speaker": "Shashank Yagnick",
+    "quote": "Looking ahead, we are confident in the long -term potential of the FMEG segment and remain on track to achieve our Project Spring targets of 1.5x - 2x industry growth and EBITDA margins in the range of 8% to 10% by FY30"
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q4 FY26",
+     "page": 9,
+     "speaker": "Shashank Yagnick",
+     "stance": "restated",
+     "quote": "In FMEG, we are also progressing well consistently, outpacing industry growth in line with our target of growing at 1.5x to 2x of market rate, while maintaining a clear focus on margin expansion and progressing towards our EBITDA margin goal of 8% to 10% by FY2030."
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 6,
+     "speaker": "Shashank Yagnick",
+     "stance": "restated",
+     "quote": "EBIT margins for the quarter were 8%, very much in line with the milestones laid out under Project Spring, where we target EBITDA margins of 8% to 10% by FY 2030.",
+     "note": "Compares a reported EBIT margin with an EBITDA target; FINN does not treat that as evidence of progress."
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 9,
+     "speaker": "Aditya Nathany",
+     "stance": "restated",
+     "quote": "So over the longer term, I believe we would end up in that kind of a range of 8% to 10% of the EBITDA margin."
+    }
+   ],
+   "interpretation": "Restated in every later call. Segment metric; no segment data in the snapshot."
+  },
+  {
+   "id": "POLYCAB-capex-12-16bn",
+   "symbol": "POLYCAB",
+   "title": "Capex of ₹12 bn to ₹16 bn a year through FY30",
+   "kind": "explicit_numeric",
+   "scope": "company-wide capital expenditure",
+   "metric": "capex",
+   "target": {
+    "low": 12,
+    "high": 16,
+    "unit": "₹ bn per year"
+   },
+   "horizon": {
+    "label": "annually through FY30",
+    "period_end": "2030-03-31",
+    "stated": true
+   },
+   "statement": {
+    "quarter": "Q3 FY26",
+    "page": 5,
+    "speaker": "Shashank Yagnick",
+    "quote": "Capital expenditure for the quarter was ₹ 3.4 billion, taking the 9M FY26 total to ₹ 10.9 billion, in-line with our Project Spring guidance of investing ₹ 12 billion to ₹ 16 billion annually through FY30."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q4 FY26",
+     "page": 9,
+     "speaker": "Shashank Yagnick",
+     "stance": "restated",
+     "quote": "During FY26, we incurred capex of INR 14.8 billion, in line with our annual guidance of INR 12 billion to INR 16 billion per annum.",
+     "note": "Management's own FY26 figure. FINN has not checked it against the filed cash-flow statement."
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 16,
+     "speaker": "Shashank Yagnick",
+     "stance": "explained",
+     "quote": "So again, as per our Project Spring guidance, we've said that whatever we will pump, around 90% of that will go into Cable & Wire capacity expansion alone",
+     "note": "How the capex is split (about 90% Cables & Wires, about 5% backward integration, 3-4% FMEG). Kept as part of this record rather than as a separate commitment."
+    }
+   ],
+   "interpretation": "Management reports FY26 capex inside the band. FINN's snapshot has no capex figure, so the yearly check is left to the filed annual cash-flow statement and is not made here."
+  },
+  {
+   "id": "POLYCAB-working-capital-days",
+   "symbol": "POLYCAB",
+   "title": "Working-capital cycle back to a long-term range (now 45 to 50 days)",
+   "kind": "measurable_qualitative",
+   "scope": "company-wide working-capital cycle",
+   "metric": "working_capital_days",
+   "target": {
+    "low": 45,
+    "high": 50,
+    "unit": "days"
+   },
+   "horizon": {
+    "label": "no date ('in the coming quarters', 'as these effects normalize')",
+    "period_end": null,
+    "stated": false
+   },
+   "statement": {
+    "quarter": "Q3 FY26",
+    "page": 5,
+    "speaker": "Shashank Yagnick",
+    "quote": "We expect this to normalize to our long-term steady range of 50 to 55 days in the coming quarters."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q4 FY26",
+     "page": 5,
+     "speaker": "Shashank Yagnick",
+     "stance": "tightened",
+     "quote": "On a normalized basis, we expect the working capital cycle to revert to our steady-state range of 45 to 50 days.",
+     "note": "The stated range moved from 50-55 days to 45-50 days without comment."
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 5,
+     "speaker": "Shashank Yagnick",
+     "stance": "restated",
+     "quote": "As these effects normalize, we expect the working capital cycle to settle within our long-term operating range of 45 to 50 days."
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 6,
+     "speaker": "Aditya Nathany",
+     "stance": "restated",
+     "quote": "As these benefits gradually normalize, we expect the working capital cycle to trend towards our long-term operating range of 45 to 50 days."
+    }
+   ],
+   "interpretation": "Expressed in days and never dated. FINN has no receivable, inventory or payable days in the snapshot and does not substitute a balance-sheet ratio, so it cannot be judged."
+  },
+  {
+   "id": "POLYCAB-ehv-commissioning",
+   "symbol": "POLYCAB",
+   "title": "EHV cable plant on stream by end of calendar 2026",
+   "kind": "measurable_qualitative",
+   "scope": "company project: EHV cable plant",
+   "metric": "milestone",
+   "target": null,
+   "horizon": {
+    "label": "end of calendar 2026",
+    "period_end": "2026-12-31",
+    "stated": true,
+    "basis": "Said on the Q4 FY26 call (filed May 2026): 'by end of this calendar year'."
+   },
+   "statement": {
+    "quarter": "Q4 FY26",
+    "page": 15,
+    "speaker": "Shashank Yagnick",
+    "quote": "Capacity is expected to come on stream by end of this calendar year."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q2 FY27",
+     "page": 18,
+     "speaker": "Aditya Nathany",
+     "stance": "delayed",
+     "quote": "So I would like to take this opportunity to sort of also let the investor community know that in terms of our EHV plant timelines, we are expecting the EHV plant to now commission somewhere in FY 2028, the next year, though, so FY28."
+    }
+   ],
+   "interpretation": "Management itself moved the date from end-2026 to FY28. FINN records the revision; the original date has not yet passed, so this is not shown as missed."
+  },
+  {
+   "id": "POLYCAB-cw-growth-1.5x",
+   "symbol": "POLYCAB",
+   "title": "Cables & Wires to grow at 1.5x the market",
+   "kind": "explicit_numeric",
+   "scope": "segment: Cables & Wires, against market growth",
+   "metric": "relative_growth",
+   "target": {
+    "low": 1.5,
+    "high": null,
+    "unit": "x market growth"
+   },
+   "horizon": {
+    "label": "each full year, no end date",
+    "period_end": null,
+    "stated": false
+   },
+   "statement": {
+    "quarter": "Q4 FY26",
+    "page": 11,
+    "speaker": "Shashank Yagnick",
+    "quote": "So again, Sonali, if you refer the Project Spring guidance, which also I referred during my speech, is that we've committed in Cables & Wires, we will grow at 1.5x of market growth."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q4 FY26",
+     "page": 15,
+     "speaker": "Shashank Yagnick",
+     "stance": "explained",
+     "quote": "So if you look at full year basis, like we've always guided, we'll continue to deliver 1.5x of GDP growth.",
+     "note": "Names GDP growth, not market growth, as the base. FINN treats these as different benchmarks and does not merge them."
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 9,
+     "speaker": "Shashank Yagnick",
+     "stance": "restated",
+     "quote": "Over maybe 2-3 next quarters, you will see a trend, and you should definitely see 1.5x of market growth.",
+     "note": "Adds a hedged near-term horizon ('maybe 2-3 next quarters', roughly to Q3-Q4 FY27). The record's horizon stays undated because the target itself is stated per full year."
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 18,
+     "speaker": "Shashank Yagnick",
+     "stance": "restated",
+     "quote": "We have guided that we'll continue to grow at 1.5x of market growth."
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 13,
+     "speaker": "Aditya Nathany",
+     "stance": "restated",
+     "quote": "What we have called out already, as an anchor to look into the volume growth, is that whatever the market grows, we will do 1.5x of that in cable and wires."
+    }
+   ],
+   "interpretation": "Needs a market growth figure and segment volume growth. Neither is in the snapshot, and FINN will not use an outside estimate of market growth. One statement uses GDP growth as the base instead, which is a different target."
+  },
+  {
+   "id": "POLYCAB-exports-10pct",
+   "symbol": "POLYCAB",
+   "title": "Exports to reach 10% of the top line by FY30",
+   "kind": "explicit_numeric",
+   "scope": "company-wide revenue mix",
+   "metric": "export_share_of_revenue",
+   "target": {
+    "low": 10,
+    "high": null,
+    "unit": "% of revenue",
+    "low_exclusive": true
+   },
+   "horizon": {
+    "label": "by FY30",
+    "period_end": "2030-03-31",
+    "stated": true
+   },
+   "statement": {
+    "quarter": "Q4 FY26",
+    "page": 8,
+    "speaker": "Shashank Yagnick",
+    "quote": "We remain firm on track to achieve our target of greater than 10% contribution from exports by financial year 2030."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q4 FY26",
+     "page": 11,
+     "speaker": "Shashank Yagnick",
+     "stance": "reported",
+     "quote": "So see, like I mentioned today, in this financial year, we are at 5.4% export contribution to overall top line.",
+     "note": "Management's own FY26 figure; not in FINN's snapshot."
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 14,
+     "speaker": "Shashank Yagnick",
+     "stance": "restated",
+     "quote": "I think we are well poised to deliver higher growth in exports, and that should actually be at a more aggressive pace because we have to also reach 10% of our overall top line by FY30."
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 19,
+     "speaker": "Shashank Yagnick",
+     "stance": "restated",
+     "quote": "We have given our guidance of going north of 10% of our overall top line by 2030."
+    }
+   ],
+   "interpretation": "Management puts FY26 at 5.4% against a 10% FY30 target. Export revenue is not in the snapshot, so FINN does not check either figure. Not restated by management in Q2 FY27; FINN does not read that silence as a change.",
+   "audit_note": "The p.5 sentence was missed by the candidate filter (no topic keyword for 'exports') and found while checking for later mentions."
+  },
+  {
+   "id": "POLYCAB-epc-margin",
+   "symbol": "POLYCAB",
+   "title": "EPC operating margin in the high single digits",
+   "kind": "measurable_qualitative",
+   "scope": "segment: EPC",
+   "metric": "segment_margin:epc",
+   "target": null,
+   "horizon": {
+    "label": "mid to long term, no date",
+    "period_end": null,
+    "stated": false
+   },
+   "statement": {
+    "quarter": "Q3 FY26",
+    "page": 7,
+    "speaker": "Shashank Yagnick",
+    "quote": "Looking ahead, the annual sustainable operating margin is expected to remain in the high single digits over mid- to long term."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q4 FY26",
+     "page": 8,
+     "speaker": "Shashank Yagnick",
+     "stance": "widened",
+     "quote": "Looking ahead, the annual sustainable operating margin is expected to remain in the mid- to high single digits over mid- to long term.",
+     "note": "'high' became 'mid- to high' single digits."
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 6,
+     "speaker": "Shashank Yagnick",
+     "stance": "restated",
+     "quote": "Over the medium to long term, we continue to expect sustainable operating margins for the EPC business to remain in the high single-digit range."
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 7,
+     "speaker": "Aditya Nathany",
+     "stance": "restated",
+     "quote": "Over the medium- to long-term, we continue to expect sustainable margins for the EPC business to remain in the high single -digit range, supported by disciplined project selection, efficient execution, and a healthy order pipeline."
+    }
+   ],
+   "interpretation": "Widened for one call, then back to 'high single-digit'. No number and no date; EPC segment results are not in the snapshot.",
+   "audit_note": "In Q3 FY26 and Q4 FY26 the sentence follows the EPC update in the prepared remarks (Q3 FY26: 'Segment profitability stood at ₹ 272 million, translating to a margin of 6.7%')."
+  },
+  {
+   "id": "POLYCAB-dividend-payout-30",
+   "symbol": "POLYCAB",
+   "title": "Dividend payout above 30% by FY2030",
+   "kind": "explicit_numeric",
+   "scope": "company-wide dividend payout",
+   "metric": "dividend_payout_ratio",
+   "target": {
+    "low": 30,
+    "high": null,
+    "unit": "% payout",
+    "low_exclusive": true
+   },
+   "horizon": {
+    "label": "by FY2030",
+    "period_end": "2030-03-31",
+    "stated": true
+   },
+   "statement": {
+    "quarter": "Q4 FY26",
+    "page": 9,
+    "speaker": "Shashank Yagnick",
+    "quote": "We also increased our dividend payout to approximately 27.2%, up from 26.3% last year as we move steadily towards our stated objective of exceeding 30% by FY 2030."
+   },
+   "follow_ups": [],
+   "interpretation": "Management reports FY26 payout at about 27.2% against an objective of more than 30% by FY2030. Payout is not defined in the sentence (dividend over which profit), and dividends are not in the snapshot, so FINN checks neither figure. No later mention was found in Q1 or Q2 FY27; FINN does not read that silence as a change.",
+   "audit_note": "Added 2026-10-27 after the review. The candidate filter missed this sentence (no topic keyword for dividends); found while checking omitted commitments."
+  },
+  {
+   "id": "HDFCBANK-ldr-85-90",
+   "symbol": "HDFCBANK",
+   "title": "Loan-to-deposit ratio of about 85% to 90% for FY27",
+   "kind": "explicit_numeric",
+   "scope": "bank-wide; standalone or consolidated not stated",
+   "metric": "loan_to_deposit_ratio",
+   "target": {
+    "low": 85,
+    "high": 90,
+    "unit": "%"
+   },
+   "horizon": {
+    "label": "FY27",
+    "period_end": "2027-03-31",
+    "stated": true
+   },
+   "statement": {
+    "quarter": "Q3 FY26",
+    "page": 6,
+    "speaker": "Sashidhar Jagdishan",
+    "quote": "And then maybe by FY '27, by the natural growth and even with the growth in the way we are expecting in terms of faster growth rate, I think we should land somewhere around the 85% to 90% for FY '27."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q3 FY26",
+     "page": 4,
+     "speaker": "Sashidhar Jagdishan",
+     "stance": "explained",
+     "quote": "I would like to say that under the current scenario, we don't think that we shall be constrained by the CD ratio.",
+     "note": "Same call as the target, before it was given: the ratio was already described as not a constraint."
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 5,
+     "speaker": "Srinivasan Vaidyanathan",
+     "stance": "restated",
+     "quote": "I think Sashi alluded to that we are committed on the glide path of taking it towards the downward glide path, and we continue to be in that.",
+     "note": "Same call; direction only, no number."
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 4,
+     "speaker": "Sashidhar Jagdishan",
+     "stance": "not_restated",
+     "quote": "The loan deposit ratio is not a constraint.",
+     "note": "Prepared remarks; the paragraph adds 'Hence, it's no longer a binding constraint.' The same view was expressed on the call that set the range (Q3 FY26 p.4), so this is not new softening. The 85% to 90% figure is not repeated."
+    }
+   ],
+   "interpretation": "Hedged when given ('maybe', 'I think', 'somewhere around'). Later calls call the ratio 'not a constraint', as the original call already did, and do not repeat the range. Not repeating a figure is not a withdrawal, so the commitment stays awaiting outcome until FY27 is reported. Loans and deposits are not in the snapshot.",
+   "audit_note": "Q4 FY26 p.9: an analyst says 'you said LDR is no longer kind of relevant or a constraint'. That paraphrase is a pointer only. Corrected 2026-10-27: an earlier version of this record called the Q4 FY26 remark 'softened' and the verdict 'not reaffirmed'; the review found the same wording on the original call."
+  },
+  {
+   "id": "HDFCBANK-growth-vs-system-fy26",
+   "symbol": "HDFCBANK",
+   "title": "FY26 'top line' growth in line with the banking system",
+   "kind": "measurable_qualitative",
+   "scope": "bank-wide 'top line' growth; measure not defined on the call",
+   "metric": "relative_growth",
+   "target": null,
+   "horizon": {
+    "label": "FY26",
+    "period_end": "2026-03-31",
+    "stated": true
+   },
+   "statement": {
+    "quarter": "Q3 FY26",
+    "page": 4,
+    "speaker": "Sashidhar Jagdishan",
+    "quote": "I would also like to reiterate that we shall meet the glide path that we had indicated earlier in terms of the growth, our top line growth, which is in line with the system this financial year and faster than the system in the next financial year."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q4 FY26",
+     "page": 3,
+     "speaker": "Sashidhar Jagdishan",
+     "stance": "explained",
+     "quote": "We had estimated the system credit growth to be around 10.5% to 11.5%. We did 12%, up from 5.5% last year.",
+     "note": "Compares with the bank's own earlier estimate of system growth, not with actual system growth."
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 8,
+     "speaker": "Sashidhar Jagdishan",
+     "stance": "explained",
+     "quote": "This is what we had expected, and we calibrated our strategies and our growth in line with that, and that is why we grew at 12%.",
+     "prompted_by": {
+      "page": 7,
+      "speaker": "Kunal Shah",
+      "quote": "So, we indicated like we will try to grow in line with the industry average, but we are seeing industry average being upwards of 15%, we are still at 12%."
+     },
+     "note": "Same answer: the system figure from RBI period-end data 'comes to somewhere around 13.5% to 13.9%'. Both numbers are management's and the analyst's, not FINN's."
+    }
+   ],
+   "interpretation": "The year has closed, but the measure is not defined and FINN has no system growth figure, so it gives no verdict. On the Q4 FY26 call management says the bank's credit grew 12%, against a system it puts at 13.5% to 13.9% and its own earlier estimate of 10.5% to 11.5%. FINN shows that exchange rather than scoring it.",
+   "audit_note": "'Top line growth' is not defined on the call. Elsewhere on the same call the CEO separates it from loan growth (Q3 FY26 p.8: deposit growth 'in line with normally the top line growth, slightly faster than the loan growth'), while the later questions and answers below discuss loan and credit growth. FINN does not decide which measure was meant."
+  },
+  {
+   "id": "HDFCBANK-growth-vs-system-fy27",
+   "symbol": "HDFCBANK",
+   "title": "FY27 'top line' growth faster than the banking system",
+   "kind": "measurable_qualitative",
+   "scope": "bank-wide 'top line' growth; measure not defined on the call",
+   "metric": "relative_growth",
+   "target": null,
+   "horizon": {
+    "label": "FY27",
+    "period_end": "2027-03-31",
+    "stated": true
+   },
+   "statement": {
+    "quarter": "Q3 FY26",
+    "page": 4,
+    "speaker": "Sashidhar Jagdishan",
+    "quote": "I would also like to reiterate that we shall meet the glide path that we had indicated earlier in terms of the growth, our top line growth, which is in line with the system this financial year and faster than the system in the next financial year."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q4 FY26",
+     "page": 6,
+     "speaker": "Kaizad Bharucha",
+     "stance": "not_restated",
+     "quote": "So I think we will continue to have a good momentum and trajectory in our growth.",
+     "prompted_by": {
+      "page": 6,
+      "speaker": "Mahrukh Adajania",
+      "quote": "Because I guess the earlier guidance was of above sector growth, but the sector growth has also moved up substantially?"
+     },
+     "note": "Asked about the above-system FY27 guidance; the answer describes momentum and does not mention the system. Not repeating the target is not a withdrawal."
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 14,
+     "speaker": "Kaizad Bharucha",
+     "stance": "not_restated",
+     "quote": "So that should give you a flavor of how we've participated in each of these segments and we do see credit demand holding.",
+     "prompted_by": {
+      "page": 13,
+      "speaker": "Nitin Aggarwal",
+      "quote": "We earlier talked about that we'll want to grow higher than the system, but I believe with the system in a different tangent, I'm not sure we'll want to really go by that?"
+     },
+     "note": "The answer gives segment growth figures and does not compare with the system. (A later line on p.15, 'we just don't want to commit any number', answers a follow-up about the FCNR deposit drive and is not used here.)"
+    }
+   ],
+   "interpretation": "Asked about it in each of the next two calls, management described growth momentum without repeating 'faster than the system'. FINN does not read that as a withdrawal: the commitment stays awaiting outcome until FY27 is reported. FINN has no system growth figure to compare against. Corrected 2026-10-27: an earlier version called these answers 'softened' and the verdict 'not reaffirmed'.",
+   "audit_note": "'Top line growth' is not defined on the call. Elsewhere on the same call the CEO separates it from loan growth (Q3 FY26 p.8: deposit growth 'in line with normally the top line growth, slightly faster than the loan growth'), while the later questions and answers below discuss loan and credit growth. FINN does not decide which measure was meant."
+  },
+  {
+   "id": "HDFCBANK-msme-growth",
+   "symbol": "HDFCBANK",
+   "title": "Business-banking (MSME) growth of about 18% to 20% (or 21%)",
+   "kind": "explicit_numeric",
+   "scope": "segment: business banking (MSME)",
+   "metric": "segment_loan_growth:business_banking",
+   "target": {
+    "low": 18,
+    "high": 21,
+    "unit": "% YoY"
+   },
+   "horizon": {
+    "label": "no date ('will continue')",
+    "period_end": null,
+    "stated": false
+   },
+   "statement": {
+    "quarter": "Q4 FY26",
+    "page": 12,
+    "speaker": "Kaizad Bharucha",
+    "quote": "If you also see the pack, which my colleagues have put out, we have grown our business banking, which is mainly representative of our MSME, we've grown at about 20% year -on-year, and that will continue to also be in that range of 18% to 20%, 21%, depending upon, obviously, some of the developments in the economy."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q1 FY27",
+     "page": 14,
+     "speaker": "Kaizad Bharucha",
+     "stance": "reported",
+     "quote": "We've also continued to see very good growth come in our MSME segment and out over there, we have seen a business banking which is the largest component of our MSME segment grow at 22.3% this year.",
+     "note": "Management's own figure, above the stated range; the period ('this year') is not specified and the figure is not in the snapshot."
+    }
+   ],
+   "conditions": "depending upon developments in the economy",
+   "interpretation": "Conditional and undated; segment loan data is not in the snapshot.",
+   "audit_note": "Management said 'in that range of 18% to 20%, 21%'. FINN records the widest reading, 18% to 21%, and shows the exact words."
+  },
+  {
+   "id": "HDFCBANK-margin-change-2q",
+   "symbol": "HDFCBANK",
+   "title": "'You will see that change' in margins over the next two quarters",
+   "kind": "commentary",
+   "scope": "bank margin relative to peers",
+   "metric": "net_interest_margin_vs_peers",
+   "target": null,
+   "horizon": {
+    "label": "next two quarters (to Q4 FY27)",
+    "period_end": "2027-03-31",
+    "stated": true
+   },
+   "statement": {
+    "quarter": "Q2 FY27",
+    "page": 9,
+    "speaker": "Kaizad Bharucha",
+    "quote": "And therefore, I think going forward, across the next 2 quarters, you will see that change coming through as we also grow the volumes in retail and MSME."
+   },
+   "follow_ups": [],
+   "interpretation": "'That change' answers an analyst who asked why the bank's margin decline is similar to peers'. Management does not say what the change will be or by how much, so FINN treats it as commentary and does not assign a direction.",
+   "audit_note": "The question (Kunal Shah, same page) is the only context for what 'that change' means."
+  }
+ ]
+}

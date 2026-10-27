@@ -179,6 +179,17 @@ details.fold .fold-item a { overflow-wrap: anywhere; }
 .q-row:first-child { border-top: 0; }
 .q-row .q { font-weight: 700; }
 .ok { color: var(--ok); } .warn { color: var(--warn); } .bad { color: var(--bad); }
+.pr-card { padding: 12px 0; border-top: 1px solid var(--line); display: grid; gap: 6px; min-width: 0; }
+.pr-card:first-child { border-top: 0; }
+.pr-card h3 { font-size: 15px; }
+.pr-card h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); margin: 12px 0 4px; }
+.chip.pv.ok { background: var(--accent-soft); color: var(--ok); font-weight: 600; }
+.chip.pv.warn { background: var(--med-soft); color: var(--med); font-weight: 600; }
+.chip.pv.bad { background: var(--high-soft); color: var(--high); font-weight: 600; }
+.chip.pv.muted { background: var(--low-soft); }
+blockquote.pq { margin: 0; padding: 2px 0 2px 10px; border-left: 3px solid var(--line); font-family: var(--serif); font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
+.pr-follow { padding: 8px 0; border-top: 1px dashed var(--line); display: grid; gap: 4px; }
+.pr-follow .chip { justify-self: start; }
 
 /* ---- settings ---- */
 .field { display: grid; gap: 4px; margin: 12px 0; }

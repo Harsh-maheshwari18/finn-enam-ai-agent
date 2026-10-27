@@ -42,9 +42,10 @@ URLs and sha256 for every file: `GET /api/v1/companies/{SYMBOL}/transcripts`, or
 
 ## Availability is not guidance quality
 These 12 transcripts are **available and readable**. That says nothing about how many measurable, checkable commitments they contain.
-- **Guidance labelled so far:** only the 10 statements in the Prompt 2 experiment (`tests/fixtures/real/guidance_experiment.json`), all from the latest quarter. Only **1 of 10** can be checked against filed numbers.
-- **Not yet extracted:** the other 9 transcripts (Q1 FY27 to Q3 FY26) have had no guidance pulled from them, by hand or by model.
-- **No LLM is used in this phase.** Promise Ledger extraction is **not verified**; the quote gate (exact or reversible-normalisation matching only) is unchanged.
+- **Prompt 5 (2026-10-27):** all 12 transcripts went through the deterministic candidate filter. That produced 164 candidates, all labelled by hand, and **16 validated ledger records**, a curated selection (`promise-ledger.md`). Only **1** record (TCS EBIT margin) can be computed from filed numbers. The rest need segment, capex, working-capital or banking data that the snapshot does not hold.
+- The labels and records were written by Claude from the extracted text and have **not been reviewed by a person**.
+- **No LLM is used.** The quote gate (exact or reversible normalisation only) is unchanged.
+- The ledger's speaker pattern accepts initials, so `K Krithivasan:` is a turn and TCS turn counts rise to 74/87/84/104. The inventory counts above use the original pattern.
 
 ## Limits
 - Covers the 3 companies × 4 quarters requested. The other 19 companies in the snapshot have `status: not_audited` in the API.

@@ -458,9 +458,73 @@ function transcriptsPanel(t) {
         : `<span class="warn">${esc(q.status)}</span> ${esc(q.reason || "")}`}</span></div>`; }).join("")}</div></section>`;
 }
 
-const guidancePanel = () => `<section class="panel" data-testid="guidance"><h2>Management guidance</h2>
-  <p class="small"><b>Guidance analysis not yet available.</b> FINN has not extracted or verified management commitments from these
-  transcripts, so it shows none rather than a guessed list. The transcript inventory above is the primary-source material it will use.</p></section>`;
+const noGuidance = (why) => `<section class="panel" data-testid="guidance"><h2>Management guidance</h2>
+  <p class="small"><b>Guidance analysis not yet available.</b> ${esc(cap(why || "FINN has not extracted or verified management commitments from these transcripts"))}. FINN shows none rather than a guessed list.</p></section>`;
+
+// Verdict and stance wording. "Not reaffirmed" and "Can't be checked" are statements about the evidence, not about
+// whether management will deliver.
+const VERDICT = { met: ["Met", "ok"], partly_met: ["Partly met", "warn"], missed: ["Missed", "bad"], pending: ["Awaiting outcome", ""],
+  not_reaffirmed: ["Not reaffirmed", "warn"], unverifiable: ["Can't be checked", "muted"] };
+const STANCE = { restated: "Restated", tightened: "Tightened", reported: "Reported progress", explained: "Explained",
+  not_restated: "Not restated", softened: "Softened", widened: "Widened", delayed: "Delayed" };
+const cap = (t) => String(t || "").replace(/^./, (c) => c.toUpperCase());
+const pageLink = (r) => ext(r.url ? `${r.url}#page=${r.page}` : null, `${r.quarter} transcript p.${r.page}`);
+
+function said(r, who = "management") {
+  return `<blockquote class="pq" data-testid="quote">“${esc(r.quote)}”</blockquote>
+    <div class="note">${esc(r.speaker)} <span class="muted" title="${esc(r.role_evidence || "")}">(${esc(who)})</span> · ${esc(fmtTime(r.said_on))} · ${pageLink(r)}
+      <span class="muted">· ${r.quote_check === "exact" ? "verbatim" : "verbatim after spacing/glyph repair"}</span></div>`;
+}
+
+function targetText(x) {
+  const t = x.target, h = x.horizon || {};
+  const u = (v) => (t.unit.startsWith("%") ? `${v}${t.unit}` : `${v} ${t.unit}`);
+  const band = !t ? "" : t.high == null ? (t.low_exclusive ? `more than ${u(t.low)}` : `${u(t.low)} or more`) : t.unit.startsWith("%") ? `${t.low}% to ${u(t.high)}` : `${t.low} to ${u(t.high)}`;
+  return [band, h.label ? `${h.label}${h.period_end && h.stated === false ? " (date inferred by FINN)" : ""}` : ""].filter(Boolean).join(" · ");
+}
+
+function computed(o) {
+  if (o.method !== "computed") return `<p class="small"><b>Not computed.</b> ${esc(o.reason)}.</p>`;
+  return `<p class="small"><b>Computed from filed results</b> <span class="muted">${esc(o.formula)}</span></p>
+    <ul class="bul small num">${o.series.map((x) => `<li>Quarter ended ${esc(fmtDay(x.period_end))}: <b>${esc(x.value.toFixed(2))}%</b>
+      <span class="muted">(EBITDA ${fmtCr(x.inputs_crore.ebitda)}, D&amp;A ${fmtCr(x.inputs_crore.dna)}, revenue ${fmtCr(x.inputs_crore.revenue)})</span></li>`).join("")}</ul>
+    <p class="small">${esc(cap(o.reason))}.</p>`;
+}
+
+function promiseCard(x) {
+  const [vl, vc] = VERDICT[x.verdict.status] || [x.verdict.status, ""];
+  const f = x.follow_ups;
+  return `<article class="pr-card" data-testid="promise" data-id="${esc(x.id)}" data-verdict="${esc(x.verdict.status)}">
+    <div class="card-top"><span class="chip pv ${vc}" data-testid="verdict">${esc(vl)}</span><span class="small muted">${esc(x.kind.replace(/_/g, " "))}</span></div>
+    <h3>${esc(x.title)}</h3>
+    ${targetText(x) ? `<p class="small">${esc(targetText(x))}</p>` : ""}
+    ${x.scope ? `<p class="small muted" data-testid="scope">Scope: ${esc(x.scope)}</p>` : ""}
+    ${said(x.statement)}
+    <p class="small pr-why" data-testid="verdict-reason"><b>Why ${esc(vl.toLowerCase())}:</b> ${esc(x.verdict.reason)}.</p>
+    <details class="pr-more"><summary class="small link-row">Evidence: ${f.length} later statement${f.length === 1 ? "" : "s"}, calculation, FINN's reading</summary>
+      <h4>What management said later</h4>
+      ${f.length ? f.map((y) => `<div class="pr-follow" data-stance="${esc(y.stance)}"><span class="chip ${["softened", "widened", "delayed"].includes(y.stance) ? "medium" : ""}">${esc(STANCE[y.stance] || y.stance)}</span>
+        ${y.prompted_by ? `<p class="note">Asked by ${esc(y.prompted_by.speaker)} (analyst, p.${esc(y.prompted_by.page)}): <i>“${esc(y.prompted_by.quote)}”</i></p>` : ""}
+        ${said(y)}${y.note ? `<p class="note">${esc(y.note)}</p>` : ""}</div>`).join("")
+        : `<p class="small muted">No later management statement on this was found in the audited calls. FINN does not treat silence as a change.</p>`}
+      <h4>What FINN computed</h4>${computed(x.outcome)}
+      <h4>FINN's reading</h4><p class="small" data-testid="interpretation">${esc(x.interpretation)}</p>
+      ${x.audit_note ? `<p class="note">Audit note: ${esc(x.audit_note)}</p>` : ""}
+    </details></article>`;
+}
+
+function promisesPanel(p) {
+  if (p.status !== "ok" && p.status !== "stale") return noGuidance(p.reason);
+  const c = p.counts || {};
+  const order = ["missed", "not_reaffirmed", "partly_met", "met", "pending", "unverifiable"];
+  const recs = [...p.records].sort((a, b) => order.indexOf(a.verdict.status) - order.indexOf(b.verdict.status));
+  return `<section class="panel" data-testid="guidance"><h2>Promise Ledger</h2>
+    <p class="small"><b>${p.records.length} management commitments</b> from ${p.transcripts.length} earnings calls${order.filter((k) => c[k]).map((k) => ` · ${c[k]} ${esc(VERDICT[k][0].toLowerCase())}`).join("")}.</p>
+    ${p.stale ? `<p class="small warn" data-testid="ledger-stale">${esc(p.stale_reason)}.</p>` : ""}
+    <p class="small muted">Each quote was found at the cited transcript page and attributed to a company speaker. Analysts' paraphrases are shown only as the question asked, never as guidance (${p.analyst_pointers} set aside). Selected and labelled by ${esc(p.ledger.audited_by)}.</p>
+    <div>${recs.map(promiseCard).join("")}</div>
+    ${p.excluded.length ? `<p class="small bad">${p.excluded.length} record(s) failed validation and are not shown.</p>` : ""}</section>`;
+}
 
 function filingsPanel(f) {
   if (!f) return "";
@@ -476,9 +540,10 @@ function filingsPanel(f) {
 async function viewCompany(sym) {
   const token = state.route;
   $main().innerHTML = `<a class="back" href="#/research">‹ Research</a><section class="state" data-testid="loading"><div class="spinner"></div><h2>Loading ${esc(sym)}</h2><p class="small muted">Results, transcripts and filings from the snapshot.</p></section>`;
-  const [co, results, trans, fil] = await Promise.allSettled([
+  const [co, results, trans, fil, prom] = await Promise.allSettled([
     companies(), getJSON(`/api/v1/companies/${encodeURIComponent(sym)}/results`),
-    getJSON(`/api/v1/companies/${encodeURIComponent(sym)}/transcripts`), getJSON(`/api/v1/companies/${encodeURIComponent(sym)}/filings`)]);
+    getJSON(`/api/v1/companies/${encodeURIComponent(sym)}/transcripts`), getJSON(`/api/v1/companies/${encodeURIComponent(sym)}/filings`),
+    getJSON(`/api/v1/companies/${encodeURIComponent(sym)}/promises`)]);
   if (token !== state.route) return;
   const all = [results, trans, fil];
   const notFound = all.every((r) => r.status === "rejected" && r.reason.status === 404);
@@ -498,7 +563,7 @@ async function viewCompany(sym) {
       <h1>${esc(c?.name || sym)}</h1><p class="small muted">NSE: ${esc(sym)}${c?.sector ? " · sector is FINN's grouping" : ""}</p></header>
     ${sect(results, resultsPanel, "Latest results")}
     ${sect(trans, transcriptsPanel, "Earnings-call transcripts")}
-    ${guidancePanel()}
+    ${sect(prom, promisesPanel, "Promise Ledger")}
     ${sect(fil, filingsPanel, "NSE filings")}`;
   for (const b of document.querySelectorAll("[data-retry]")) b.onclick = render;
 }

@@ -225,11 +225,60 @@ def test_transcripts_and_honest_guidance_state(page):
     page.wait_for_selector("[data-testid=transcripts]")
     t = page.inner_text("[data-testid=transcripts]")
     assert "4 of 4" in t and "Q2 FY27" in t
-    assert "Guidance analysis not yet available" in page.inner_text("[data-testid=guidance]")
+    page.wait_for_selector("[data-testid=promise]")               # POLYCAB now has a validated ledger
+    assert "Promise Ledger" in page.inner_text("[data-testid=guidance]")
     go(page, "#/company/ITC")
     page.wait_for_selector("[data-testid=transcripts]")
     assert "Not retrieved" in page.inner_text("[data-testid=transcripts]")
     assert "Guidance analysis not yet available" in page.inner_text("[data-testid=guidance]")
+
+
+def test_promise_ledger_evidence_chain(page):
+    go(page, "#/company/TCS")
+    page.wait_for_selector("[data-testid=promise]")
+    no_horizontal_scroll(page)
+    cards = page.locator("[data-testid=promise]")
+    assert cards.count() == 2
+    card = page.locator("[data-testid=promise][data-id=TCS-ebit-exit-25]")
+    assert card.get_attribute("data-verdict") == "not_reaffirmed"
+    assert card.locator("[data-testid=verdict]").inner_text() == "Not reaffirmed"
+    assert "We want to exit at 25% plus" in card.locator("[data-testid=quote]").first.inner_text()
+    href = card.locator("a").first.get_attribute("href")
+    assert href.startswith("https://nsearchives.nseindia.com/") and href.endswith("#page=23")
+    card.locator("summary").click()
+    t = card.inner_text()
+    assert "Softened" in t and "Ruchi Mukhija (analyst" in t                # the question, labelled as the analyst's
+    assert "23.98%" in t and "not in the snapshot" in t                     # computed, and why it is not a verdict yet
+    assert "date inferred by FINN" in t
+    no_horizontal_scroll(page)
+
+
+def test_promise_ledger_states_for_segment_guidance(page):
+    go(page, "#/company/POLYCAB")
+    page.wait_for_selector("[data-testid=promise]")
+    assert page.locator("[data-testid=promise]").count() == 9
+    wc = page.locator("[data-testid=promise][data-id=POLYCAB-wc-ebitda-11-13]")
+    assert wc.locator("[data-testid=verdict]").inner_text() == "Awaiting outcome"
+    wc.locator("summary").click()
+    t = wc.inner_text()
+    assert "Not computed." in t and "segment results are not in the snapshot" in t
+    assert "14.37" not in page.inner_text("[data-testid=guidance]")         # consolidated margin is never used here
+    wcd = page.locator("[data-testid=promise][data-id=POLYCAB-working-capital-days]")
+    assert wcd.locator("[data-testid=verdict]").inner_text() == "Can't be checked"
+    no_horizontal_scroll(page)
+
+
+def test_promise_ledger_does_not_treat_omission_as_withdrawal(page):
+    go(page, "#/company/HDFCBANK")
+    page.wait_for_selector("[data-testid=promise]")
+    ldr = page.locator("[data-testid=promise][data-id=HDFCBANK-ldr-85-90]")
+    assert ldr.locator("[data-testid=verdict]").inner_text() == "Awaiting outcome"
+    assert "bank-wide" in ldr.locator("[data-testid=scope]").inner_text()
+    ldr.locator("summary").click()
+    t = ldr.inner_text()
+    assert "Not restated" in t and "Softened" not in t
+    assert "constrained by the CD ratio" in t                               # the same view on the original call
+    no_horizontal_scroll(page)
 
 
 def test_unsupported_ticker_messages(page):

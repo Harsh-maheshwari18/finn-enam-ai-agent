@@ -57,12 +57,22 @@ def test_management_header_parsed():
 
 
 def _item(**kw):
+    # The POLYCAB 11-13% band is Wires & Cables segment guidance (corrected in Prompt 5; see the fixture's
+    # metric_correction). Only the admission gate is tested here; no outcome is computed for it.
     base = dict(symbol="POLYCAB", quote=EXP["items"][0]["quote"], kind="explicit_numeric", speaker=None,
                 speaker_role="management", said_on=date(2026, 10, 15),
                 source=SourceRef("transcript", "fixture", datetime.now(timezone.utc), None, "fixture", location="p.7"),
-                metric="ebitda_margin", target_low=11, target_high=13, target_unit="%")
+                metric=EXP["items"][0]["metric"], target_low=11, target_high=13, target_unit="%")
     base.update(kw)
     return GuidanceItem(**base)
+
+
+def test_polycab_band_is_labelled_as_segment_guidance():
+    item = EXP["items"][0]
+    assert item["symbol"] == "POLYCAB" and (item["lo"], item["hi"]) == (11, 13)
+    assert item["metric"] == "segment_ebitda_margin:wires_and_cables"
+    assert item["metric_as_first_labelled"] == "ebitda_margin" and "14.37" in item["metric_correction"]
+    assert "Wires and Cables segment" in pages_of("POLYCAB")[6]     # the page the quote sits on says so
 
 
 def test_admit_gate():
@@ -73,6 +83,9 @@ def test_admit_gate():
     assert not admit(_item(speaker_role="analyst"), pages, 7)[0]
 
 
+# SYNTHETIC actuals that exercise judge_band on an 11-13 band. They are not POLYCAB outcomes: 14.37 was POLYCAB's
+# consolidated EBITDA margin, which is not comparable with this segment band (Prompt 5 correction). The cases are kept
+# so that the band logic stays tested, and "missed"/"pending" here say nothing about POLYCAB.
 @pytest.mark.parametrize("actual,closed,verdict", [
     (12.0, True, "met"), (14.37, True, "missed"), (14.37, False, "pending"), (None, True, "unverifiable")])
 def test_band_verdicts_are_deterministic(actual, closed, verdict):

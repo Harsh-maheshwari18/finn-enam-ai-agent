@@ -59,7 +59,7 @@ Ten statements from 3 transcripts, labelled by hand (`tests/fixtures/real/guidan
 
 | Kind | Count | Example |
 |---|---|---|
-| explicit_numeric | 2 | POLYCAB: "sustaining medium-to long-term EBITDA margins within our guided range of 11% to 13%" (p.7, Aditya Nathany), horizon FY30 per p.9 |
+| explicit_numeric | 2 | POLYCAB: "sustaining medium-to long-term EBITDA margins within our guided range of 11% to 13%" (p.7, Aditya Nathany), horizon FY30 per p.9. **This is the Wires & Cables segment margin** (see the correction under item 5) |
 | measurable_qualitative | 3 | POLYCAB working capital "towards… 45 to 50 days" (no date) |
 | commentary | 3 | TCS CFO: "long-term aspiration… 26% to 28%" (no period) |
 | analyst_claim | 2 | TCS analyst: "margin commitment… exiting FY27, at 25% plus EBIT margin" |
@@ -70,6 +70,8 @@ Findings:
 3. **The most "guidance-sounding" sentences are often analysts.** Without a speaker filter, 2/10 would have become false guidance.
 4. **Real analytical signal exists:** TCS's CFO answered the "25% exit FY27" question with "uphill task… endeavor to inch up on our margins", which is a softening. The ledger needs a `not_reaffirmed` state, and must find the *original* commitment in an earlier transcript.
 5. **Verifiability:** only 1/10 (POLYCAB group EBITDA margin band) can be checked against XBRL today. Its Q2 FY27 actual is 14.37%, *above* the 11–13% band, so the verdict is pending with the period open to FY30. Segment guidance (FMEG 8–10%) and working-capital days need data we don't extract.
+
+   > **Correction (2026-10-27, Prompt 5; see `promise-ledger.md`).** The sentence above is wrong and is kept only as a record of what was concluded at the time. POLYCAB's 11–13% is the **Wires & Cables segment** EBITDA margin, not the company's consolidated margin. The Q2 FY27 statement sits in the Wires & Cables paragraph, right after "EBIT margins in the Wires and Cables segment stood at 14.2%" (p.7), and Q1 FY27 p.5 says "for this business". The consolidated 14.37% is therefore **not** a like-for-like actual, and no verdict, pending or otherwise, can be drawn from it. FINN's snapshot has no segment results, so **none of the 10** statements in this experiment (5 POLYCAB, 4 TCS, 1 HDFCBANK) can be checked like-for-like against filed numbers. Even the segment figure management reports is EBIT, while the guidance is EBITDA. The one checkable target found later is TCS's 25% exit operating margin (management's own words were located later, at Q1 FY27 p.23; the `analyst_claim` example in the table above is only a pointer to it).
 
 **Conclusion:** the Promise Ledger is feasible but will be **sparse**, about 1–3 checkable promises per company per quarter. It is most valuable for companies that guide numerically (POLYCAB-style), and less so for TCS/HDFCBANK, which mostly speak in aspirations. The product should present "unverifiable" and "not reaffirmed" as findings, not hide them.
 

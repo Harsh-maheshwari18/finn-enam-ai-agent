@@ -1,0 +1,1429 @@
+{
+ "about": "Manual labels for every candidate statement proposed by `python -m finn.promises audit` over the 12 audited transcripts. key = first 12 hex of sha256('SYMBOL|QUARTER|' + transcripts.normalise(sentence)); the sentence itself is not stored. Labels: explicit_numeric | measurable_qualitative | commentary (management, forward-looking about this company), actual_report (management describing a reported result), not_guidance (management, not a forward statement about this company), analyst (a questioner's words; never guidance).",
+ "labelled_by": "Claude (AI assistant), 2026-10-27, from the extracted text; not yet reviewed by a person",
+ "known_misses": [
+  {
+   "symbol": "TCS",
+   "quarter": "Q1 FY27",
+   "page": 23,
+   "why": "'We want to exit at 25% plus...' has a number and a forward word but no topic keyword ('margin' is in the question, not the answer), so the filter dropped it. Found by reading the Q&A around the margin question."
+  },
+  {
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 8,
+   "why": "'...target of greater than 10% contribution from exports by financial year 2030.' has no topic keyword for exports. Found while checking later mentions of the export target."
+  },
+  {
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 5,
+   "why": "'We expect this to normalize to our long-term steady range of 50 to 55 days...' says 'this' for the working-capital cycle, so no topic keyword matched. Found while tracing the 45-50 days range back."
+  },
+  {
+   "symbol": "HDFCBANK",
+   "quarter": "Q4 FY26",
+   "page": 4,
+   "why": "'The loan deposit ratio is not a constraint.' has no forward word. Found while checking later mentions of the LDR range."
+  },
+  {
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 9,
+   "why": "'...towards our stated objective of exceeding 30% by FY 2030.' (dividend payout) has no topic keyword for dividends. Found in the final review while checking omitted commitments."
+  }
+ ],
+ "items": [
+  {
+   "key": "05d699024520",
+   "symbol": "HDFCBANK",
+   "quarter": "Q3 FY26",
+   "page": 4,
+   "speaker": "Sashidhar Jagdishan",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "962df3acf758",
+   "symbol": "HDFCBANK",
+   "quarter": "Q3 FY26",
+   "page": 4,
+   "speaker": "Mahrukh Adajania",
+   "label": "analyst"
+  },
+  {
+   "key": "e84196c411da",
+   "symbol": "HDFCBANK",
+   "quarter": "Q3 FY26",
+   "page": 6,
+   "speaker": "Kunal Shah",
+   "label": "analyst"
+  },
+  {
+   "key": "7ec78598dd7b",
+   "symbol": "HDFCBANK",
+   "quarter": "Q3 FY26",
+   "page": 6,
+   "speaker": "Sashidhar Jagdishan",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "92a50fea8b86",
+   "symbol": "HDFCBANK",
+   "quarter": "Q3 FY26",
+   "page": 8,
+   "speaker": "Chintan",
+   "label": "analyst"
+  },
+  {
+   "key": "c4ed62428443",
+   "symbol": "HDFCBANK",
+   "quarter": "Q3 FY26",
+   "page": 8,
+   "speaker": "Chintan",
+   "label": "analyst"
+  },
+  {
+   "key": "2b1a0d7e3bb7",
+   "symbol": "HDFCBANK",
+   "quarter": "Q3 FY26",
+   "page": 10,
+   "speaker": "Nitin Aggarwal",
+   "label": "analyst"
+  },
+  {
+   "key": "6fe9b751f411",
+   "symbol": "HDFCBANK",
+   "quarter": "Q3 FY26",
+   "page": 14,
+   "speaker": "Abhishek Murarka",
+   "label": "analyst"
+  },
+  {
+   "key": "0d9699142a8f",
+   "symbol": "HDFCBANK",
+   "quarter": "Q3 FY26",
+   "page": 17,
+   "speaker": "Kaizad Bharucha",
+   "label": "not_guidance"
+  },
+  {
+   "key": "e12b691b1dd7",
+   "symbol": "HDFCBANK",
+   "quarter": "Q4 FY26",
+   "page": 3,
+   "speaker": "Sashidhar Jagdishan",
+   "label": "not_guidance"
+  },
+  {
+   "key": "fcdd3ac23cfb",
+   "symbol": "HDFCBANK",
+   "quarter": "Q4 FY26",
+   "page": 5,
+   "speaker": "Sashidhar Jagdishan",
+   "label": "not_guidance"
+  },
+  {
+   "key": "4692742ddbd6",
+   "symbol": "HDFCBANK",
+   "quarter": "Q4 FY26",
+   "page": 6,
+   "speaker": "Mahrukh Adajania",
+   "label": "analyst"
+  },
+  {
+   "key": "4817e3253062",
+   "symbol": "HDFCBANK",
+   "quarter": "Q4 FY26",
+   "page": 7,
+   "speaker": "Srinivasan Vaidyanathan",
+   "label": "not_guidance"
+  },
+  {
+   "key": "59b2652c23d9",
+   "symbol": "HDFCBANK",
+   "quarter": "Q4 FY26",
+   "page": 7,
+   "speaker": "Kunal Shah",
+   "label": "analyst"
+  },
+  {
+   "key": "147d3c926ed3",
+   "symbol": "HDFCBANK",
+   "quarter": "Q4 FY26",
+   "page": 8,
+   "speaker": "Sashidhar Jagdishan",
+   "label": "not_guidance"
+  },
+  {
+   "key": "e4bd5a8088cc",
+   "symbol": "HDFCBANK",
+   "quarter": "Q4 FY26",
+   "page": 8,
+   "speaker": "Sashidhar Jagdishan",
+   "label": "actual_report"
+  },
+  {
+   "key": "d4a3efd9655e",
+   "symbol": "HDFCBANK",
+   "quarter": "Q4 FY26",
+   "page": 9,
+   "speaker": "Sashidhar Jagdishan",
+   "label": "not_guidance"
+  },
+  {
+   "key": "53d083b291e1",
+   "symbol": "HDFCBANK",
+   "quarter": "Q4 FY26",
+   "page": 9,
+   "speaker": "Sashidhar Jagdishan",
+   "label": "not_guidance"
+  },
+  {
+   "key": "f3bac118c9ea",
+   "symbol": "HDFCBANK",
+   "quarter": "Q4 FY26",
+   "page": 9,
+   "speaker": "Pranav",
+   "label": "analyst"
+  },
+  {
+   "key": "3201de754afb",
+   "symbol": "HDFCBANK",
+   "quarter": "Q4 FY26",
+   "page": 10,
+   "speaker": "Pranav",
+   "label": "analyst"
+  },
+  {
+   "key": "b62358670abd",
+   "symbol": "HDFCBANK",
+   "quarter": "Q4 FY26",
+   "page": 12,
+   "speaker": "Kaizad Bharucha",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "c30695ffa83d",
+   "symbol": "HDFCBANK",
+   "quarter": "Q1 FY27",
+   "page": 6,
+   "speaker": "Srinivasan Vaidyanathan",
+   "label": "not_guidance"
+  },
+  {
+   "key": "f686b60c6613",
+   "symbol": "HDFCBANK",
+   "quarter": "Q1 FY27",
+   "page": 8,
+   "speaker": "Srinivasan Vaidyanathan",
+   "label": "commentary"
+  },
+  {
+   "key": "a1a358adad25",
+   "symbol": "HDFCBANK",
+   "quarter": "Q1 FY27",
+   "page": 8,
+   "speaker": "Sashidhar Jagdishan",
+   "label": "commentary"
+  },
+  {
+   "key": "e990e5e8b83a",
+   "symbol": "HDFCBANK",
+   "quarter": "Q1 FY27",
+   "page": 9,
+   "speaker": "Seshadri Sen",
+   "label": "analyst"
+  },
+  {
+   "key": "4012ebb0942c",
+   "symbol": "HDFCBANK",
+   "quarter": "Q1 FY27",
+   "page": 11,
+   "speaker": "Suresh Ganapathy",
+   "label": "analyst"
+  },
+  {
+   "key": "014aa5163416",
+   "symbol": "HDFCBANK",
+   "quarter": "Q1 FY27",
+   "page": 12,
+   "speaker": "Srinivasan Vaidyanathan",
+   "label": "not_guidance"
+  },
+  {
+   "key": "d559edf721bb",
+   "symbol": "HDFCBANK",
+   "quarter": "Q1 FY27",
+   "page": 13,
+   "speaker": "Abhishek Murarka",
+   "label": "analyst"
+  },
+  {
+   "key": "fd0f96f7e6c6",
+   "symbol": "HDFCBANK",
+   "quarter": "Q2 FY27",
+   "page": 3,
+   "speaker": "Sashidhar Jagdishan",
+   "label": "not_guidance"
+  },
+  {
+   "key": "69827f54321f",
+   "symbol": "HDFCBANK",
+   "quarter": "Q2 FY27",
+   "page": 9,
+   "speaker": "Kaizad Bharucha",
+   "label": "commentary"
+  },
+  {
+   "key": "c4357700895b",
+   "symbol": "HDFCBANK",
+   "quarter": "Q2 FY27",
+   "page": 16,
+   "speaker": "Srinivasan Vaidyanathan",
+   "label": "not_guidance"
+  },
+  {
+   "key": "5ea94a74d8be",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 4,
+   "speaker": "Niyant Maru",
+   "label": "not_guidance"
+  },
+  {
+   "key": "02173f78c429",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 4,
+   "speaker": "Niyant Maru",
+   "label": "not_guidance"
+  },
+  {
+   "key": "acf6a4be661e",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 4,
+   "speaker": "Niyant Maru",
+   "label": "not_guidance"
+  },
+  {
+   "key": "8fb1de4c8724",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 5,
+   "speaker": "Shashank Yagnick",
+   "label": "actual_report"
+  },
+  {
+   "key": "78a576d3cf99",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 5,
+   "speaker": "Shashank Yagnick",
+   "label": "actual_report"
+  },
+  {
+   "key": "b7c6ad544fe7",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 5,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "cf67322228a8",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 7,
+   "speaker": "Shashank Yagnick",
+   "label": "actual_report"
+  },
+  {
+   "key": "b908ad94f379",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 7,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "6bce64e4fe04",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 7,
+   "speaker": "Shashank Yagnick",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "c2071ef4849d",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 13,
+   "speaker": "Chirayu Upadhyaya",
+   "label": "not_guidance"
+  },
+  {
+   "key": "1077f7c07e0c",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 13,
+   "speaker": "Chirayu Upadhyaya",
+   "label": "not_guidance"
+  },
+  {
+   "key": "1a840bb5bcf9",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 13,
+   "speaker": "Pulkit Patni",
+   "label": "analyst"
+  },
+  {
+   "key": "19a4fae6bf11",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 14,
+   "speaker": "Chirayu Upadhyaya",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "109a9565d422",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 14,
+   "speaker": "Chirayu Upadhyaya",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "861b23b42550",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 15,
+   "speaker": "Keyur Pandya",
+   "label": "analyst"
+  },
+  {
+   "key": "acbb1a5be938",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 15,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "76c2e5af1797",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 16,
+   "speaker": "Umang Mehta",
+   "label": "analyst"
+  },
+  {
+   "key": "9eac1ad09d42",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 19,
+   "speaker": "Chirayu Upadhyaya",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "4a1339bab0f2",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 19,
+   "speaker": "Aniruddha Joshi",
+   "label": "analyst"
+  },
+  {
+   "key": "94880c1a92b3",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 19,
+   "speaker": "Aniruddha Joshi",
+   "label": "analyst"
+  },
+  {
+   "key": "d4b51e36cdd0",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 20,
+   "speaker": "Chirayu Upadhyaya",
+   "label": "actual_report"
+  },
+  {
+   "key": "fd2823e545ba",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 4,
+   "speaker": "Niyant Maru",
+   "label": "not_guidance"
+  },
+  {
+   "key": "de55d26e0dca",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 4,
+   "speaker": "Niyant Maru",
+   "label": "not_guidance"
+  },
+  {
+   "key": "0ee69daaeeeb",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 5,
+   "speaker": "Shashank Yagnick",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "783f96f65446",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 6,
+   "speaker": "Shashank Yagnick",
+   "label": "actual_report"
+  },
+  {
+   "key": "fb78bf591a29",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 6,
+   "speaker": "Shashank Yagnick",
+   "label": "actual_report"
+  },
+  {
+   "key": "4664ddbeb7f1",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 6,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "ed447cee4f13",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 7,
+   "speaker": "Shashank Yagnick",
+   "label": "actual_report"
+  },
+  {
+   "key": "c6a858ee0011",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 8,
+   "speaker": "Shashank Yagnick",
+   "label": "commentary"
+  },
+  {
+   "key": "7380f18f999b",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 8,
+   "speaker": "Shashank Yagnick",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "d03e10a5e23c",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 8,
+   "speaker": "Shashank Yagnick",
+   "label": "actual_report"
+  },
+  {
+   "key": "0509adbc25c7",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 9,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "28bdee3b0f52",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 9,
+   "speaker": "Shashank Yagnick",
+   "label": "actual_report"
+  },
+  {
+   "key": "75eed080c2d1",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 11,
+   "speaker": "Shashank Yagnick",
+   "label": "commentary"
+  },
+  {
+   "key": "415154e7f90f",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 11,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "862621636f2b",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 11,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "753cf0928f3e",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 12,
+   "speaker": "Puneet Gulati",
+   "label": "analyst"
+  },
+  {
+   "key": "34bf7892eb06",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 12,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "7d19fe12026e",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 13,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "afbb33030bf8",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 13,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "7eb90d8432d6",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 13,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "5f101999c39f",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 14,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "226c18d34260",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 14,
+   "speaker": "Shashank Yagnick",
+   "label": "actual_report"
+  },
+  {
+   "key": "96c5633250f8",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 15,
+   "speaker": "Shashank Yagnick",
+   "label": "not_guidance"
+  },
+  {
+   "key": "77554fd7c88c",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 15,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "0a6db4547665",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 15,
+   "speaker": "Shashank Yagnick",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "39c92e188999",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 16,
+   "speaker": "Akshay Gattani",
+   "label": "analyst"
+  },
+  {
+   "key": "a5a3f9a65905",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 16,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "282a50109fa7",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 16,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "c04cbe887367",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 16,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "375bbe7f8645",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 16,
+   "speaker": "Umang Mehta",
+   "label": "analyst"
+  },
+  {
+   "key": "49b91529ea5e",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 17,
+   "speaker": "Shashank Yagnick",
+   "label": "not_guidance"
+  },
+  {
+   "key": "cd57758d02bd",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 18,
+   "speaker": "Achal Lohade",
+   "label": "analyst"
+  },
+  {
+   "key": "e1e747e043b5",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 3,
+   "speaker": "Niyant Maru",
+   "label": "not_guidance"
+  },
+  {
+   "key": "5d28176852ce",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 5,
+   "speaker": "Shashank Yagnick",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "700e3fb63ff0",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 5,
+   "speaker": "Shashank Yagnick",
+   "label": "actual_report"
+  },
+  {
+   "key": "1e0eb5f1b06d",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 5,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "941be04fc959",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 6,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "1dd810127047",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 6,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "3d22122e76f0",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 6,
+   "speaker": "Shashank Yagnick",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "cbd667eeed15",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 9,
+   "speaker": "Shashank Yagnick",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "88488f805671",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 9,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "3726a99e4364",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 9,
+   "speaker": "Shashank Yagnick",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "1304cce8358a",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 11,
+   "speaker": "Shashank Yagnick",
+   "label": "not_guidance"
+  },
+  {
+   "key": "c29baa257f94",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 12,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "bc0b57024262",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 14,
+   "speaker": "Shashank Yagnick",
+   "label": "commentary"
+  },
+  {
+   "key": "890885f36aed",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 15,
+   "speaker": "Naushad Chaudhary",
+   "label": "analyst"
+  },
+  {
+   "key": "ba1dcdd78322",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 16,
+   "speaker": "Naushad Chaudhary",
+   "label": "analyst"
+  },
+  {
+   "key": "a02231f53d12",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 16,
+   "speaker": "Shashank Yagnick",
+   "label": "not_guidance"
+  },
+  {
+   "key": "2db744fbeffe",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 17,
+   "speaker": "Keyur Pandya",
+   "label": "analyst"
+  },
+  {
+   "key": "472a60238dae",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 18,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "e607570f6da2",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 18,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "2d1a93e6f45c",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 19,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "842aeb4b1710",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 19,
+   "speaker": "Keyur Pandya",
+   "label": "analyst"
+  },
+  {
+   "key": "9b06c38f5153",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 19,
+   "speaker": "Shashank Yagnick",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "aa4e22cf3f5c",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 19,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "31c06b6c9f2f",
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 19,
+   "speaker": "Shashank Yagnick",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "211650bec1f5",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 4,
+   "speaker": "Niyant Maru",
+   "label": "not_guidance"
+  },
+  {
+   "key": "9b2a54fd1948",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 4,
+   "speaker": "Niyant Maru",
+   "label": "not_guidance"
+  },
+  {
+   "key": "1f0a067c40bf",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 6,
+   "speaker": "Aditya Nathany",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "31b222af6eae",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 7,
+   "speaker": "Aditya Nathany",
+   "label": "commentary"
+  },
+  {
+   "key": "ec5e3565ea90",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 7,
+   "speaker": "Aditya Nathany",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "367b32ed7e6b",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 7,
+   "speaker": "Aditya Nathany",
+   "label": "commentary"
+  },
+  {
+   "key": "85a3f761fba1",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 7,
+   "speaker": "Aditya Nathany",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "9e5a17a41265",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 8,
+   "speaker": "Aditya Nathany",
+   "label": "not_guidance"
+  },
+  {
+   "key": "08237bc651a7",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 8,
+   "speaker": "Kevin Shah",
+   "label": "analyst"
+  },
+  {
+   "key": "71f254379703",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 8,
+   "speaker": "Kevin Shah",
+   "label": "analyst"
+  },
+  {
+   "key": "8f3aa42e4851",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 9,
+   "speaker": "Aditya Nathany",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "16f435e520b8",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 9,
+   "speaker": "Aditya Nathany",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "7de0fe791860",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 9,
+   "speaker": "Aditya Nathany",
+   "label": "commentary"
+  },
+  {
+   "key": "a1d7acff6703",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 10,
+   "speaker": "Umang Mehta",
+   "label": "analyst"
+  },
+  {
+   "key": "1ee31982ced4",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 11,
+   "speaker": "Aditya Nathany",
+   "label": "commentary"
+  },
+  {
+   "key": "9018250cd764",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 11,
+   "speaker": "Aditya Nathany",
+   "label": "not_guidance"
+  },
+  {
+   "key": "747b70a141d1",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 13,
+   "speaker": "Aditya Nathany",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "0327e35a8bb4",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 13,
+   "speaker": "Aditya Nathany",
+   "label": "explicit_numeric"
+  },
+  {
+   "key": "445123b737ee",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 16,
+   "speaker": "Ashish Jain",
+   "label": "analyst"
+  },
+  {
+   "key": "459e743d2484",
+   "symbol": "POLYCAB",
+   "quarter": "Q2 FY27",
+   "page": 18,
+   "speaker": "Aditya Nathany",
+   "label": "measurable_qualitative"
+  },
+  {
+   "key": "8a9f88c52bdf",
+   "symbol": "TCS",
+   "quarter": "Q3 FY26",
+   "page": 6,
+   "speaker": "Samir Seksaria",
+   "label": "commentary"
+  },
+  {
+   "key": "3db2c29dfaa5",
+   "symbol": "TCS",
+   "quarter": "Q3 FY26",
+   "page": 22,
+   "speaker": "Vibhor Singhal",
+   "label": "analyst"
+  },
+  {
+   "key": "1be12d483cc0",
+   "symbol": "TCS",
+   "quarter": "Q3 FY26",
+   "page": 23,
+   "speaker": "Vibhor Singhal",
+   "label": "analyst"
+  },
+  {
+   "key": "c5a92ddbbb2c",
+   "symbol": "TCS",
+   "quarter": "Q3 FY26",
+   "page": 24,
+   "speaker": "Vibhor Singhal",
+   "label": "analyst"
+  },
+  {
+   "key": "a4df65cb2ce8",
+   "symbol": "TCS",
+   "quarter": "Q3 FY26",
+   "page": 27,
+   "speaker": "K Krithivasan",
+   "label": "commentary"
+  },
+  {
+   "key": "1f46e68bf4d2",
+   "symbol": "TCS",
+   "quarter": "Q3 FY26",
+   "page": 27,
+   "speaker": "K Krithivasan",
+   "label": "commentary"
+  },
+  {
+   "key": "397e2063691d",
+   "symbol": "TCS",
+   "quarter": "Q3 FY26",
+   "page": 33,
+   "speaker": "K Krithivasan",
+   "label": "commentary"
+  },
+  {
+   "key": "93112542719a",
+   "symbol": "TCS",
+   "quarter": "Q4 FY26",
+   "page": 5,
+   "speaker": "K Krithivasan",
+   "label": "not_guidance"
+  },
+  {
+   "key": "1cf05d3b0dc3",
+   "symbol": "TCS",
+   "quarter": "Q4 FY26",
+   "page": 8,
+   "speaker": "Samir Seksaria",
+   "label": "commentary"
+  },
+  {
+   "key": "43ee0e724258",
+   "symbol": "TCS",
+   "quarter": "Q4 FY26",
+   "page": 15,
+   "speaker": "K Krithivasan",
+   "label": "not_guidance"
+  },
+  {
+   "key": "7fb168584a12",
+   "symbol": "TCS",
+   "quarter": "Q4 FY26",
+   "page": 21,
+   "speaker": "Sudheer Guntupalli",
+   "label": "analyst"
+  },
+  {
+   "key": "142a432b2331",
+   "symbol": "TCS",
+   "quarter": "Q4 FY26",
+   "page": 22,
+   "speaker": "Kumar Rakesh",
+   "label": "analyst"
+  },
+  {
+   "key": "02a33c7ea239",
+   "symbol": "TCS",
+   "quarter": "Q4 FY26",
+   "page": 22,
+   "speaker": "K Krithivasan",
+   "label": "commentary"
+  },
+  {
+   "key": "f981fab44634",
+   "symbol": "TCS",
+   "quarter": "Q4 FY26",
+   "page": 28,
+   "speaker": "Vibhor Singhal",
+   "label": "analyst"
+  },
+  {
+   "key": "ee995f2b3cc7",
+   "symbol": "TCS",
+   "quarter": "Q4 FY26",
+   "page": 33,
+   "speaker": "K Krithivasan",
+   "label": "commentary"
+  },
+  {
+   "key": "a0a654b5f7e6",
+   "symbol": "TCS",
+   "quarter": "Q1 FY27",
+   "page": 6,
+   "speaker": "Samir Seksaria",
+   "label": "commentary"
+  },
+  {
+   "key": "aaff5d9637ce",
+   "symbol": "TCS",
+   "quarter": "Q1 FY27",
+   "page": 22,
+   "speaker": "Gaurav Rateria",
+   "label": "analyst"
+  },
+  {
+   "key": "7fb8c6298733",
+   "symbol": "TCS",
+   "quarter": "Q1 FY27",
+   "page": 22,
+   "speaker": "Samir Seksaria",
+   "label": "commentary"
+  },
+  {
+   "key": "5918a3ecccf2",
+   "symbol": "TCS",
+   "quarter": "Q1 FY27",
+   "page": 23,
+   "speaker": "Samir Seksaria",
+   "label": "commentary"
+  },
+  {
+   "key": "ed771a294b6c",
+   "symbol": "TCS",
+   "quarter": "Q1 FY27",
+   "page": 23,
+   "speaker": "Samir Seksaria",
+   "label": "not_guidance"
+  },
+  {
+   "key": "0f299a677617",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 5,
+   "speaker": "Samir Seksaria",
+   "label": "commentary"
+  },
+  {
+   "key": "bf269c3755fa",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 6,
+   "speaker": "Samir Seksaria",
+   "label": "commentary"
+  },
+  {
+   "key": "936278ad67a8",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 12,
+   "speaker": "K Krithivasan",
+   "label": "commentary"
+  },
+  {
+   "key": "b7588c2826a5",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 15,
+   "speaker": "Ravi Menon",
+   "label": "analyst"
+  },
+  {
+   "key": "e9081d9ca023",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 15,
+   "speaker": "Samir Seksaria",
+   "label": "commentary"
+  },
+  {
+   "key": "71d41dea614c",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 16,
+   "speaker": "Ruchi Mukhija",
+   "label": "analyst"
+  },
+  {
+   "key": "fad00759bca6",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 16,
+   "speaker": "Samir Seksaria",
+   "label": "commentary"
+  },
+  {
+   "key": "1f420e8dd847",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 17,
+   "speaker": "Nitin Padmanabhan",
+   "label": "analyst"
+  },
+  {
+   "key": "bb0161b2765b",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 20,
+   "speaker": "Vibhor Singhal",
+   "label": "analyst"
+  },
+  {
+   "key": "b33bfe260062",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 21,
+   "speaker": "Sandeep Shah",
+   "label": "analyst"
+  },
+  {
+   "key": "1d76cefa5a89",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 23,
+   "speaker": "K Krithivasan",
+   "label": "commentary"
+  },
+  {
+   "key": "ecd86369e861",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 23,
+   "speaker": "K Krithivasan",
+   "label": "commentary"
+  },
+  {
+   "key": "e18aa88fbad8",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 24,
+   "speaker": "Samir Seksaria",
+   "label": "commentary"
+  },
+  {
+   "key": "429e84db05c0",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 27,
+   "speaker": "Kumar Rakesh",
+   "label": "analyst"
+  },
+  {
+   "key": "091e09b55dbe",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 27,
+   "speaker": "Samir Seksaria",
+   "label": "commentary"
+  },
+  {
+   "key": "3639efe6be45",
+   "symbol": "TCS",
+   "quarter": "Q2 FY27",
+   "page": 27,
+   "speaker": "Kumar Rakesh",
+   "label": "analyst"
+  }
+ ],
+ "relabels": [
+  {
+   "key": "69827f54321f",
+   "symbol": "HDFCBANK",
+   "quarter": "Q2 FY27",
+   "page": 9,
+   "from": "measurable_qualitative",
+   "to": "commentary",
+   "why": "'You will see that change' names no measure, size or direction; relabelled when the ledger record was written.",
+   "when": "2026-10-27, while building the ledger (disclosed in the final review)"
+  },
+  {
+   "key": "8fb1de4c8724",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 5,
+   "from": "not_guidance",
+   "to": "actual_report",
+   "why": "Reports the quarter's EBITDA margin adjusted for a one-off; describes a result, not a target.",
+   "when": "2026-10-27, final review"
+  },
+  {
+   "key": "78a576d3cf99",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 5,
+   "from": "not_guidance",
+   "to": "actual_report",
+   "why": "Describes the quarter's inventory and working-capital position; a result, not a target.",
+   "when": "2026-10-27, final review"
+  },
+  {
+   "key": "cf67322228a8",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 7,
+   "from": "not_guidance",
+   "to": "actual_report",
+   "why": "Reports Q3 FY26 FMEG growth of 17% YoY; the Project Spring reference describes performance so far.",
+   "when": "2026-10-27, final review"
+  },
+  {
+   "key": "d4b51e36cdd0",
+   "symbol": "POLYCAB",
+   "quarter": "Q3 FY26",
+   "page": 20,
+   "from": "not_guidance",
+   "to": "actual_report",
+   "why": "Compares the quarter's growth with FINN-unchecked industry growth; a description of the result.",
+   "when": "2026-10-27, final review"
+  },
+  {
+   "key": "ed447cee4f13",
+   "symbol": "POLYCAB",
+   "quarter": "Q4 FY26",
+   "page": 7,
+   "from": "not_guidance",
+   "to": "actual_report",
+   "why": "Describes past outperformance; a result, not a target.",
+   "when": "2026-10-27, final review"
+  }
+ ],
+ "record_kind_changes": [
+  {
+   "record": "POLYCAB-cw-growth-1.5x",
+   "from": "measurable_qualitative",
+   "to": "explicit_numeric",
+   "why": "The record's kind was changed to match the audit label of its statement (a numeric multiple, 1.5x), when the build began enforcing that kinds agree with labels."
+  }
+ ],
+ "labels_retained_after_review": [
+  {
+   "symbol": "POLYCAB",
+   "quarter": "Q1 FY27",
+   "page": 14,
+   "label": "commentary",
+   "why": "BharatNet 'maybe INR 800 crores to INR 1,000 crores' is hedged twice ('maybe') and does not follow from the arithmetic stated with it (one third of the INR 4,500 crore execution piece is about INR 1,500 crore); no period is named beyond the question's 'full year'. Kept as commentary rather than promoted to a numeric commitment."
+  }
+ ]
+}

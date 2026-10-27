@@ -5,6 +5,7 @@ GET /api/v1/companies                         every company in the snapshot with
 GET /api/v1/companies/{SYMBOL}/results        results card; every number carries its source
 GET /api/v1/companies/{SYMBOL}/transcripts    earnings-call transcript inventory (metadata only)
 GET /api/v1/companies/{SYMBOL}/filings        stored NSE announcements and the last completed EOD session
+GET /api/v1/companies/{SYMBOL}/promises       Management Promise Ledger (validated quotes, outcomes, verdicts)
 GET /api/v1/signals?window=24h&move_pct=5&volume_x=2&lookback=20&watch=..&mute=..&symbols=..
                                               ranked Signal Inbox over the snapshot (finn/signals.py)
 GET /api/v1/diagnostics/connectivity          live NSE / Yahoo reachability from THIS host; needs the
@@ -31,7 +32,7 @@ from urllib.parse import parse_qsl
 from finn import http, service, signals, snapshot
 from finn.adapters import nse_filings, nse_results, prices
 
-VERSION = "0.3.0"
+VERSION = "0.4.0"
 SYMBOL = re.compile(r"^[A-Z0-9&\-]{1,20}$")
 DIAG_TTL_S = 600
 WEB_DIR = Path(__file__).resolve().parent.parent / "web"
@@ -188,6 +189,48 @@ def transcripts(con, sym, _q=None):
                       "note": "metadata only; transcript text is not stored or served"}
 
 
+def ledger_path() -> Path:
+    return snapshot_path().parent / "promise_ledger.json"
+
+
+_ledger_cache: dict = {}
+
+
+def _ledger() -> dict | None:
+    p = ledger_path()
+    try:
+        mtime = p.stat().st_mtime_ns
+    except OSError:
+        return None
+    if _ledger_cache.get("key") != (str(p), mtime):
+        _ledger_cache.update(key=(str(p), mtime), body=json.loads(p.read_text()))
+    return _ledger_cache["body"]
+
+
+def promises(con, sym, _q=None):
+    if _company(con, sym) is None:
+        return _not_in_snapshot(con, sym)
+    meta = _meta(con)
+    led = _ledger()
+    if led is None:
+        return "200 OK", {"symbol": sym, "status": "unavailable", "snapshot": _snapshot_ref(meta), "records": [],
+                          "reason": "the promise ledger file is not present next to the snapshot"}
+    co = led["companies"].get(sym)
+    if co is None:
+        return "200 OK", {"symbol": sym, "status": "not_audited", "snapshot": _snapshot_ref(meta), "records": [],
+                          "reason": "management commitments were not extracted for this company; transcripts were "
+                                    "audited for " + ", ".join(sorted(led["companies"]))}
+    stale = led["built_from"]["snapshot_digest"] != meta.get("content_digest")
+    return "200 OK", {"symbol": sym, "status": "stale" if stale else "ok", "stale": stale, "snapshot": _snapshot_ref(meta),
+                      "ledger": {**led["built_from"], "version": led["ledger_version"], "audited_by": led["audited_by"],
+                                 "method": led["method"]},
+                      **({"stale_reason": "the ledger was built from a different snapshot; outcomes may be out of date"}
+                         if stale else {}),
+                      "records": co["records"], "excluded": co["excluded"], "counts": co["counts"],
+                      "transcripts": co["transcripts"], "analyst_pointers": len(co["analyst_pointers"]),
+                      "note": "short validated excerpts only; the transcripts themselves are not served"}
+
+
 _diag_lock = threading.Lock()
 _diag_cache: dict = {}
 
@@ -246,6 +289,7 @@ ROUTES = [
     (re.compile(r"^/api/v1/companies/([^/]+)/results/?$"), results),
     (re.compile(r"^/api/v1/companies/([^/]+)/transcripts/?$"), transcripts),
     (re.compile(r"^/api/v1/companies/([^/]+)/filings/?$"), filings),
+    (re.compile(r"^/api/v1/companies/([^/]+)/promises/?$"), promises),
     (re.compile(r"^/api/v1/signals/?$"), signal_inbox),
     (re.compile(r"^/api/v1/diagnostics/connectivity/?$"), connectivity),
 ]

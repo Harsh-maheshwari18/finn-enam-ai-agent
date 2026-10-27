@@ -57,7 +57,7 @@ The BAJFINANCE regrouping is the one place where FINN still shows a different Yo
 - **19 of 22 companies** are checked by identities and against screener, not against their signed PDFs by hand.
 - **LT's results PDF is image-only.** Its lending-cost line is checked against XBRL and screener, not the PDF.
 - **Insurers, and restatements other than the one found,** are not tested.
-- **Promise Ledger is not validated.** All 12 target transcripts are available and readable (`transcript-coverage.md`), but guidance is labelled for the latest quarter only (10 statements, 1 checkable against filed numbers). The other 9 transcripts have no extraction, and no LLM is called.
+- **Promise Ledger: validated locally, not deployed.** `GET /api/v1/companies/{SYM}/promises` (API 0.4.0) serves 16 records for TCS, POLYCAB and HDFCBANK. Every quote is re-checked against the cited PDF page and speaker (`promise-ledger.md`). The ledger is labelled `stale` if it was built from a different snapshot. It is tested offline (`tests/test_promises.py`, 27) and in the browser (3 new UI tests), **not on Render**. The audit was done by Claude and has not been reviewed by a person.
 - **Large swings are reproduced, not explained.** Some cards show them: DEEPAKNTR PAT +207% YoY; DIXON PBT +140% while EBITDA is −4%. Both match screener. The card does not yet explain why; that is the job of the filings and transcript layers.
 
 ## Reproduce

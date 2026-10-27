@@ -1,0 +1,1723 @@
+{
+ "ledger_version": 1,
+ "built_from": {
+  "snapshot_digest": "c4e9ab86424773ec96c3af847cb80ac4fa22922fd892c37c0fb39b04fb84c3f2",
+  "snapshot_as_of": "2026-10-27",
+  "records_sha256": "483836d2ddeeca990462dd69629c313c11c1c9f17542f52182f916717e0a63f4",
+  "audit_sha256": "83e2722ab01bb15590700188abec51748cefa20b3f3a81ed9f268fb4d4a8e9be"
+ },
+ "audited_by": "Claude (AI assistant), 2026-10-27, from extracted PDF text; not yet reviewed by a person",
+ "method": "Quotes are admitted only if found in the cited transcript page (exact or reversible normalisation, no fuzzy matching), inside a turn of the cited speaker whose role comes from the same document. Outcomes are computed only for metrics the snapshot holds on the matching basis. No LLM is used.",
+ "audit": {
+  "candidates": 164,
+  "labelled": 164,
+  "labels": {
+   "measurable_qualitative": 14,
+   "analyst": 44,
+   "explicit_numeric": 35,
+   "not_guidance": 30,
+   "actual_report": 12,
+   "commentary": 29
+  },
+  "unlabelled_candidates": [],
+  "labels_without_candidate": [],
+  "known_misses": [
+   {
+    "symbol": "TCS",
+    "quarter": "Q1 FY27",
+    "page": 23,
+    "why": "'We want to exit at 25% plus...' has a number and a forward word but no topic keyword ('margin' is in the question, not the answer), so the filter dropped it. Found by reading the Q&A around the margin question."
+   },
+   {
+    "symbol": "POLYCAB",
+    "quarter": "Q4 FY26",
+    "page": 8,
+    "why": "'...target of greater than 10% contribution from exports by financial year 2030.' has no topic keyword for exports. Found while checking later mentions of the export target."
+   },
+   {
+    "symbol": "POLYCAB",
+    "quarter": "Q3 FY26",
+    "page": 5,
+    "why": "'We expect this to normalize to our long-term steady range of 50 to 55 days...' says 'this' for the working-capital cycle, so no topic keyword matched. Found while tracing the 45-50 days range back."
+   },
+   {
+    "symbol": "HDFCBANK",
+    "quarter": "Q4 FY26",
+    "page": 4,
+    "why": "'The loan deposit ratio is not a constraint.' has no forward word. Found while checking later mentions of the LDR range."
+   },
+   {
+    "symbol": "POLYCAB",
+    "quarter": "Q4 FY26",
+    "page": 9,
+    "why": "'...towards our stated objective of exceeding 30% by FY 2030.' (dividend payout) has no topic keyword for dividends. Found in the final review while checking omitted commitments."
+   }
+  ],
+  "unreadable_transcripts": []
+ },
+ "companies": {
+  "HDFCBANK": {
+   "records": [
+    {
+     "id": "HDFCBANK-ldr-85-90",
+     "title": "Loan-to-deposit ratio of about 85% to 90% for FY27",
+     "kind": "explicit_numeric",
+     "scope": "bank-wide; standalone or consolidated not stated",
+     "metric": "loan_to_deposit_ratio",
+     "target": {
+      "low": 85,
+      "high": 90,
+      "unit": "%"
+     },
+     "horizon": {
+      "label": "FY27",
+      "period_end": "2027-03-31",
+      "stated": true
+     },
+     "conditions": null,
+     "interpretation": "Hedged when given ('maybe', 'I think', 'somewhere around'). Later calls call the ratio 'not a constraint', as the original call already did, and do not repeat the range. Not repeating a figure is not a withdrawal, so the commitment stays awaiting outcome until FY27 is reported. Loans and deposits are not in the snapshot.",
+     "audit_note": "Q4 FY26 p.9: an analyst says 'you said LDR is no longer kind of relevant or a constraint'. That paraphrase is a pointer only. Corrected 2026-10-27: an earlier version of this record called the Q4 FY26 remark 'softened' and the verdict 'not reaffirmed'; the review found the same wording on the original call.",
+     "statement": {
+      "quote": "And then maybe by FY '27, by the natural growth and even with the growth in the way we are expecting in terms of faster growth rate, I think we should land somewhere around the 85% to 90% for FY '27.",
+      "page": 6,
+      "quote_check": "normalised",
+      "speaker": "Sashidhar Jagdishan",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q3 FY26",
+      "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_23012026155630_SEintimationTranscriptofearningscall17_Jan_2026.pdf",
+      "said_on": "2026-01-23T16:00:19+05:30",
+      "sha256": "3013668b1592a58c1a9a29487abc7634af441139d078a85e11cb51e126984f38",
+      "candidate_label": "explicit_numeric"
+     },
+     "follow_ups": [
+      {
+       "quote": "I would like to say that under the current scenario, we don't think that we shall be constrained by the CD ratio.",
+       "page": 4,
+       "quote_check": "normalised",
+       "speaker": "Sashidhar Jagdishan",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q3 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_23012026155630_SEintimationTranscriptofearningscall17_Jan_2026.pdf",
+       "said_on": "2026-01-23T16:00:19+05:30",
+       "sha256": "3013668b1592a58c1a9a29487abc7634af441139d078a85e11cb51e126984f38",
+       "stance": "explained",
+       "note": "Same call as the target, before it was given: the ratio was already described as not a constraint."
+      },
+      {
+       "quote": "I think Sashi alluded to that we are committed on the glide path of taking it towards the downward glide path, and we continue to be in that.",
+       "page": 5,
+       "quote_check": "normalised",
+       "speaker": "Srinivasan Vaidyanathan",
+       "role": "management",
+       "role_evidence": "spoke in the prepared remarks before the first analyst",
+       "quarter": "Q3 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_23012026155630_SEintimationTranscriptofearningscall17_Jan_2026.pdf",
+       "said_on": "2026-01-23T16:00:19+05:30",
+       "sha256": "3013668b1592a58c1a9a29487abc7634af441139d078a85e11cb51e126984f38",
+       "stance": "restated",
+       "note": "Same call; direction only, no number."
+      },
+      {
+       "quote": "The loan deposit ratio is not a constraint.",
+       "page": 4,
+       "quote_check": "normalised",
+       "speaker": "Sashidhar Jagdishan",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q4 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_24042026154113_SEintimationTranscriptofearningscall18April2026.pdf",
+       "said_on": "2026-04-24T15:44:52+05:30",
+       "sha256": "46164033635150fc2d5b0cfe635362e9146cc676330ac3f4b31b4752773bca0c",
+       "stance": "not_restated",
+       "note": "Prepared remarks; the paragraph adds 'Hence, it's no longer a binding constraint.' The same view was expressed on the call that set the range (Q3 FY26 p.4), so this is not new softening. The 85% to 90% figure is not repeated."
+      }
+     ],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "loans and deposits are not in the snapshot"
+     },
+     "verdict": {
+      "status": "pending",
+      "reason": "horizon still open; loans and deposits are not in the snapshot; 1 later answer(s) did not repeat the target, which FINN does not treat as withdrawal"
+     }
+    },
+    {
+     "id": "HDFCBANK-growth-vs-system-fy26",
+     "title": "FY26 'top line' growth in line with the banking system",
+     "kind": "measurable_qualitative",
+     "scope": "bank-wide 'top line' growth; measure not defined on the call",
+     "metric": "relative_growth",
+     "target": null,
+     "horizon": {
+      "label": "FY26",
+      "period_end": "2026-03-31",
+      "stated": true
+     },
+     "conditions": null,
+     "interpretation": "The year has closed, but the measure is not defined and FINN has no system growth figure, so it gives no verdict. On the Q4 FY26 call management says the bank's credit grew 12%, against a system it puts at 13.5% to 13.9% and its own earlier estimate of 10.5% to 11.5%. FINN shows that exchange rather than scoring it.",
+     "audit_note": "'Top line growth' is not defined on the call. Elsewhere on the same call the CEO separates it from loan growth (Q3 FY26 p.8: deposit growth 'in line with normally the top line growth, slightly faster than the loan growth'), while the later questions and answers below discuss loan and credit growth. FINN does not decide which measure was meant.",
+     "statement": {
+      "quote": "I would also like to reiterate that we shall meet the glide path that we had indicated earlier in terms of the growth, our top line growth, which is in line with the system this financial year and faster than the system in the next financial year.",
+      "page": 4,
+      "quote_check": "normalised",
+      "speaker": "Sashidhar Jagdishan",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q3 FY26",
+      "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_23012026155630_SEintimationTranscriptofearningscall17_Jan_2026.pdf",
+      "said_on": "2026-01-23T16:00:19+05:30",
+      "sha256": "3013668b1592a58c1a9a29487abc7634af441139d078a85e11cb51e126984f38",
+      "candidate_label": "measurable_qualitative"
+     },
+     "follow_ups": [
+      {
+       "quote": "We had estimated the system credit growth to be around 10.5% to 11.5%. We did 12%, up from 5.5% last year.",
+       "page": 3,
+       "quote_check": "normalised",
+       "speaker": "Sashidhar Jagdishan",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q4 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_24042026154113_SEintimationTranscriptofearningscall18April2026.pdf",
+       "said_on": "2026-04-24T15:44:52+05:30",
+       "sha256": "46164033635150fc2d5b0cfe635362e9146cc676330ac3f4b31b4752773bca0c",
+       "stance": "explained",
+       "note": "Compares with the bank's own earlier estimate of system growth, not with actual system growth."
+      },
+      {
+       "quote": "This is what we had expected, and we calibrated our strategies and our growth in line with that, and that is why we grew at 12%.",
+       "page": 8,
+       "quote_check": "normalised",
+       "speaker": "Sashidhar Jagdishan",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q4 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_24042026154113_SEintimationTranscriptofearningscall18April2026.pdf",
+       "said_on": "2026-04-24T15:44:52+05:30",
+       "sha256": "46164033635150fc2d5b0cfe635362e9146cc676330ac3f4b31b4752773bca0c",
+       "stance": "explained",
+       "note": "Same answer: the system figure from RBI period-end data 'comes to somewhere around 13.5% to 13.9%'. Both numbers are management's and the analyst's, not FINN's.",
+       "prompted_by": {
+        "quote": "So, we indicated like we will try to grow in line with the industry average, but we are seeing industry average being upwards of 15%, we are still at 12%.",
+        "page": 7,
+        "quote_check": "normalised",
+        "speaker": "Kunal Shah",
+        "role": "analyst",
+        "role_evidence": "introduced by the moderator as a questioner",
+        "quarter": "Q4 FY26",
+        "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_24042026154113_SEintimationTranscriptofearningscall18April2026.pdf",
+        "said_on": "2026-04-24T15:44:52+05:30",
+        "sha256": "46164033635150fc2d5b0cfe635362e9146cc676330ac3f4b31b4752773bca0c"
+       }
+      }
+     ],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "needs market or banking-system growth, which FINN does not hold"
+     },
+     "verdict": {
+      "status": "unverifiable",
+      "reason": "horizon has passed; needs market or banking-system growth, which FINN does not hold"
+     }
+    },
+    {
+     "id": "HDFCBANK-growth-vs-system-fy27",
+     "title": "FY27 'top line' growth faster than the banking system",
+     "kind": "measurable_qualitative",
+     "scope": "bank-wide 'top line' growth; measure not defined on the call",
+     "metric": "relative_growth",
+     "target": null,
+     "horizon": {
+      "label": "FY27",
+      "period_end": "2027-03-31",
+      "stated": true
+     },
+     "conditions": null,
+     "interpretation": "Asked about it in each of the next two calls, management described growth momentum without repeating 'faster than the system'. FINN does not read that as a withdrawal: the commitment stays awaiting outcome until FY27 is reported. FINN has no system growth figure to compare against. Corrected 2026-10-27: an earlier version called these answers 'softened' and the verdict 'not reaffirmed'.",
+     "audit_note": "'Top line growth' is not defined on the call. Elsewhere on the same call the CEO separates it from loan growth (Q3 FY26 p.8: deposit growth 'in line with normally the top line growth, slightly faster than the loan growth'), while the later questions and answers below discuss loan and credit growth. FINN does not decide which measure was meant.",
+     "statement": {
+      "quote": "I would also like to reiterate that we shall meet the glide path that we had indicated earlier in terms of the growth, our top line growth, which is in line with the system this financial year and faster than the system in the next financial year.",
+      "page": 4,
+      "quote_check": "normalised",
+      "speaker": "Sashidhar Jagdishan",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q3 FY26",
+      "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_23012026155630_SEintimationTranscriptofearningscall17_Jan_2026.pdf",
+      "said_on": "2026-01-23T16:00:19+05:30",
+      "sha256": "3013668b1592a58c1a9a29487abc7634af441139d078a85e11cb51e126984f38",
+      "candidate_label": "measurable_qualitative"
+     },
+     "follow_ups": [
+      {
+       "quote": "So I think we will continue to have a good momentum and trajectory in our growth.",
+       "page": 6,
+       "quote_check": "normalised",
+       "speaker": "Kaizad Bharucha",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q4 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_24042026154113_SEintimationTranscriptofearningscall18April2026.pdf",
+       "said_on": "2026-04-24T15:44:52+05:30",
+       "sha256": "46164033635150fc2d5b0cfe635362e9146cc676330ac3f4b31b4752773bca0c",
+       "stance": "not_restated",
+       "note": "Asked about the above-system FY27 guidance; the answer describes momentum and does not mention the system. Not repeating the target is not a withdrawal.",
+       "prompted_by": {
+        "quote": "Because I guess the earlier guidance was of above sector growth, but the sector growth has also moved up substantially?",
+        "page": 6,
+        "quote_check": "normalised",
+        "speaker": "Mahrukh Adajania",
+        "role": "analyst",
+        "role_evidence": "introduced by the moderator as a questioner",
+        "quarter": "Q4 FY26",
+        "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_24042026154113_SEintimationTranscriptofearningscall18April2026.pdf",
+        "said_on": "2026-04-24T15:44:52+05:30",
+        "sha256": "46164033635150fc2d5b0cfe635362e9146cc676330ac3f4b31b4752773bca0c"
+       }
+      },
+      {
+       "quote": "So that should give you a flavor of how we've participated in each of these segments and we do see credit demand holding.",
+       "page": 14,
+       "quote_check": "normalised",
+       "speaker": "Kaizad Bharucha",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header of another transcript",
+       "quarter": "Q1 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_24072026154746_SEintimationTranscriptofearningscall18jul2026.pdf",
+       "said_on": "2026-07-24T15:52:03+05:30",
+       "sha256": "d6c19e7d4f74456f7e842284db091fd3fcf98eb1dac35820379d1a8c57c26db0",
+       "stance": "not_restated",
+       "note": "The answer gives segment growth figures and does not compare with the system. (A later line on p.15, 'we just don't want to commit any number', answers a follow-up about the FCNR deposit drive and is not used here.)",
+       "prompted_by": {
+        "quote": "We earlier talked about that we'll want to grow higher than the system, but I believe with the system in a different tangent, I'm not sure we'll want to really go by that?",
+        "page": 13,
+        "quote_check": "normalised",
+        "speaker": "Nitin Aggarwal",
+        "role": "analyst",
+        "role_evidence": "introduced by the moderator as a questioner",
+        "quarter": "Q1 FY27",
+        "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_24072026154746_SEintimationTranscriptofearningscall18jul2026.pdf",
+        "said_on": "2026-07-24T15:52:03+05:30",
+        "sha256": "d6c19e7d4f74456f7e842284db091fd3fcf98eb1dac35820379d1a8c57c26db0"
+       }
+      }
+     ],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "needs market or banking-system growth, which FINN does not hold"
+     },
+     "verdict": {
+      "status": "pending",
+      "reason": "horizon still open; needs market or banking-system growth, which FINN does not hold; 2 later answer(s) did not repeat the target, which FINN does not treat as withdrawal"
+     }
+    },
+    {
+     "id": "HDFCBANK-msme-growth",
+     "title": "Business-banking (MSME) growth of about 18% to 20% (or 21%)",
+     "kind": "explicit_numeric",
+     "scope": "segment: business banking (MSME)",
+     "metric": "segment_loan_growth:business_banking",
+     "target": {
+      "low": 18,
+      "high": 21,
+      "unit": "% YoY"
+     },
+     "horizon": {
+      "label": "no date ('will continue')",
+      "period_end": null,
+      "stated": false
+     },
+     "conditions": "depending upon developments in the economy",
+     "interpretation": "Conditional and undated; segment loan data is not in the snapshot.",
+     "audit_note": "Management said 'in that range of 18% to 20%, 21%'. FINN records the widest reading, 18% to 21%, and shows the exact words.",
+     "statement": {
+      "quote": "If you also see the pack, which my colleagues have put out, we have grown our business banking, which is mainly representative of our MSME, we've grown at about 20% year -on-year, and that will continue to also be in that range of 18% to 20%, 21%, depending upon, obviously, some of the developments in the economy.",
+      "page": 12,
+      "quote_check": "normalised",
+      "speaker": "Kaizad Bharucha",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q4 FY26",
+      "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_24042026154113_SEintimationTranscriptofearningscall18April2026.pdf",
+      "said_on": "2026-04-24T15:44:52+05:30",
+      "sha256": "46164033635150fc2d5b0cfe635362e9146cc676330ac3f4b31b4752773bca0c",
+      "candidate_label": "explicit_numeric"
+     },
+     "follow_ups": [
+      {
+       "quote": "We've also continued to see very good growth come in our MSME segment and out over there, we have seen a business banking which is the largest component of our MSME segment grow at 22.3% this year.",
+       "page": 14,
+       "quote_check": "normalised",
+       "speaker": "Kaizad Bharucha",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header of another transcript",
+       "quarter": "Q1 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_24072026154746_SEintimationTranscriptofearningscall18jul2026.pdf",
+       "said_on": "2026-07-24T15:52:03+05:30",
+       "sha256": "d6c19e7d4f74456f7e842284db091fd3fcf98eb1dac35820379d1a8c57c26db0",
+       "stance": "reported",
+       "note": "Management's own figure, above the stated range; the period ('this year') is not specified and the figure is not in the snapshot."
+      }
+     ],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "segment results are not in the snapshot; FINN does not compare segment guidance with consolidated figures"
+     },
+     "verdict": {
+      "status": "unverifiable",
+      "reason": "no date was given; segment results are not in the snapshot; FINN does not compare segment guidance with consolidated figures"
+     }
+    },
+    {
+     "id": "HDFCBANK-margin-change-2q",
+     "title": "'You will see that change' in margins over the next two quarters",
+     "kind": "commentary",
+     "scope": "bank margin relative to peers",
+     "metric": "net_interest_margin_vs_peers",
+     "target": null,
+     "horizon": {
+      "label": "next two quarters (to Q4 FY27)",
+      "period_end": "2027-03-31",
+      "stated": true
+     },
+     "conditions": null,
+     "interpretation": "'That change' answers an analyst who asked why the bank's margin decline is similar to peers'. Management does not say what the change will be or by how much, so FINN treats it as commentary and does not assign a direction.",
+     "audit_note": "The question (Kunal Shah, same page) is the only context for what 'that change' means.",
+     "statement": {
+      "quote": "And therefore, I think going forward, across the next 2 quarters, you will see that change coming through as we also grow the volumes in retail and MSME.",
+      "page": 9,
+      "quote_check": "normalised",
+      "speaker": "Kaizad Bharucha",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q2 FY27",
+      "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_23102026224657_SEintimationTranscriptofearningscall17oct2026.pdf",
+      "said_on": "2026-10-23T22:50:22+05:30",
+      "sha256": "07c34082f55e8a5cc9785f4e06e2ac9a14b0d4962f40e00739a88514623fc3a2",
+      "candidate_label": "commentary"
+     },
+     "follow_ups": [],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "peer margins are not in the snapshot"
+     },
+     "verdict": {
+      "status": "unverifiable",
+      "reason": "commentary or aspiration, not a measurable commitment"
+     }
+    }
+   ],
+   "excluded": [],
+   "transcripts": [
+    {
+     "quarter": "Q3 FY26",
+     "period_end": "2025-12-31",
+     "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_23012026155630_SEintimationTranscriptofearningscall17_Jan_2026.pdf",
+     "sha256": "3013668b1592a58c1a9a29487abc7634af441139d078a85e11cb51e126984f38",
+     "broadcast_at": "2026-01-23T16:00:19+05:30",
+     "readable": true
+    },
+    {
+     "quarter": "Q4 FY26",
+     "period_end": "2026-03-31",
+     "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_24042026154113_SEintimationTranscriptofearningscall18April2026.pdf",
+     "sha256": "46164033635150fc2d5b0cfe635362e9146cc676330ac3f4b31b4752773bca0c",
+     "broadcast_at": "2026-04-24T15:44:52+05:30",
+     "readable": true
+    },
+    {
+     "quarter": "Q1 FY27",
+     "period_end": "2026-06-30",
+     "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_24072026154746_SEintimationTranscriptofearningscall18jul2026.pdf",
+     "sha256": "d6c19e7d4f74456f7e842284db091fd3fcf98eb1dac35820379d1a8c57c26db0",
+     "broadcast_at": "2026-07-24T15:52:03+05:30",
+     "readable": true
+    },
+    {
+     "quarter": "Q2 FY27",
+     "period_end": "2026-09-30",
+     "url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_23102026224657_SEintimationTranscriptofearningscall17oct2026.pdf",
+     "sha256": "07c34082f55e8a5cc9785f4e06e2ac9a14b0d4962f40e00739a88514623fc3a2",
+     "broadcast_at": "2026-10-23T22:50:22+05:30",
+     "readable": true
+    }
+   ],
+   "analyst_pointers": [
+    {
+     "quarter": "Q3 FY26",
+     "page": 10,
+     "speaker": "Nitin Aggarwal"
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 10,
+     "speaker": "Pranav"
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 11,
+     "speaker": "Suresh Ganapathy"
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 6,
+     "speaker": "Mahrukh Adajania"
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 7,
+     "speaker": "Kunal Shah"
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 14,
+     "speaker": "Abhishek Murarka"
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 8,
+     "speaker": "Chintan"
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 4,
+     "speaker": "Mahrukh Adajania"
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 8,
+     "speaker": "Chintan"
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 13,
+     "speaker": "Abhishek Murarka"
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 6,
+     "speaker": "Kunal Shah"
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 9,
+     "speaker": "Seshadri Sen"
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 9,
+     "speaker": "Pranav"
+    }
+   ],
+   "counts": {
+    "pending": 2,
+    "unverifiable": 3
+   }
+  },
+  "POLYCAB": {
+   "records": [
+    {
+     "id": "POLYCAB-wc-ebitda-11-13",
+     "title": "Wires & Cables EBITDA margin of 11% to 13% (Project Spring, FY30)",
+     "kind": "explicit_numeric",
+     "scope": "segment: Wires & Cables",
+     "metric": "segment_ebitda_margin:wires_and_cables",
+     "target": {
+      "low": 11,
+      "high": 13,
+      "unit": "%"
+     },
+     "horizon": {
+      "label": "FY30 (Project Spring)",
+      "period_end": "2030-03-31",
+      "stated": true,
+      "basis": "Q2 FY27 p.11: 'that is the reason why we stick to our long-term guidance for FY30'."
+     },
+     "conditions": null,
+     "interpretation": "Restated in every later call. This is a segment margin (Wires & Cables), not the consolidated margin: the Q1 FY27 and Q2 FY27 statements sit in the Wires & Cables paragraph. FINN's snapshot has no segment results, so it does not compare it with anything.",
+     "audit_note": "An earlier FINN label (Prompt 2 experiment) mapped this to the consolidated EBITDA margin. That was wrong and is corrected here. The Q3 FY26 sentence names neither the segment nor EBITDA; the segment comes from the Project Spring band and the Q1/Q2 FY27 statements, and 'EBITDA' from Q4 FY26 p.13 and Q2 FY27 p.7. Management reports this segment at EBIT (13.3% in Q1 FY27, 14.2% in Q2 FY27), which is a different measure: FINN will not compare a segment EBIT figure with this EBITDA target.",
+     "statement": {
+      "quote": "And if I had to add to that, to refer to our Project Spring guidance, we've given a long-term guidance of 11% to 13%.",
+      "page": 15,
+      "quote_check": "normalised",
+      "speaker": "Shashank Yagnick",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q3 FY26",
+      "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_22012026193636_Intimation_of_Earnings_Call_Transcript.pdf",
+      "said_on": "2026-01-22T19:37:01+05:30",
+      "sha256": "a329cd206e93f6b36d9bb4a10682624bf088792ff1f4cf1adbb5b997e06305eb",
+      "candidate_label": "explicit_numeric"
+     },
+     "follow_ups": [
+      {
+       "quote": "So again, that's a very calibrated guidance which we have given that over long term, we should expect 11% to 13% EBITDA margin.",
+       "page": 13,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q4 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-05-08T18:59:43+05:30",
+       "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+       "stance": "restated",
+       "note": "The same answer adds a nearer range: 'in the near to mid term, we may expect 12% to 14% EBITDA'."
+      },
+      {
+       "quote": "Consistent with our Project Spring roadmap, we continue to maintain our medium- to long-term margin guidance of 11% to 13% for this business.",
+       "page": 5,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "spoke in the prepared remarks before the first analyst",
+       "quarter": "Q1 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_20072026120857_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-07-20T12:11:37+05:30",
+       "sha256": "59ed4c66897046791800f195ec5de31bfc4f2a7d878a59c7961f3845d419f2e6",
+       "stance": "restated",
+       "note": null
+      },
+      {
+       "quote": "In line with our Project Spring roadmap, we remain confident of sustaining medium - to long -term EBITDA margins within our guided range of 11% to 13%.",
+       "page": 7,
+       "quote_check": "normalised",
+       "speaker": "Aditya Nathany",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q2 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_19102026163912_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-10-19T16:39:28+05:30",
+       "sha256": "2119d33fa2af9db9f2276725949a0a3ec6305e7df9517baea0f280b9aba64726",
+       "stance": "restated",
+       "note": null
+      },
+      {
+       "quote": "But as you know, Umang, there are different seasonalities, there are different periods of years where fluctuations will happen, and that is the reason why we stick to our long-term guidance for FY30.",
+       "page": 11,
+       "quote_check": "normalised",
+       "speaker": "Aditya Nathany",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q2 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_19102026163912_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-10-19T16:39:28+05:30",
+       "sha256": "2119d33fa2af9db9f2276725949a0a3ec6305e7df9517baea0f280b9aba64726",
+       "stance": "restated",
+       "note": null
+      }
+     ],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "segment results are not in the snapshot; FINN does not compare segment guidance with consolidated figures"
+     },
+     "verdict": {
+      "status": "pending",
+      "reason": "horizon still open; segment results are not in the snapshot; FINN does not compare segment guidance with consolidated figures"
+     }
+    },
+    {
+     "id": "POLYCAB-fmeg-ebitda-8-10",
+     "title": "FMEG EBITDA margin of 8% to 10% by FY30",
+     "kind": "explicit_numeric",
+     "scope": "segment: FMEG",
+     "metric": "segment_ebitda_margin:fmeg",
+     "target": {
+      "low": 8,
+      "high": 10,
+      "unit": "%"
+     },
+     "horizon": {
+      "label": "by FY30",
+      "period_end": "2030-03-31",
+      "stated": true
+     },
+     "conditions": null,
+     "interpretation": "Restated in every later call. Segment metric; no segment data in the snapshot.",
+     "audit_note": null,
+     "statement": {
+      "quote": "Looking ahead, we are confident in the long -term potential of the FMEG segment and remain on track to achieve our Project Spring targets of 1.5x - 2x industry growth and EBITDA margins in the range of 8% to 10% by FY30",
+      "page": 7,
+      "quote_check": "normalised",
+      "speaker": "Shashank Yagnick",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q3 FY26",
+      "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_22012026193636_Intimation_of_Earnings_Call_Transcript.pdf",
+      "said_on": "2026-01-22T19:37:01+05:30",
+      "sha256": "a329cd206e93f6b36d9bb4a10682624bf088792ff1f4cf1adbb5b997e06305eb",
+      "candidate_label": "explicit_numeric"
+     },
+     "follow_ups": [
+      {
+       "quote": "In FMEG, we are also progressing well consistently, outpacing industry growth in line with our target of growing at 1.5x to 2x of market rate, while maintaining a clear focus on margin expansion and progressing towards our EBITDA margin goal of 8% to 10% by FY2030.",
+       "page": 9,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q4 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-05-08T18:59:43+05:30",
+       "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+       "stance": "restated",
+       "note": null
+      },
+      {
+       "quote": "EBIT margins for the quarter were 8%, very much in line with the milestones laid out under Project Spring, where we target EBITDA margins of 8% to 10% by FY 2030.",
+       "page": 6,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "spoke in the prepared remarks before the first analyst",
+       "quarter": "Q1 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_20072026120857_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-07-20T12:11:37+05:30",
+       "sha256": "59ed4c66897046791800f195ec5de31bfc4f2a7d878a59c7961f3845d419f2e6",
+       "stance": "restated",
+       "note": "Compares a reported EBIT margin with an EBITDA target; FINN does not treat that as evidence of progress."
+      },
+      {
+       "quote": "So over the longer term, I believe we would end up in that kind of a range of 8% to 10% of the EBITDA margin.",
+       "page": 9,
+       "quote_check": "normalised",
+       "speaker": "Aditya Nathany",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q2 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_19102026163912_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-10-19T16:39:28+05:30",
+       "sha256": "2119d33fa2af9db9f2276725949a0a3ec6305e7df9517baea0f280b9aba64726",
+       "stance": "restated",
+       "note": null
+      }
+     ],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "segment results are not in the snapshot; FINN does not compare segment guidance with consolidated figures"
+     },
+     "verdict": {
+      "status": "pending",
+      "reason": "horizon still open; segment results are not in the snapshot; FINN does not compare segment guidance with consolidated figures"
+     }
+    },
+    {
+     "id": "POLYCAB-capex-12-16bn",
+     "title": "Capex of ₹12 bn to ₹16 bn a year through FY30",
+     "kind": "explicit_numeric",
+     "scope": "company-wide capital expenditure",
+     "metric": "capex",
+     "target": {
+      "low": 12,
+      "high": 16,
+      "unit": "₹ bn per year"
+     },
+     "horizon": {
+      "label": "annually through FY30",
+      "period_end": "2030-03-31",
+      "stated": true
+     },
+     "conditions": null,
+     "interpretation": "Management reports FY26 capex inside the band. FINN's snapshot has no capex figure, so the yearly check is left to the filed annual cash-flow statement and is not made here.",
+     "audit_note": null,
+     "statement": {
+      "quote": "Capital expenditure for the quarter was ₹ 3.4 billion, taking the 9M FY26 total to ₹ 10.9 billion, in-line with our Project Spring guidance of investing ₹ 12 billion to ₹ 16 billion annually through FY30.",
+      "page": 5,
+      "quote_check": "normalised",
+      "speaker": "Shashank Yagnick",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q3 FY26",
+      "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_22012026193636_Intimation_of_Earnings_Call_Transcript.pdf",
+      "said_on": "2026-01-22T19:37:01+05:30",
+      "sha256": "a329cd206e93f6b36d9bb4a10682624bf088792ff1f4cf1adbb5b997e06305eb",
+      "candidate_label": "explicit_numeric"
+     },
+     "follow_ups": [
+      {
+       "quote": "During FY26, we incurred capex of INR 14.8 billion, in line with our annual guidance of INR 12 billion to INR 16 billion per annum.",
+       "page": 9,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q4 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-05-08T18:59:43+05:30",
+       "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+       "stance": "restated",
+       "note": "Management's own FY26 figure. FINN has not checked it against the filed cash-flow statement."
+      },
+      {
+       "quote": "So again, as per our Project Spring guidance, we've said that whatever we will pump, around 90% of that will go into Cable & Wire capacity expansion alone",
+       "page": 16,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q4 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-05-08T18:59:43+05:30",
+       "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+       "stance": "explained",
+       "note": "How the capex is split (about 90% Cables & Wires, about 5% backward integration, 3-4% FMEG). Kept as part of this record rather than as a separate commitment."
+      }
+     ],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "no capex figure is in the snapshot"
+     },
+     "verdict": {
+      "status": "pending",
+      "reason": "horizon still open; no capex figure is in the snapshot"
+     }
+    },
+    {
+     "id": "POLYCAB-working-capital-days",
+     "title": "Working-capital cycle back to a long-term range (now 45 to 50 days)",
+     "kind": "measurable_qualitative",
+     "scope": "company-wide working-capital cycle",
+     "metric": "working_capital_days",
+     "target": {
+      "low": 45,
+      "high": 50,
+      "unit": "days"
+     },
+     "horizon": {
+      "label": "no date ('in the coming quarters', 'as these effects normalize')",
+      "period_end": null,
+      "stated": false
+     },
+     "conditions": null,
+     "interpretation": "Expressed in days and never dated. FINN has no receivable, inventory or payable days in the snapshot and does not substitute a balance-sheet ratio, so it cannot be judged.",
+     "audit_note": null,
+     "statement": {
+      "quote": "We expect this to normalize to our long-term steady range of 50 to 55 days in the coming quarters.",
+      "page": 5,
+      "quote_check": "normalised",
+      "speaker": "Shashank Yagnick",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q3 FY26",
+      "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_22012026193636_Intimation_of_Earnings_Call_Transcript.pdf",
+      "said_on": "2026-01-22T19:37:01+05:30",
+      "sha256": "a329cd206e93f6b36d9bb4a10682624bf088792ff1f4cf1adbb5b997e06305eb",
+      "candidate_label": "not proposed by the filter (found by reading)"
+     },
+     "follow_ups": [
+      {
+       "quote": "On a normalized basis, we expect the working capital cycle to revert to our steady-state range of 45 to 50 days.",
+       "page": 5,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q4 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-05-08T18:59:43+05:30",
+       "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+       "stance": "tightened",
+       "note": "The stated range moved from 50-55 days to 45-50 days without comment."
+      },
+      {
+       "quote": "As these effects normalize, we expect the working capital cycle to settle within our long-term operating range of 45 to 50 days.",
+       "page": 5,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "spoke in the prepared remarks before the first analyst",
+       "quarter": "Q1 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_20072026120857_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-07-20T12:11:37+05:30",
+       "sha256": "59ed4c66897046791800f195ec5de31bfc4f2a7d878a59c7961f3845d419f2e6",
+       "stance": "restated",
+       "note": null
+      },
+      {
+       "quote": "As these benefits gradually normalize, we expect the working capital cycle to trend towards our long-term operating range of 45 to 50 days.",
+       "page": 6,
+       "quote_check": "normalised",
+       "speaker": "Aditya Nathany",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q2 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_19102026163912_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-10-19T16:39:28+05:30",
+       "sha256": "2119d33fa2af9db9f2276725949a0a3ec6305e7df9517baea0f280b9aba64726",
+       "stance": "restated",
+       "note": null
+      }
+     ],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "working-capital days are not in the snapshot; FINN does not substitute a balance-sheet ratio"
+     },
+     "verdict": {
+      "status": "unverifiable",
+      "reason": "no date was given; working-capital days are not in the snapshot; FINN does not substitute a balance-sheet ratio"
+     }
+    },
+    {
+     "id": "POLYCAB-ehv-commissioning",
+     "title": "EHV cable plant on stream by end of calendar 2026",
+     "kind": "measurable_qualitative",
+     "scope": "company project: EHV cable plant",
+     "metric": "milestone",
+     "target": null,
+     "horizon": {
+      "label": "end of calendar 2026",
+      "period_end": "2026-12-31",
+      "stated": true,
+      "basis": "Said on the Q4 FY26 call (filed May 2026): 'by end of this calendar year'."
+     },
+     "conditions": null,
+     "interpretation": "Management itself moved the date from end-2026 to FY28. FINN records the revision; the original date has not yet passed, so this is not shown as missed.",
+     "audit_note": null,
+     "statement": {
+      "quote": "Capacity is expected to come on stream by end of this calendar year.",
+      "page": 15,
+      "quote_check": "normalised",
+      "speaker": "Shashank Yagnick",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q4 FY26",
+      "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+      "said_on": "2026-05-08T18:59:43+05:30",
+      "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+      "candidate_label": "measurable_qualitative"
+     },
+     "follow_ups": [
+      {
+       "quote": "So I would like to take this opportunity to sort of also let the investor community know that in terms of our EHV plant timelines, we are expecting the EHV plant to now commission somewhere in FY 2028, the next year, though, so FY28.",
+       "page": 18,
+       "quote_check": "normalised",
+       "speaker": "Aditya Nathany",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q2 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_19102026163912_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-10-19T16:39:28+05:30",
+       "sha256": "2119d33fa2af9db9f2276725949a0a3ec6305e7df9517baea0f280b9aba64726",
+       "stance": "delayed",
+       "note": null
+      }
+     ],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "a commissioning date is not a reported number; it is checked only against later management statements"
+     },
+     "verdict": {
+      "status": "not_reaffirmed",
+      "reason": "management's latest statement on it (Q2 FY27 p.18) delayed the commitment"
+     }
+    },
+    {
+     "id": "POLYCAB-cw-growth-1.5x",
+     "title": "Cables & Wires to grow at 1.5x the market",
+     "kind": "explicit_numeric",
+     "scope": "segment: Cables & Wires, against market growth",
+     "metric": "relative_growth",
+     "target": {
+      "low": 1.5,
+      "high": null,
+      "unit": "x market growth"
+     },
+     "horizon": {
+      "label": "each full year, no end date",
+      "period_end": null,
+      "stated": false
+     },
+     "conditions": null,
+     "interpretation": "Needs a market growth figure and segment volume growth. Neither is in the snapshot, and FINN will not use an outside estimate of market growth. One statement uses GDP growth as the base instead, which is a different target.",
+     "audit_note": null,
+     "statement": {
+      "quote": "So again, Sonali, if you refer the Project Spring guidance, which also I referred during my speech, is that we've committed in Cables & Wires, we will grow at 1.5x of market growth.",
+      "page": 11,
+      "quote_check": "normalised",
+      "speaker": "Shashank Yagnick",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q4 FY26",
+      "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+      "said_on": "2026-05-08T18:59:43+05:30",
+      "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+      "candidate_label": "explicit_numeric"
+     },
+     "follow_ups": [
+      {
+       "quote": "So if you look at full year basis, like we've always guided, we'll continue to deliver 1.5x of GDP growth.",
+       "page": 15,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q4 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-05-08T18:59:43+05:30",
+       "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+       "stance": "explained",
+       "note": "Names GDP growth, not market growth, as the base. FINN treats these as different benchmarks and does not merge them."
+      },
+      {
+       "quote": "Over maybe 2-3 next quarters, you will see a trend, and you should definitely see 1.5x of market growth.",
+       "page": 9,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "spoke in the prepared remarks before the first analyst",
+       "quarter": "Q1 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_20072026120857_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-07-20T12:11:37+05:30",
+       "sha256": "59ed4c66897046791800f195ec5de31bfc4f2a7d878a59c7961f3845d419f2e6",
+       "stance": "restated",
+       "note": "Adds a hedged near-term horizon ('maybe 2-3 next quarters', roughly to Q3-Q4 FY27). The record's horizon stays undated because the target itself is stated per full year."
+      },
+      {
+       "quote": "We have guided that we'll continue to grow at 1.5x of market growth.",
+       "page": 18,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "spoke in the prepared remarks before the first analyst",
+       "quarter": "Q1 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_20072026120857_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-07-20T12:11:37+05:30",
+       "sha256": "59ed4c66897046791800f195ec5de31bfc4f2a7d878a59c7961f3845d419f2e6",
+       "stance": "restated",
+       "note": null
+      },
+      {
+       "quote": "What we have called out already, as an anchor to look into the volume growth, is that whatever the market grows, we will do 1.5x of that in cable and wires.",
+       "page": 13,
+       "quote_check": "normalised",
+       "speaker": "Aditya Nathany",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q2 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_19102026163912_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-10-19T16:39:28+05:30",
+       "sha256": "2119d33fa2af9db9f2276725949a0a3ec6305e7df9517baea0f280b9aba64726",
+       "stance": "restated",
+       "note": null
+      }
+     ],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "needs market or banking-system growth, which FINN does not hold"
+     },
+     "verdict": {
+      "status": "unverifiable",
+      "reason": "no date was given; needs market or banking-system growth, which FINN does not hold"
+     }
+    },
+    {
+     "id": "POLYCAB-exports-10pct",
+     "title": "Exports to reach 10% of the top line by FY30",
+     "kind": "explicit_numeric",
+     "scope": "company-wide revenue mix",
+     "metric": "export_share_of_revenue",
+     "target": {
+      "low": 10,
+      "high": null,
+      "unit": "% of revenue",
+      "low_exclusive": true
+     },
+     "horizon": {
+      "label": "by FY30",
+      "period_end": "2030-03-31",
+      "stated": true
+     },
+     "conditions": null,
+     "interpretation": "Management puts FY26 at 5.4% against a 10% FY30 target. Export revenue is not in the snapshot, so FINN does not check either figure. Not restated by management in Q2 FY27; FINN does not read that silence as a change.",
+     "audit_note": "The p.5 sentence was missed by the candidate filter (no topic keyword for 'exports') and found while checking for later mentions.",
+     "statement": {
+      "quote": "We remain firm on track to achieve our target of greater than 10% contribution from exports by financial year 2030.",
+      "page": 8,
+      "quote_check": "normalised",
+      "speaker": "Shashank Yagnick",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q4 FY26",
+      "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+      "said_on": "2026-05-08T18:59:43+05:30",
+      "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+      "candidate_label": "not proposed by the filter (found by reading)"
+     },
+     "follow_ups": [
+      {
+       "quote": "So see, like I mentioned today, in this financial year, we are at 5.4% export contribution to overall top line.",
+       "page": 11,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q4 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-05-08T18:59:43+05:30",
+       "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+       "stance": "reported",
+       "note": "Management's own FY26 figure; not in FINN's snapshot."
+      },
+      {
+       "quote": "I think we are well poised to deliver higher growth in exports, and that should actually be at a more aggressive pace because we have to also reach 10% of our overall top line by FY30.",
+       "page": 14,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q4 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-05-08T18:59:43+05:30",
+       "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+       "stance": "restated",
+       "note": null
+      },
+      {
+       "quote": "We have given our guidance of going north of 10% of our overall top line by 2030.",
+       "page": 19,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "spoke in the prepared remarks before the first analyst",
+       "quarter": "Q1 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_20072026120857_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-07-20T12:11:37+05:30",
+       "sha256": "59ed4c66897046791800f195ec5de31bfc4f2a7d878a59c7961f3845d419f2e6",
+       "stance": "restated",
+       "note": null
+      }
+     ],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "export revenue is not in the snapshot"
+     },
+     "verdict": {
+      "status": "pending",
+      "reason": "horizon still open; export revenue is not in the snapshot"
+     }
+    },
+    {
+     "id": "POLYCAB-epc-margin",
+     "title": "EPC operating margin in the high single digits",
+     "kind": "measurable_qualitative",
+     "scope": "segment: EPC",
+     "metric": "segment_margin:epc",
+     "target": null,
+     "horizon": {
+      "label": "mid to long term, no date",
+      "period_end": null,
+      "stated": false
+     },
+     "conditions": null,
+     "interpretation": "Widened for one call, then back to 'high single-digit'. No number and no date; EPC segment results are not in the snapshot.",
+     "audit_note": "In Q3 FY26 and Q4 FY26 the sentence follows the EPC update in the prepared remarks (Q3 FY26: 'Segment profitability stood at ₹ 272 million, translating to a margin of 6.7%').",
+     "statement": {
+      "quote": "Looking ahead, the annual sustainable operating margin is expected to remain in the high single digits over mid- to long term.",
+      "page": 7,
+      "quote_check": "normalised",
+      "speaker": "Shashank Yagnick",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q3 FY26",
+      "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_22012026193636_Intimation_of_Earnings_Call_Transcript.pdf",
+      "said_on": "2026-01-22T19:37:01+05:30",
+      "sha256": "a329cd206e93f6b36d9bb4a10682624bf088792ff1f4cf1adbb5b997e06305eb",
+      "candidate_label": "measurable_qualitative"
+     },
+     "follow_ups": [
+      {
+       "quote": "Looking ahead, the annual sustainable operating margin is expected to remain in the mid- to high single digits over mid- to long term.",
+       "page": 8,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q4 FY26",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-05-08T18:59:43+05:30",
+       "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+       "stance": "widened",
+       "note": "'high' became 'mid- to high' single digits."
+      },
+      {
+       "quote": "Over the medium to long term, we continue to expect sustainable operating margins for the EPC business to remain in the high single-digit range.",
+       "page": 6,
+       "quote_check": "normalised",
+       "speaker": "Shashank Yagnick",
+       "role": "management",
+       "role_evidence": "spoke in the prepared remarks before the first analyst",
+       "quarter": "Q1 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_20072026120857_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-07-20T12:11:37+05:30",
+       "sha256": "59ed4c66897046791800f195ec5de31bfc4f2a7d878a59c7961f3845d419f2e6",
+       "stance": "restated",
+       "note": null
+      },
+      {
+       "quote": "Over the medium- to long-term, we continue to expect sustainable margins for the EPC business to remain in the high single -digit range, supported by disciplined project selection, efficient execution, and a healthy order pipeline.",
+       "page": 7,
+       "quote_check": "normalised",
+       "speaker": "Aditya Nathany",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q2 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_19102026163912_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-10-19T16:39:28+05:30",
+       "sha256": "2119d33fa2af9db9f2276725949a0a3ec6305e7df9517baea0f280b9aba64726",
+       "stance": "restated",
+       "note": null
+      }
+     ],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "segment results are not in the snapshot; FINN does not compare segment guidance with consolidated figures"
+     },
+     "verdict": {
+      "status": "unverifiable",
+      "reason": "no date was given; segment results are not in the snapshot; FINN does not compare segment guidance with consolidated figures"
+     }
+    },
+    {
+     "id": "POLYCAB-dividend-payout-30",
+     "title": "Dividend payout above 30% by FY2030",
+     "kind": "explicit_numeric",
+     "scope": "company-wide dividend payout",
+     "metric": "dividend_payout_ratio",
+     "target": {
+      "low": 30,
+      "high": null,
+      "unit": "% payout",
+      "low_exclusive": true
+     },
+     "horizon": {
+      "label": "by FY2030",
+      "period_end": "2030-03-31",
+      "stated": true
+     },
+     "conditions": null,
+     "interpretation": "Management reports FY26 payout at about 27.2% against an objective of more than 30% by FY2030. Payout is not defined in the sentence (dividend over which profit), and dividends are not in the snapshot, so FINN checks neither figure. No later mention was found in Q1 or Q2 FY27; FINN does not read that silence as a change.",
+     "audit_note": "Added 2026-10-27 after the review. The candidate filter missed this sentence (no topic keyword for dividends); found while checking omitted commitments.",
+     "statement": {
+      "quote": "We also increased our dividend payout to approximately 27.2%, up from 26.3% last year as we move steadily towards our stated objective of exceeding 30% by FY 2030.",
+      "page": 9,
+      "quote_check": "normalised",
+      "speaker": "Shashank Yagnick",
+      "role": "management",
+      "role_evidence": "listed under the MANAGEMENT header",
+      "quarter": "Q4 FY26",
+      "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+      "said_on": "2026-05-08T18:59:43+05:30",
+      "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+      "candidate_label": "not proposed by the filter (found by reading)"
+     },
+     "follow_ups": [],
+     "outcome": {
+      "method": "not_computed",
+      "status": null,
+      "reason": "dividends declared are not in the snapshot"
+     },
+     "verdict": {
+      "status": "pending",
+      "reason": "horizon still open; dividends declared are not in the snapshot"
+     }
+    }
+   ],
+   "excluded": [],
+   "transcripts": [
+    {
+     "quarter": "Q3 FY26",
+     "period_end": "2025-12-31",
+     "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_22012026193636_Intimation_of_Earnings_Call_Transcript.pdf",
+     "sha256": "a329cd206e93f6b36d9bb4a10682624bf088792ff1f4cf1adbb5b997e06305eb",
+     "broadcast_at": "2026-01-22T19:37:01+05:30",
+     "readable": true
+    },
+    {
+     "quarter": "Q4 FY26",
+     "period_end": "2026-03-31",
+     "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_08052026185934_Intimation_of_Earnings_Call_Transcript.pdf",
+     "sha256": "ffed5ff85c254bce2ade9d6249791c4caab98244aa462321925abd38d2d07347",
+     "broadcast_at": "2026-05-08T18:59:43+05:30",
+     "readable": true
+    },
+    {
+     "quarter": "Q1 FY27",
+     "period_end": "2026-06-30",
+     "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_20072026120857_Intimation_of_Earnings_Call_Transcript.pdf",
+     "sha256": "59ed4c66897046791800f195ec5de31bfc4f2a7d878a59c7961f3845d419f2e6",
+     "broadcast_at": "2026-07-20T12:11:37+05:30",
+     "readable": true
+    },
+    {
+     "quarter": "Q2 FY27",
+     "period_end": "2026-09-30",
+     "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_19102026163912_Intimation_of_Earnings_Call_Transcript.pdf",
+     "sha256": "2119d33fa2af9db9f2276725949a0a3ec6305e7df9517baea0f280b9aba64726",
+     "broadcast_at": "2026-10-19T16:39:28+05:30",
+     "readable": true
+    }
+   ],
+   "analyst_pointers": [
+    {
+     "quarter": "Q2 FY27",
+     "page": 8,
+     "speaker": "Kevin Shah"
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 13,
+     "speaker": "Pulkit Patni"
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 17,
+     "speaker": "Keyur Pandya"
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 16,
+     "speaker": "Umang Mehta"
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 16,
+     "speaker": "Akshay Gattani"
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 16,
+     "speaker": "Ashish Jain"
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 19,
+     "speaker": "Aniruddha Joshi"
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 8,
+     "speaker": "Kevin Shah"
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 12,
+     "speaker": "Puneet Gulati"
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 16,
+     "speaker": "Umang Mehta"
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 19,
+     "speaker": "Keyur Pandya"
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 15,
+     "speaker": "Keyur Pandya"
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 15,
+     "speaker": "Naushad Chaudhary"
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 19,
+     "speaker": "Aniruddha Joshi"
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 10,
+     "speaker": "Umang Mehta"
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 16,
+     "speaker": "Naushad Chaudhary"
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 18,
+     "speaker": "Achal Lohade"
+    }
+   ],
+   "counts": {
+    "pending": 5,
+    "unverifiable": 3,
+    "not_reaffirmed": 1
+   }
+  },
+  "TCS": {
+   "records": [
+    {
+     "id": "TCS-ebit-exit-25",
+     "title": "Exit FY27 at an operating margin of 25% or more",
+     "kind": "explicit_numeric",
+     "scope": "consolidated",
+     "metric": "ebit_margin",
+     "target": {
+      "low": 25,
+      "high": null,
+      "unit": "%"
+     },
+     "horizon": {
+      "label": "exit FY27 (Q4 FY27)",
+      "period_end": "2027-03-31",
+      "stated": false,
+      "basis": "'exit' read as the last quarter of the fiscal year; the question was about FY27. Analysts later restate it as 'exiting FY27' (Q2 FY27 p.16) and 'by 4Q' (Q2 FY27 p.21)."
+     },
+     "conditions": null,
+     "interpretation": "Stated once (Q1 FY27). Asked about it in the next call, the CFO called it 'an uphill task' and spoke of endeavouring to inch margins up, without repeating 25%; a second answer also gave no number. FINN records the explicit 'uphill task' answer as softening and the commitment as not reaffirmed. It is not a miss: Q4 FY27 has not been reported.",
+     "audit_note": "The quoted sentence does not name the margin; it answers a question about 'margins' going back to FY26 levels, and TCS's prepared remarks call the figure its 'operating margin' (24% in Q1 and Q2 FY27). The analyst's word 'EBIT' is not management's. FINN's (EBITDA - D&A) / revenue on the consolidated filing gives 23.96% and 23.98% for those quarters, which matches the 24% TCS states; TCS's own definition is not published in the snapshot, so the match is the only basis for the formula.",
+     "statement": {
+      "quote": "We want to exit at 25% plus and strive to achieve it sooner rather than later.",
+      "page": 23,
+      "quote_check": "normalised",
+      "speaker": "Samir Seksaria",
+      "role": "management",
+      "role_evidence": "spoke in the prepared remarks before the first analyst",
+      "quarter": "Q1 FY27",
+      "url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_15072026193646_SEInt15072026_Signed.pdf",
+      "said_on": "2026-07-15T19:37:13+05:30",
+      "sha256": "c47e71290e80f0a46ff3cb9cae57a86ba4d5d5a7322a4f20acbc4640e80b7bfb",
+      "candidate_label": "not proposed by the filter (found by reading)"
+     },
+     "follow_ups": [
+      {
+       "quote": "While it's an uphill task, we'll continue to endeavor to inch up on our margins.",
+       "page": 16,
+       "quote_check": "normalised",
+       "speaker": "Samir Seksaria",
+       "role": "management",
+       "role_evidence": "spoke in the prepared remarks before the first analyst",
+       "quarter": "Q2 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_14102026155941_SEInt14102026_signed.pdf",
+       "said_on": "2026-10-14T16:00:08+05:30",
+       "sha256": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe",
+       "stance": "softened",
+       "note": "Asked directly about the 25% exit, the CFO did not restate the number.",
+       "prompted_by": {
+        "quote": "In that context, how do we think about the margin commitment we had made around exiting FY27, at 25% plus EBIT margin range?",
+        "page": 16,
+        "quote_check": "normalised",
+        "speaker": "Ruchi Mukhija",
+        "role": "analyst",
+        "role_evidence": "introduced by the moderator as a questioner",
+        "quarter": "Q2 FY27",
+        "url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_14102026155941_SEInt14102026_signed.pdf",
+        "said_on": "2026-10-14T16:00:08+05:30",
+        "sha256": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe"
+       }
+      },
+      {
+       "quote": "So, on an overall basis, we will balance our investment priorities and our disciplined execution, and we will work towards inching margins higher from here.",
+       "page": 21,
+       "quote_check": "normalised",
+       "speaker": "Samir Seksaria",
+       "role": "management",
+       "role_evidence": "spoke in the prepared remarks before the first analyst",
+       "quarter": "Q2 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_14102026155941_SEInt14102026_signed.pdf",
+       "said_on": "2026-10-14T16:00:08+05:30",
+       "sha256": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe",
+       "stance": "not_restated",
+       "note": "Second direct question. The answer gives direction ('inching margins higher') but does not repeat 25%; FINN counts that as not restated, not as weakening.",
+       "prompted_by": {
+        "quote": "Sir, on an organic basis, is it fair to assume that the guidance is still intact for reaching 25% by 4Q, if I exclude the 50 bps kind of adverse impact from MHP consolidation?",
+        "page": 21,
+        "quote_check": "normalised",
+        "speaker": "Sandeep Shah",
+        "role": "analyst",
+        "role_evidence": "introduced by the moderator as a questioner",
+        "quarter": "Q2 FY27",
+        "url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_14102026155941_SEInt14102026_signed.pdf",
+        "said_on": "2026-10-14T16:00:08+05:30",
+        "sha256": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe"
+       }
+      }
+     ],
+     "outcome": {
+      "method": "computed",
+      "formula": "(EBITDA - depreciation & amortisation) / revenue x 100, consolidated",
+      "series": [
+       {
+        "period_end": "2025-09-30",
+        "value": 25.18,
+        "unit": "%",
+        "inputs_crore": {
+         "ebitda": 17978.0,
+         "dna": 1413.0,
+         "revenue": 65799.0
+        },
+        "sources": [
+         "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1543879_09102025115624_WEB.xml"
+        ]
+       },
+       {
+        "period_end": "2026-06-30",
+        "value": 23.96,
+        "unit": "%",
+        "inputs_crore": {
+         "ebitda": 18556.0,
+         "dna": 1239.0,
+         "revenue": 72275.0
+        },
+        "sources": [
+         "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1690004_09072026063620_WEB.xml"
+        ]
+       },
+       {
+        "period_end": "2026-09-30",
+        "value": 23.98,
+        "unit": "%",
+        "inputs_crore": {
+         "ebitda": 18815.0,
+         "dna": 1262.0,
+         "revenue": 73188.0
+        },
+        "sources": [
+         "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1734607_08102026100810_WEB.xml"
+        ]
+       }
+      ],
+      "status": "pending",
+      "reason": "results for the quarter ended 2027-03-31 are not in the snapshot; latest 23.98% (quarter ended 2026-09-30) is outside the target"
+     },
+     "verdict": {
+      "status": "not_reaffirmed",
+      "reason": "management's latest statement on it (Q2 FY27 p.16) softened the commitment"
+     }
+    },
+    {
+     "id": "TCS-aspiration-26-28",
+     "title": "Long-term operating margin aspiration of 26% to 28%",
+     "kind": "commentary",
+     "scope": "consolidated",
+     "metric": "ebit_margin",
+     "target": {
+      "low": 26,
+      "high": 28,
+      "unit": "%"
+     },
+     "horizon": {
+      "label": "long term, no date",
+      "period_end": null,
+      "stated": false
+     },
+     "conditions": null,
+     "interpretation": "Called an aspiration and a 'guiding beacon', with no date. It cannot be met or missed, so FINN shows the latest computed margin for context only.",
+     "audit_note": "An analyst also refers to the band in Q3 FY26 (p.23); that is a pointer, not management guidance.",
+     "statement": {
+      "quote": "Overall, our long-term aspiration remains unchanged, continues to be 26% to 28%.",
+      "page": 15,
+      "quote_check": "normalised",
+      "speaker": "Samir Seksaria",
+      "role": "management",
+      "role_evidence": "spoke in the prepared remarks before the first analyst",
+      "quarter": "Q2 FY27",
+      "url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_14102026155941_SEInt14102026_signed.pdf",
+      "said_on": "2026-10-14T16:00:08+05:30",
+      "sha256": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe",
+      "candidate_label": "commentary"
+     },
+     "follow_ups": [
+      {
+       "quote": "See, we have always called 26%-28% as our guiding beacon, and we would not want to shift away from that.",
+       "page": 27,
+       "quote_check": "normalised",
+       "speaker": "Samir Seksaria",
+       "role": "management",
+       "role_evidence": "spoke in the prepared remarks before the first analyst",
+       "quarter": "Q2 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_14102026155941_SEInt14102026_signed.pdf",
+       "said_on": "2026-10-14T16:00:08+05:30",
+       "sha256": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe",
+       "stance": "restated",
+       "note": null
+      }
+     ],
+     "outcome": {
+      "method": "computed",
+      "formula": "(EBITDA - depreciation & amortisation) / revenue x 100, consolidated",
+      "series": [
+       {
+        "period_end": "2025-09-30",
+        "value": 25.18,
+        "unit": "%",
+        "inputs_crore": {
+         "ebitda": 17978.0,
+         "dna": 1413.0,
+         "revenue": 65799.0
+        },
+        "sources": [
+         "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1543879_09102025115624_WEB.xml"
+        ]
+       },
+       {
+        "period_end": "2026-06-30",
+        "value": 23.96,
+        "unit": "%",
+        "inputs_crore": {
+         "ebitda": 18556.0,
+         "dna": 1239.0,
+         "revenue": 72275.0
+        },
+        "sources": [
+         "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1690004_09072026063620_WEB.xml"
+        ]
+       },
+       {
+        "period_end": "2026-09-30",
+        "value": 23.98,
+        "unit": "%",
+        "inputs_crore": {
+         "ebitda": 18815.0,
+         "dna": 1262.0,
+         "revenue": 73188.0
+        },
+        "sources": [
+         "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1734607_08102026100810_WEB.xml"
+        ]
+       }
+      ],
+      "status": null,
+      "reason": "context only: latest 23.98% (quarter ended 2026-09-30); an undated aspiration cannot be met or missed"
+     },
+     "verdict": {
+      "status": "unverifiable",
+      "reason": "commentary or aspiration, not a measurable commitment"
+     }
+    }
+   ],
+   "excluded": [],
+   "transcripts": [
+    {
+     "quarter": "Q3 FY26",
+     "period_end": "2025-12-31",
+     "url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_16012026163741_Signed_SEIntimation.pdf",
+     "sha256": "699bbfb4697e3d5baeccdbe573ad4c5a2ec625458e69c415f765aa8fc7ae8dab",
+     "broadcast_at": "2026-01-16T16:38:43+05:30",
+     "readable": true
+    },
+    {
+     "quarter": "Q4 FY26",
+     "period_end": "2026-03-31",
+     "url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_14042026200132_SEInt14042026_signed.pdf",
+     "sha256": "5298f07b01814d66ed6bdf9f40dc70116ff7f822ef93d29ffe5721b9fc9222c1",
+     "broadcast_at": "2026-04-14T20:02:19+05:30",
+     "readable": true
+    },
+    {
+     "quarter": "Q1 FY27",
+     "period_end": "2026-06-30",
+     "url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_15072026193646_SEInt15072026_Signed.pdf",
+     "sha256": "c47e71290e80f0a46ff3cb9cae57a86ba4d5d5a7322a4f20acbc4640e80b7bfb",
+     "broadcast_at": "2026-07-15T19:37:13+05:30",
+     "readable": true
+    },
+    {
+     "quarter": "Q2 FY27",
+     "period_end": "2026-09-30",
+     "url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_14102026155941_SEInt14102026_signed.pdf",
+     "sha256": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe",
+     "broadcast_at": "2026-10-14T16:00:08+05:30",
+     "readable": true
+    }
+   ],
+   "analyst_pointers": [
+    {
+     "quarter": "Q4 FY26",
+     "page": 22,
+     "speaker": "Kumar Rakesh"
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 23,
+     "speaker": "Vibhor Singhal"
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 17,
+     "speaker": "Nitin Padmanabhan"
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 27,
+     "speaker": "Kumar Rakesh"
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 22,
+     "speaker": "Vibhor Singhal"
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 27,
+     "speaker": "Kumar Rakesh"
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 16,
+     "speaker": "Ruchi Mukhija"
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 21,
+     "speaker": "Sudheer Guntupalli"
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 22,
+     "speaker": "Gaurav Rateria"
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 21,
+     "speaker": "Sandeep Shah"
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 15,
+     "speaker": "Ravi Menon"
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 20,
+     "speaker": "Vibhor Singhal"
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 24,
+     "speaker": "Vibhor Singhal"
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 28,
+     "speaker": "Vibhor Singhal"
+    }
+   ],
+   "counts": {
+    "not_reaffirmed": 1,
+    "unverifiable": 1
+   }
+  }
+ }
+}

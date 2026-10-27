@@ -11,3 +11,4 @@ data/*.db
 *.pdf
 !tests/fixtures/**/*.pdf
 snapshot/*.building
+data/derived/
