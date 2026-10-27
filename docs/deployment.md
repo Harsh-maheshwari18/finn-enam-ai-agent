@@ -1,6 +1,6 @@
 # FINN: Deployment (Render Free)
 
-**Status 2026-10-27: deployed** at https://finn-api-9z4q.onrender.com. First deploy: commit `c9ccac0`, snapshot `3c15b9d5…`. Smoke test from outside: every endpoint gave the expected status; POST 405; first request after idle took 23.6 s (cold start), later ones 0.34–0.45 s.
+**Status 2026-10-27: deployed** at https://finn-api-9z4q.onrender.com. First deploy: commit `c9ccac0`, snapshot `3c15b9d5…`. Smoke test from outside: every endpoint gave the expected status; POST 405; first request after idle took 23.6 s (an observation; Render's suspension was not checked in its logs), later ones 0.34–0.45 s.
 
 **Redeployed 09:16 UTC:** commit `ec315b3` (timestamp fix), snapshot `ff4868ac…`. Live at about 20 s after the push. `/health`: `verified: true`, 22 companies. Checked live: TCS revenue `73188.00`, all 4 TCS `published_at` values end in `+05:30`, and POLYCAB transcript `broadcast_at` values end in `+05:30` (Q2 FY27 `2026-10-19T16:39:28+05:30`). The 404/405 responses were not re-checked after the redeploy; that code did not change.
 
@@ -15,7 +15,13 @@ Two samples, 48 minutes apart, on one day: they show the Render IP was not block
 
 **Tests at the deployed commit:** 254 passed offline; `python -m finn.snapshot verify` OK (`ff4868acfaa6c15c` recomputed, stored and in the manifest).
 
-**Cold start:** 23.6 s for the first request after idle, measured once on the first deploy. Not re-measured after the redeploy (the service was already warm). Any frontend must show a loading state for this, and the URL should be opened once before a demo.
+**Cold start:** one earlier observation and one controlled measurement, on different deploys; neither was repeated.
+- First deploy (`c9ccac0`), **observation**: 23.6 s for the first request after idle. Render's logs were not checked,
+  so a suspension before that request is not confirmed.
+- `6ccb298` deploy, **measurement**: **32.81 s, HTTP 200**, `verified: true`. Render's logs confirm the instance was
+  stopped while idle and a new one started for the request. See "Cold start (measured …)" below.
+
+Any frontend must show a loading state for this, and the URL should be opened once before a demo.
 
 ## Remaining limitations (2026-10-27)
 - **NSE access from Render:** two passing samples on one day. Long-run, rate- or time-dependent blocking is unmeasured.
@@ -38,10 +44,11 @@ Two samples, 48 minutes apart, on one day: they show the Render IP was not block
 
 What happened, in order:
 1. `e63fea8` (Phase 4) deployed to `finn-api` by the push; `finn-web` was **not** created and `FINN_DIAG_TOKEN`
-   stayed unset. Cause: `render.yaml` did not parse. The static `buildCommand` was a plain YAML scalar containing
-   `apiBase: "%s"`, and `: ` inside a plain scalar is a mapping indicator (PyYAML: `mapping values are not allowed
-   here`, line 38 col 57). Render's own sync error message was not retrieved (the Render integration has no
-   Blueprint tool).
+   stayed unset, and a manual Blueprint sync failed. **Cause: unconfirmed.** Render's own sync error message was
+   not retrieved (the Render integration has no Blueprint tool). The likely cause is a defect that was confirmed
+   locally: `render.yaml` was not valid YAML. The static `buildCommand` was a plain YAML scalar containing `apiBase: "%s"`,
+   and `: ` inside a plain scalar is a mapping indicator (PyYAML: `mapping values are not allowed here`, line 38
+   col 57). Supporting evidence: the next push changed only that line, and its Blueprint sync succeeded.
 2. `75689df` turned it into a `>-` block scalar. The fixed file parses and passes Render's published schema
    (`render.com/schema/render.yaml.json`) with 0 errors. The push triggered a Blueprint sync that created
    `finn-web` (assigned `finn-web-q1bw`) and generated `FINN_DIAG_TOKEN` on `finn-api`; `finn-api`'s plan,
@@ -80,6 +87,29 @@ What happened, in order:
   allow-origin header. Console errors 0, page errors 0, failed requests 0, HTTP ≥ 400 responses 0. A page on an
   unrelated origin (served by Playwright's router) was blocked by Chromium's CORS policy.
 - Not tested: a real phone, Lighthouse, the authenticated connectivity probe.
+
+### Cold start (measured 2026-10-27 on the `6ccb298` deploy)
+This measures the deploy of `6ccb298` (`dep-dbg87o29lscs7392nctg`, live 10:59:24 UTC). Any later push, including
+a documentation-only one, redeploys `finn-api`; those later deploys were **not** measured.
+
+| Step | Time (UTC) | Source |
+|---|---|---|
+| `6ccb298` instance live | 10:59:24 | Render deploy record |
+| Last request from us before the measurement | ≈ 10:43:51 (live walkthrough) | our script log |
+| Render stops the idle instance (`Handling signal: term`) | 11:14:24, 15 min after going live | Render app log |
+| The one timed request sent (`GET /health`, curl) | 11:18:03.5 | our clock |
+| New instance starts gunicorn | 11:18:25.7 | Render app log |
+| Request served on the new instance | 11:18:38.4 | Render access log |
+
+Result: **HTTP 200 after 32.81 s** (time to first byte; connect 0.16 s). Body: `ok`, commit `6ccb298`,
+digest `c4e9ab86424773ec…`, `verified: true`, schema 2. The service had been idle for 18 min 39 s since going
+live, and was asleep for 3 min 39 s before the request. Only Render's own internal health checks reached it
+between 10:59 and 11:14; they did not keep it awake. Our clock and Render's differ by about 2 s, so use the
+curl durations, not differences between the two clocks.
+
+One sample, from one network. It is slower than the 23.6 s first-deploy observation, which makes the 45 s app
+timeout about 1.4× the slowest observed wake. Only the API was timed, not the browser; the static site's own
+files come from Render's CDN and do not sleep.
 
 ## What gets deployed
 A read-only JSON API (`finn/api.py`, plain WSGI, served by gunicorn) that serves the committed snapshot `snapshot/finn_snapshot.db`. Requests never fetch live data and never call an LLM, with one exception: `/api/v1/diagnostics/connectivity` is a deliberate live probe, rate limited to one run per 10 minutes per worker.
