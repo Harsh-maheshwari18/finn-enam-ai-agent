@@ -35,7 +35,8 @@ services:
     runtime: static
     branch: main
     autoDeploy: true
-    buildCommand: printf 'window.FINN_CONFIG = { apiBase: "%s" };\n' "$FINN_API_BASE" > web/config.js
+    buildCommand: >-
+      printf 'window.FINN_CONFIG = { apiBase: "%s" };\n' "$FINN_API_BASE" > web/config.js
     staticPublishPath: web
     envVars:
       - key: FINN_API_BASE
