@@ -1,0 +1,23 @@
+{
+ "about": "Decisions made by a person in the human review of the Promise Ledger, rendered into docs/promise-ledger-human-review.md by scripts/promise_review_pack.py. Only a decision the reviewer gave personally is recorded here. Decisions Claude (AI assistant) made at the reviewer's request are not reviews and are not recorded here. Entries are written by Claude on the reviewer's explicit instruction. The reviewer's name is entered only when the reviewer gives it.",
+ "reviews": {
+  "TCS-ebit-exit-25": {
+   "date": "2026-10-27",
+   "reviewer": "Harsh Maheshwari",
+   "overall": "Accept",
+   "verdict_confirmed": "pending",
+   "checks_marked": false,
+   "note": "Accept with the verdict `pending`. Keep both Q2 FY27 follow-ups as `not_restated`. Retain the “uphill task” and failure to reconfirm the target as cautionary context, not proof of withdrawal. Keep Q4 FY27 explicitly marked as an inferred horizon and preserve the caveat that FINN's margin formula is an unverified proxy for TCS's official operating-margin definition."
+  }
+ },
+ "changes_during_review": [
+  {
+   "record": "TCS-aspiration-26-28",
+   "what": "Horizon basis added: 'long-term' is management's word (Q2 FY27 p.15, p.27); only the absence of a date is FINN's reading. The Q2 FY27 p.27 answer now shows the analyst question that prompted it (Kumar Rakesh: whether TCS would revise the band). Verdict unchanged (unverifiable)."
+  },
+  {
+   "record": "POLYCAB-exports-10pct",
+   "what": "Added management's Q2 FY27 p.16 figure ('still at 5%', Aditya Nathany) as a `reported` follow-up, unchecked. The 10% target is still not restated in Q2 FY27. Verdict unchanged (pending)."
+  }
+ ]
+}

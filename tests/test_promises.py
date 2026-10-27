@@ -349,13 +349,31 @@ def test_review_pack_is_generated_from_the_current_ledger():
             assert q["quote"].replace("|", "\\|") in text and f"({q['url']}#page={q['page']})" in text
 
 
-def test_review_pack_leaves_every_record_pending():
+def test_review_pack_marks_only_decisions_a_person_made():
     text = _review_pack().render()
     prompts = json.loads((ROOT / "config" / "promise_review_questions.json").read_text(encoding="utf-8"))
+    reviews = json.loads((ROOT / "config" / "promise_reviews.json").read_text(encoding="utf-8"))["reviews"]
     assert set(prompts["questions"]) == {r["id"] for _, r in ALL}
-    assert text.count("**Status: PENDING. Not reviewed by a person.**") == len(ALL)
-    assert "☑" not in text and "[x]" not in text.lower()           # no box is ticked on anyone's behalf
-    assert "not yet reviewed by a person" in LEDGER["audited_by"]
+    assert set(reviews) == {"TCS-ebit-exit-25"}                      # R01 is the only record the reviewer decided personally
+    assert text.count("**Status: PENDING. Not reviewed by a person.**") == len(ALL) - len(reviews)
+    assert text.count("**Status: REVIEWED BY A PERSON:") == len(reviews)
+    assert text.count("☑") == len(reviews) and "[x]" not in text.lower()   # one overall box per review; no check ticked on anyone's behalf
+    blocks = text.split("\n### ")
+    for _, r in ALL:
+        block = next(b for b in blocks if b.startswith(f"R") and f" · {r['id']}\n" in b.split("\n", 1)[0] + "\n")
+        assert ("☑" in block) == (r["id"] in reviews)
+    assert "not yet reviewed by a person" in LEDGER["audited_by"]   # 16 of 17 records are still unreviewed
+
+
+def test_a_review_no_longer_matching_the_verdict_is_refused(monkeypatch, tmp_path):
+    pack = _review_pack()
+    data = json.loads(pack.REVIEWS.read_text(encoding="utf-8"))
+    data["reviews"]["TCS-ebit-exit-25"]["verdict_confirmed"] = "not_reaffirmed"
+    stale = tmp_path / "reviews.json"
+    stale.write_text(json.dumps(data), encoding="utf-8")
+    monkeypatch.setattr(pack, "REVIEWS", stale)
+    with pytest.raises(SystemExit, match="does not match the ledger"):
+        pack.render()
 
 
 # --- real transcripts (raw cache) ------------------------------------------------------------------------------

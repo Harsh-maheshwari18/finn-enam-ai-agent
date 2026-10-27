@@ -3,7 +3,7 @@
  "built_from": {
   "snapshot_digest": "c4e9ab86424773ec96c3af847cb80ac4fa22922fd892c37c0fb39b04fb84c3f2",
   "snapshot_as_of": "2026-10-27",
-  "records_sha256": "1eb9fa4c4dc5c9c2409e8cb1546b91d10a37d5cd58e94326cef4efe8fa2b5fe3",
+  "records_sha256": "15fc467c047a5e007b445acd833841c3d751000643e6b0008bbdaf5715fee109",
   "audit_sha256": "5d8da1b17cb37a67118d6edd749468b71f62ef8b72b7d8bfb98f75e088d24533"
  },
  "audited_by": "Claude (AI assistant), 2026-10-27, from extracted PDF text; not yet reviewed by a person",
@@ -1250,7 +1250,7 @@
       "stated": true
      },
      "conditions": null,
-     "interpretation": "Management puts FY26 at 5.4% against a 10% FY30 target. Export revenue is not in the snapshot, so FINN does not check either figure. Not restated by management in Q2 FY27; FINN does not read that silence as a change.",
+     "interpretation": "Management puts FY26 at 5.4% and Q2 FY27 at about 5% against a 10% FY30 target. Export revenue is not in the snapshot, so FINN does not check these figures. The 10% target is not restated in Q2 FY27; FINN does not read that silence as a change.",
      "audit_note": "The p.8 sentence was missed by the candidate filter (no topic keyword for 'exports') and found while checking for later mentions.",
      "statement": {
       "quote": "We remain firm on track to achieve our target of greater than 10% contribution from exports by financial year 2030.",
@@ -1307,6 +1307,20 @@
        "sha256": "59ed4c66897046791800f195ec5de31bfc4f2a7d878a59c7961f3845d419f2e6",
        "stance": "restated",
        "note": null
+      },
+      {
+       "quote": "Today, as a percentage of our overall revenues, it's still at 5%.",
+       "page": 16,
+       "quote_check": "normalised",
+       "speaker": "Aditya Nathany",
+       "role": "management",
+       "role_evidence": "listed under the MANAGEMENT header",
+       "quarter": "Q2 FY27",
+       "url": "https://nsearchives.nseindia.com/corporate/POLYCAB_19102026163912_Intimation_of_Earnings_Call_Transcript.pdf",
+       "said_on": "2026-10-19T16:39:28+05:30",
+       "sha256": "2119d33fa2af9db9f2276725949a0a3ec6305e7df9517baea0f280b9aba64726",
+       "stance": "reported",
+       "note": "Management's own figure for exports, given in an answer about margins; not in FINN's snapshot and not checked. The same answer says the share looks 'slightly lower optically' because domestic demand is high. It does not mention the 10% target."
       }
      ],
      "outcome": {
@@ -1595,7 +1609,7 @@
      },
      "conditions": null,
      "interpretation": "Stated once (Q1 FY27). Asked about it in the next call, the CFO listed second-half headwinds (about 50 bps dilution from the MHP acquisition, furlough seasonality and continued ecosystem investments) and said 'While it's an uphill task, we'll continue to endeavor to inch up on our margins'. A second answer said near-term investment priorities continue. Neither answer repeats, revises or withdraws the 25% figure, so FINN treats both as cautionary context and the commitment as awaiting outcome until Q4 FY27 is reported. Risk note, not a verdict: management's own headwinds and the latest 23.98% make the target harder to reach.",
-     "audit_note": "The quoted sentence does not name the margin; it answers a question about 'margins' going back to FY26 levels, and TCS's prepared remarks call the figure its 'operating margin' (24% in Q1 and Q2 FY27). The analyst's word 'EBIT' is not management's. FINN's (EBITDA - D&A) / revenue on the consolidated filing gives 23.96% and 23.98% for those quarters, which matches the 24% TCS states; TCS's own definition is not published in the snapshot, so the match is the only basis for the formula. Corrected 2026-10-27 on the reviewer's instruction: an earlier version recorded the Q2 FY27 p.16 answer as 'softened' and the verdict as 'not reaffirmed'. The answer is cautionary but does not revise the 25% target. Not yet signed off by a person.",
+     "audit_note": "The quoted sentence does not name the margin; it answers a question about 'margins' going back to FY26 levels, and TCS's prepared remarks call the figure its 'operating margin' (24% in Q1 and Q2 FY27). The analyst's word 'EBIT' is not management's. FINN's (EBITDA - D&A) / revenue on the consolidated filing gives 23.96% and 23.98% for those quarters, which matches the 24% TCS states; TCS's own definition is not published in the snapshot, so the match is the only basis for the formula. Corrected 2026-10-27 on the reviewer's instruction: an earlier version recorded the Q2 FY27 p.16 answer as 'softened' and the verdict as 'not reaffirmed'. The answer is cautionary but does not revise the 25% target. Accepted by a person on 2026-10-27 with the verdict pending (review pack R01).",
      "statement": {
       "quote": "We want to exit at 25% plus and strive to achieve it sooner rather than later.",
       "page": 23,
@@ -1729,7 +1743,8 @@
      "horizon": {
       "label": "long term, no date",
       "period_end": null,
-      "stated": false
+      "stated": false,
+      "basis": "'Long-term' is management's word (Q2 FY27 p.15: 'our long-term aspiration'; p.27: 'that's the long-term aspiration'). No call gives a date; only that absence is FINN's reading."
      },
      "conditions": null,
      "interpretation": "First stated in these calls in Q3 FY26 ('we want to inch closer to our 26% to 28% band') and restated twice in Q2 FY27, where it is called an aspiration and a 'guiding beacon'. No date is given in any of the three. It cannot be met or missed, so FINN shows the latest computed margin for context only.",
@@ -1786,7 +1801,19 @@
        "said_on": "2026-10-14T16:00:08+05:30",
        "sha256": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe",
        "stance": "restated",
-       "note": null
+       "note": null,
+       "prompted_by": {
+        "quote": "So, would we revise the band which gives sense for the floor of the margin where it can potentially fall to give all the investments which the business would need?",
+        "page": 27,
+        "quote_check": "normalised",
+        "speaker": "Kumar Rakesh",
+        "role": "analyst",
+        "role_evidence": "introduced by the moderator as a questioner",
+        "quarter": "Q2 FY27",
+        "url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_14102026155941_SEInt14102026_signed.pdf",
+        "said_on": "2026-10-14T16:00:08+05:30",
+        "sha256": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe"
+       }
       }
      ],
      "outcome": {

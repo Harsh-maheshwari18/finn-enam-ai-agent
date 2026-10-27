@@ -23,7 +23,7 @@ For each company: what did management commit to on an earnings call, what did th
 | Audit labels | **164** (one per candidate) | analyst 44 · explicit numeric 35 · measurable qualitative 14 · commentary 29 · actual report 12 · not guidance 30 |
 | Known misses | **7** | Real commitments the filter did not propose, found by reading (listed in `promise_audit.json`). Two were found during review preparation on 2026-10-27 |
 | Ledger records | **17** | Selected commitments (criteria below) |
-| Quotes inside the records | **69** | 17 statements, 45 follow-ups and 7 analyst questions (67 distinct texts). Every one is re-validated by the build. Before the review corrections of 2026-10-27 there were 55 (16, 34 and 5) |
+| Quotes inside the records | **71** | 17 statements, 46 follow-ups and 8 analyst questions (69 distinct texts). Every one is re-validated by the build. Before the review corrections of 2026-10-27 there were 55 (16, 34 and 5) |
 
 Correction: the final review first described the 15 original records as "50 quotes: 15 statements, 25 follow-ups and 10 analyst questions". The 50 was right, but the split was 15, 30 and 5.
 
@@ -107,7 +107,7 @@ No record is met or missed.
 | POLYCAB exports audit note | "The p.5 sentence was missed" | "The p.8 sentence" | The sentence is on Q4 FY26 p.8, which the statement and `known_misses` both cite. No POLYCAB transcript has an export target on p.5 |
 
 ### Corrections made during review preparation (2026-10-27)
-These were made on the reviewer's instruction while working through the review pack. They are **not** a person's sign-off: every record stays marked as not yet reviewed by a person.
+These were made on the reviewer's instruction while working through the review pack. They are **not** a person's sign-off: every record stayed marked as not yet reviewed by a person (see "Human review" below for R01).
 
 | Item | Before | After | Why |
 |---|---|---|---|
@@ -120,6 +120,14 @@ These were made on the reviewer's instruction while working through the review p
 | HDFCBANK FY27 LDR 85–90% | 3 follow-ups | 5 | Added the CEO's Q3 FY26 p.8 answer to a direct question about the FY27 range, as two `explained` follow-ups: "a broad range", with "90%" meaning roughly 88% to 91%, and "somewhere around the 90%" being acceptable. Management's reading of its own range, not a revision: the 85–90% target and the pending verdict are unchanged. FY26-only sentences from the same answer stay with the FY26 record |
 | HDFCBANK FY26 LDR 90–96% | not in the ledger | **new record**, unverifiable | "We said we will try and be in a range of somewhere between 90% to 96% in the year FY '26, which is what we will be is what we are very confident about" (Q3 FY26 p.6, CEO), repeated on p.8. It meets the same criteria as the dividend record: management speaker, the bank's own ratio, a numeric range with a stated year, an investor-tracked balance-sheet measure, a separate target from the FY27 record, not withdrawn in the same answer. FY26 has closed, FINN holds no loan or deposit figures and no FY26 ratio was found in the later calls, so it is neither met nor missed. Logged as a known miss |
 | Every record | — | `scope` field | Scope is explicit and enforced by the build |
+
+### Human review (2026-10-27)
+**R01 (TCS 25% exit) was accepted by a person, with the verdict pending.** That decision is recorded in `config/promise_reviews.json` and shown in the review pack. The reviewer is Harsh Maheshwari. The other 16 records are still not reviewed by a person. Claude also made decisions on R02–R17 at the reviewer's request; those are not reviews and are not recorded as reviews. Two changes were applied with the reviewer's approval. Neither changes a verdict:
+
+| Item | Before | After | Why |
+|---|---|---|---|
+| TCS 26–28% aspiration | horizon "inferred by FINN"; p.27 answer with no question | horizon basis quotes management's "long-term"; p.27 shows Kumar Rakesh's question | Only the absence of a date is FINN's reading. The p.27 answer replies to whether TCS would revise the band |
+| POLYCAB exports | 3 follow-ups | 4 | Added management's Q2 FY27 p.16 figure, "still at 5%" (Aditya Nathany), as `reported`, unchecked. The 10% target is still not restated in Q2 FY27 |
 
 The relabelling is logged in `promise_audit.json` (`relabels`, `record_kind_changes`):
 - **HDFCBANK Q2 FY27 p.9**, `measurable_qualitative` → `commentary`. This was done while the ledger was being built and was disclosed in the final review. "You will see that change" names no measure, size or direction.
@@ -144,15 +152,15 @@ The relabelling is logged in `promise_audit.json` (`relabels`, `record_kind_chan
 Other commitment-labelled candidates are restatements already attached to a record as follow-ups. The exceptions are a few minor items not made into records: POLYCAB's ₹60–80 bn five-year capex programme and its "₹6,000 to ₹8,000 crores by FY2030" form (both restate the capex record), the FMEG "1.5x to 2x of industry growth" target, and the W&C "12% to 14%" near-to-mid-term range (noted on the W&C record). They are labelled in `promise_audit.json` and can be promoted later by the same criteria.
 
 ## Who audited it
-The labels, records, relabels and this selection were written by **Claude (AI assistant)** from the extracted PDF text on 2026-10-27. The build checks quotes, pages, speakers and roles, but **no person has reviewed the judgements** (labels, stances, scopes, selection). The UI and the data both say so. `docs/promise-ledger-human-review.md` sets out every record, with a checklist and a question for the reviewer. It is generated from the ledger, and every record in it is marked pending.
+The labels, records, relabels and this selection were written by **Claude (AI assistant)** from the extracted PDF text on 2026-10-27. The build checks quotes, pages, speakers and roles, but **no person has reviewed the judgements** (labels, stances, scopes, selection). The UI and the data both say so. `docs/promise-ledger-human-review.md` sets out every record, with a checklist and a question for the reviewer. It is generated from the ledger. R01 is marked as accepted by a person (`config/promise_reviews.json`); every other record is marked pending.
 
 ## Tests
-- `tests/test_promises.py`: 34 tests.
+- `tests/test_promises.py`: 35 tests.
   - Committed artefacts: digest and input hashes match, no exclusions, every quote is management speech with a page and an NSE URL, no confidence fields, the TCS series is right, segment and days guidance is never computed, the verdict table holds, the relabel log matches the labels, the HDFCBANK verdicts do not rest on omission, every record has a scope and only consolidated scope is computed.
   - Verdict rules on SYNTHETIC records: neutral stances never withdraw or clear; a segment-scope record with a computable metric name is not computed.
   - API: ok, not_audited, 404, stale, missing.
   - Five tests use the real PDFs and skip without `data/raw`: the build reproduces the committed ledger exactly; the quote check rejects a paraphrase, a wrong page, a wrong speaker and an analyst cited as management; roles; analyst labels against roles; a tampered record is excluded.
-  - Review pack: the committed pack equals a fresh generation and contains every quote and page link; every record is marked pending, and no box is ticked. The working-capital record keeps its original range and shows the reported cycle, the exports note cites p.8, the FY26 LDR record is unverifiable (not missed), the C&W horizon is quoted, and the TCS aspiration starts at Q3 FY26 p.23.
+  - Review pack: the committed pack equals a fresh generation and contains every quote and page link; only the records in `config/promise_reviews.json` (R01) are marked reviewed, with exactly one overall box ticked each, and a review whose verdict no longer matches the ledger is refused. The working-capital record keeps its original range and shows the reported cycle, the exports note cites p.8, the FY26 LDR record is unverifiable (not missed), the C&W horizon is quoted, and the TCS aspiration starts at Q3 FY26 p.23.
 - `tests/test_guidance_llm.py`: a new test pins the Prompt 2 fixture's corrected segment label for the POLYCAB 11–13% band. The 14.37% cases in the band-logic test are kept and marked as synthetic inputs, not POLYCAB outcomes.
 - `tests/test_ui.py`: 3 new browser tests:
   - the TCS evidence chain;

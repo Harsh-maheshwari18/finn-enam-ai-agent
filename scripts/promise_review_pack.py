@@ -19,6 +19,7 @@ REPO = Path(__file__).resolve().parents[1]
 LEDGER = REPO / "snapshot" / "promise_ledger.json"
 AUDIT = REPO / "config" / "promise_audit.json"
 PROMPTS = REPO / "config" / "promise_review_questions.json"
+REVIEWS = REPO / "config" / "promise_reviews.json"   # decisions a person made; the only source of a ticked box
 OUT = REPO / "docs" / "promise-ledger-human-review.md"
 ORDER = ["TCS", "POLYCAB", "HDFCBANK"]
 LABELS = ["explicit_numeric", "measurable_qualitative", "commentary", "actual_report", "not_guidance", "analyst"]
@@ -26,6 +27,7 @@ STANCE = {"restated": "restated (decisive)", "tightened": "tightened (decisive)"
           "widened": "widened (decisive)", "delayed": "delayed (decisive)", "not_restated": "not restated (neutral)",
           "reported": "reported (neutral)", "explained": "explained (neutral)"}
 CHANGED = {"tightened", "softened", "widened", "delayed"}
+OVERALL = ["Accept", "Needs correction", "Uncertain"]
 CHECKS = ["1. Quote accuracy (open the link, compare word for word)", "2. Speaker attribution and role",
           "3. Management guidance versus commentary (`kind`)", "4. Metric, unit and segment/consolidated scope",
           "5. Reporting period and target horizon", "6. Verdict follows from the evidence",
@@ -53,14 +55,21 @@ def quotes(r: dict) -> list[dict]:
     return [r["statement"], *r["follow_ups"], *[f["prompted_by"] for f in r["follow_ups"] if f.get("prompted_by")]]
 
 
-def review_block() -> list[str]:
+def review_block(rv: dict | None = None) -> list[str]:
     out = ["| Check | Accept | Needs correction | Uncertain | Reviewer note |", "|---|:-:|:-:|:-:|---|"]
     out += [f"| {c} | ☐ | ☐ | ☐ | |" for c in CHECKS]
-    return out + ["", "**Overall:** ☐ Accept · ☐ Needs correction · ☐ Uncertain", "",
-                  "**Reviewer:** ________ · **Date:** ________", "", "**Status: PENDING. Not reviewed by a person.**"]
+    if not rv:
+        return out + ["", "**Overall:** ☐ Accept · ☐ Needs correction · ☐ Uncertain", "",
+                      "**Reviewer:** ________ · **Date:** ________", "", "**Status: PENDING. Not reviewed by a person.**"]
+    overall = " · ".join(f"{'☑' if o == rv['overall'] else '☐'} {o}" for o in OVERALL)
+    return out + ["", f"**Overall:** {overall}", "", f"**Reviewer note:** {cell(rv['note'])}", "",
+                  f"**Reviewer:** {rv.get('reviewer') or '________ (name not yet entered)'} · **Date:** {rv['date']}", "",
+                  f"**Status: REVIEWED BY A PERSON: {rv['overall']}, verdict {rv['verdict_confirmed']} ({rv['date']}).** "
+                  + ("" if rv.get("checks_marked") else "The decision was given for the record as a whole, so the seven checks above are not marked one by one. ")
+                  + "Recorded by Claude on the reviewer's instruction."]
 
 
-def record(n: int, sym: str, r: dict, prompts: dict) -> list[str]:
+def record(n: int, sym: str, r: dict, prompts: dict, reviews: dict) -> list[str]:
     st, h, o = r["statement"], r["horizon"], r["outcome"]
     changes = [f"{link(f)} {f['stance']}: “{cell(f['quote'])}”" for f in r["follow_ups"] if f["stance"] in CHANGED]
     out = [f"### R{n:02d} · {r['id']}", "", f"**{cell(r['title'])}**", "",
@@ -110,19 +119,26 @@ def record(n: int, sym: str, r: dict, prompts: dict) -> list[str]:
                 "FINN has not checked them against filings.", ""]
     if r["id"] in prompts["flags"]:
         out += [f"⚠ **Preparer flag:** {prompts['flags'][r['id']]}", ""]
-    return out + [f"**Question for the reviewer:** {prompts['questions'][r['id']]}", ""] + review_block() + ["", "---", ""]
+    return out + [f"**Question for the reviewer:** {prompts['questions'][r['id']]}", ""] + review_block(reviews.get(r["id"])) + ["", "---", ""]
 
 
 def render() -> str:
     ledger = json.loads(LEDGER.read_text(encoding="utf-8"))
     audit = json.loads(AUDIT.read_text(encoding="utf-8"))
     prompts = json.loads(PROMPTS.read_text(encoding="utf-8"))
+    rvf = json.loads(REVIEWS.read_text(encoding="utf-8"))
+    reviews = rvf["reviews"]
     recs = [(s, r) for s in ORDER for r in ledger["companies"][s]["records"]]
     ids = {r["id"] for _, r in recs}
     if set(prompts["questions"]) != ids or not set(prompts["flags"]) <= ids:
         raise SystemExit(f"{PROMPTS.name} does not match the ledger: "
                          f"no question for {sorted(ids - set(prompts['questions']))}, unknown {sorted(set(prompts['questions']) - ids)}")
     rn = {r["id"]: f"R{n:02d}" for n, (_, r) in enumerate(recs, 1)}
+    status = {r["id"]: r["verdict"]["status"] for _, r in recs}
+    for rid, rv in reviews.items():   # a review stands only for the record and verdict the person actually saw
+        if rid not in ids or rv["overall"] not in OVERALL or rv["verdict_confirmed"] != status[rid]:
+            raise SystemExit(f"{REVIEWS.name}: review of {rid} does not match the ledger (verdict now {status.get(rid)})")
+    done = [rn[i] for i in rn if i in reviews]
     by = Counter((i["symbol"], i["label"]) for i in audit["items"])
     tot = Counter(i["label"] for i in audit["items"])
     v = Counter(r["verdict"]["status"] for _, r in recs)
@@ -144,9 +160,11 @@ def render() -> str:
 
     md = [
         "# Promise Ledger: human review pack", "",
-        "**Status: PENDING. No record in this pack has been reviewed by a person.** Each ☐ stays empty until a reviewer fills it in.", "",
+        (f"**Status: {len(done)} of {len(recs)} records reviewed by a person ({', '.join(done)}); the other {len(recs) - len(done)} are PENDING.** "
+         if done else "**Status: PENDING. No record in this pack has been reviewed by a person.** ")
+        + "Each ☐ stays empty until a reviewer fills it in. Decisions Claude made at the reviewer's request are not reviews and tick nothing.", "",
         "Generated by `python scripts/promise_review_pack.py` from `snapshot/promise_ledger.json` and `config/promise_audit.json`. "
-        "Do not edit this file by hand: change the records or `config/promise_review_questions.json`, rebuild, and regenerate.", "",
+        "Do not edit this file by hand: change the records, `config/promise_review_questions.json` or `config/promise_reviews.json` (decisions a person made), rebuild, and regenerate.", "",
         "## Read this first",
         f"- **What you are reviewing.** `snapshot/promise_ledger.json`, built from snapshot `{bf['snapshot_digest'][:8]}…` (as of {bf['snapshot_as_of']}), "
         f"records file sha256 `{bf['records_sha256'][:12]}…` and audit file sha256 `{bf['audit_sha256'][:12]}…`.",
@@ -185,6 +203,11 @@ def render() -> str:
         "## Corrections made before this review", "",
         "| Record | Correction |", "|---|---|"]
     md += [f"| {c['record']} ({rn[c['record']]}) | {cell(c['what'])} |" for c in prompts["corrections_before_review"]]
+    if rvf["changes_during_review"]:
+        md += ["", "## Changes made during the review", "",
+               "Applied with the reviewer's approval. They add evidence or wording and change no verdict.", "",
+               "| Record | Change |", "|---|---|"]
+        md += [f"| {c['record']} ({rn[c['record']]}) | {cell(c['what'])} |" for c in rvf["changes_during_review"]]
     md += ["",
            "## How to review",
            "Open each source link; it opens the NSE PDF at the cited page. For each record, mark one status per check, write a note for anything other than Accept, and set an overall status.", "",
@@ -234,7 +257,7 @@ def render() -> str:
            "3. **TCS 25% exit («TCS-ebit-exit-25») changed from not reaffirmed to pending on the reviewer's instruction.** \"While it's an uphill task\" (Q2 FY27 p.16) "
            "is now read as cautionary context, not an explicit revision or withdrawal of the 25% target, so both Q2 FY27 answers are `not_restated`. "
            "The risk note (MHP dilution, furlough seasonality, investment priorities, the latest 23.98%) is kept, as is the margin-formula caveat. "
-           "\"Exit\" is still read as Q4 FY27, marked as inferred. A reviewer who reads p.16 as an explicit softening should mark **Needs correction**.",
+           "\"Exit\" is still read as Q4 FY27, marked as inferred. The reviewer accepted this reading on 2026-10-27 («TCS-ebit-exit-25»).",
            "4. **Record added: HDFCBANK FY26 LDR of 90% to 96% («HDFCBANK-ldr-fy26-90-96»).** In the same answer that gives the FY27 range (Q3 FY26 p.6), the CEO says "
            "\"we will try and be in a range of somewhere between 90% to 96% in the year FY '26, which is… what we are very confident about\", and repeats it on p.8. "
            "The filter did not propose the sentence. It meets the inclusion criteria (see the start of this pack). FY26 has closed, but FINN holds no loan or deposit "
@@ -267,7 +290,7 @@ def render() -> str:
     md += ["", "The ledger covers only TCS, POLYCAB and HDFCBANK. The other companies in the snapshot are `not_audited` and show no records; nothing was created for them.", "",
            "## Records", ""]
     for n, (s, r) in enumerate(recs, 1):
-        md += record(n, s, r, prompts)
+        md += record(n, s, r, prompts, reviews)
     md += ["## Sign-off", "", "| | |", "|---|---|",
            f"| Records accepted | __ / {len(recs)} |", "| Records needing correction | __ |", "| Records uncertain | __ |",
            "| Reviewer name and role | |", "| Date | |", "| Independent of the original audit? | ☐ yes ☐ no |", "",

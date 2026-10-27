@@ -55,7 +55,7 @@
     }
    ],
    "interpretation": "Stated once (Q1 FY27). Asked about it in the next call, the CFO listed second-half headwinds (about 50 bps dilution from the MHP acquisition, furlough seasonality and continued ecosystem investments) and said 'While it's an uphill task, we'll continue to endeavor to inch up on our margins'. A second answer said near-term investment priorities continue. Neither answer repeats, revises or withdraws the 25% figure, so FINN treats both as cautionary context and the commitment as awaiting outcome until Q4 FY27 is reported. Risk note, not a verdict: management's own headwinds and the latest 23.98% make the target harder to reach.",
-   "audit_note": "The quoted sentence does not name the margin; it answers a question about 'margins' going back to FY26 levels, and TCS's prepared remarks call the figure its 'operating margin' (24% in Q1 and Q2 FY27). The analyst's word 'EBIT' is not management's. FINN's (EBITDA - D&A) / revenue on the consolidated filing gives 23.96% and 23.98% for those quarters, which matches the 24% TCS states; TCS's own definition is not published in the snapshot, so the match is the only basis for the formula. Corrected 2026-10-27 on the reviewer's instruction: an earlier version recorded the Q2 FY27 p.16 answer as 'softened' and the verdict as 'not reaffirmed'. The answer is cautionary but does not revise the 25% target. Not yet signed off by a person."
+   "audit_note": "The quoted sentence does not name the margin; it answers a question about 'margins' going back to FY26 levels, and TCS's prepared remarks call the figure its 'operating margin' (24% in Q1 and Q2 FY27). The analyst's word 'EBIT' is not management's. FINN's (EBITDA - D&A) / revenue on the consolidated filing gives 23.96% and 23.98% for those quarters, which matches the 24% TCS states; TCS's own definition is not published in the snapshot, so the match is the only basis for the formula. Corrected 2026-10-27 on the reviewer's instruction: an earlier version recorded the Q2 FY27 p.16 answer as 'softened' and the verdict as 'not reaffirmed'. The answer is cautionary but does not revise the 25% target. Accepted by a person on 2026-10-27 with the verdict pending (review pack R01)."
   },
   {
    "id": "TCS-aspiration-26-28",
@@ -72,7 +72,8 @@
    "horizon": {
     "label": "long term, no date",
     "period_end": null,
-    "stated": false
+    "stated": false,
+    "basis": "'Long-term' is management's word (Q2 FY27 p.15: 'our long-term aspiration'; p.27: 'that's the long-term aspiration'). No call gives a date; only that absence is FINN's reading."
    },
    "statement": {
     "quarter": "Q3 FY26",
@@ -98,7 +99,12 @@
      "page": 27,
      "speaker": "Samir Seksaria",
      "stance": "restated",
-     "quote": "See, we have always called 26%-28% as our guiding beacon, and we would not want to shift away from that."
+     "quote": "See, we have always called 26%-28% as our guiding beacon, and we would not want to shift away from that.",
+     "prompted_by": {
+      "page": 27,
+      "speaker": "Kumar Rakesh",
+      "quote": "So, would we revise the band which gives sense for the floor of the margin where it can potentially fall to give all the investments which the business would need?"
+     }
     }
    ],
    "interpretation": "First stated in these calls in Q3 FY26 ('we want to inch closer to our 26% to 28% band') and restated twice in Q2 FY27, where it is called an aspiration and a 'guiding beacon'. No date is given in any of the three. It cannot be met or missed, so FINN shows the latest computed margin for context only.",
@@ -488,9 +494,17 @@
      "speaker": "Shashank Yagnick",
      "stance": "restated",
      "quote": "We have given our guidance of going north of 10% of our overall top line by 2030."
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 16,
+     "speaker": "Aditya Nathany",
+     "stance": "reported",
+     "quote": "Today, as a percentage of our overall revenues, it's still at 5%.",
+     "note": "Management's own figure for exports, given in an answer about margins; not in FINN's snapshot and not checked. The same answer says the share looks 'slightly lower optically' because domestic demand is high. It does not mention the 10% target."
     }
    ],
-   "interpretation": "Management puts FY26 at 5.4% against a 10% FY30 target. Export revenue is not in the snapshot, so FINN does not check either figure. Not restated by management in Q2 FY27; FINN does not read that silence as a change.",
+   "interpretation": "Management puts FY26 at 5.4% and Q2 FY27 at about 5% against a 10% FY30 target. Export revenue is not in the snapshot, so FINN does not check these figures. The 10% target is not restated in Q2 FY27; FINN does not read that silence as a change.",
    "audit_note": "The p.8 sentence was missed by the candidate filter (no topic keyword for 'exports') and found while checking for later mentions."
   },
   {

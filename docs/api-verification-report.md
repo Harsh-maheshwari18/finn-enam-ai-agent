@@ -57,11 +57,12 @@ The BAJFINANCE regrouping is the one place where FINN still shows a different Yo
 - **19 of 22 companies** are checked by identities and against screener, not against their signed PDFs by hand.
 - **LT's results PDF is image-only.** Its lending-cost line is checked against XBRL and screener, not the PDF.
 - **Insurers, and restatements other than the one found,** are not tested.
-- **Promise Ledger: deployed and checked live (commit `8b4db28`, 2026-10-27).** `GET /api/v1/companies/{SYM}/promises` (API 0.4.0) serves the ledger for TCS, POLYCAB and HDFCBANK (16 records as deployed; 17 locally after review preparation). Every quote is re-checked against the cited PDF page and speaker (`promise-ledger.md`). The ledger is labelled `stale` if it was built from a different snapshot. It is tested offline (`tests/test_promises.py`, 34) and in the browser (3 UI tests).
+- **Promise Ledger: deployed and checked live (commit `8b4db28`, 2026-10-27).** `GET /api/v1/companies/{SYM}/promises` (API 0.4.0) serves the ledger for TCS, POLYCAB and HDFCBANK (17 records, deployed as `fdb7599` and checked live). Every quote is re-checked against the cited PDF page and speaker (`promise-ledger.md`). The ledger is labelled `stale` if it was built from a different snapshot. It is tested offline (`tests/test_promises.py`, 35) and in the browser (3 UI tests).
   - **Live check:** the API returned records identical to the committed ledger. The live `index.html`, `app.js` and `styles.css` were byte-identical to `web/`. The cards showed 50 source links (one per statement and follow-up). The 10 cited transcripts and 3 XBRL filings each returned HTTP 200 on a single GET, and every transcript matched its recorded sha256.
   - **Deployed and checked live (`2d8707d`):** the POLYCAB working-capital target and the exports audit note.
-  - **Not yet deployed:** the review-preparation corrections (17th record, TCS and C&W verdicts; see `promise-ledger.md`).
-  - **Review:** the audit was done by Claude and has not been reviewed by a person. The review pack is `promise-ledger-human-review.md`.
+  - **Deployed and checked live (`fdb7599`):** the review-preparation corrections (17th record, TCS and C&W verdicts; see `promise-ledger.md`). 54/54 live checks passed: API records identical to the commit, frontend byte-identical, 17 cards with every source link, 11 transcripts and 3 XBRL filings reachable with matching hashes.
+  - **Not yet deployed:** the two human-review changes (TCS 26–28% horizon wording and analyst question; POLYCAB exports Q2 FY27 figure).
+  - **Review:** the audit was done by Claude. A person has reviewed 1 of 17 records (R01, accepted); the other 16 are not reviewed by a person. The review pack is `promise-ledger-human-review.md`.
 - **Large swings are reproduced, not explained.** Some cards show them: DEEPAKNTR PAT +207% YoY; DIXON PBT +140% while EBITDA is −4%. Both match screener. The card does not yet explain why; that is the job of the filings and transcript layers.
 
 ## Reproduce
