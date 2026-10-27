@@ -1,6 +1,6 @@
 # FINN: API and Data Verification Report
 
-Run 2026-10-27. Sections 1–3: local development machine, gunicorn 23.0.0 with the exact Render start command, snapshot `3c15b9d5…`. Section 4: the deployed Render service. Section 5: timestamp correction, snapshot `ff4868ac…` (local; **not yet deployed**).
+Run 2026-10-27. Sections 1–3: local development machine, gunicorn 23.0.0 with the exact Render start command, snapshot `3c15b9d5…`. Section 4: the deployed Render service. Section 5: timestamp correction, snapshot `ff4868ac…` (deployed as commit `ec315b3`, 09:16 UTC).
 
 ## 1. Does the API work?
 
@@ -53,15 +53,16 @@ The excise fix changed served numbers. Before it, ITC revenue YoY read **+27.6%*
 The BAJFINANCE regrouping is the one place where FINN still shows a different YoY than a like-for-like comparison. It is counted above as reconciled, because the cause is proven, but **the number is not corrected**. NSE's latest XBRL has no comparative columns, and BAJFINANCE's XBRL notes do not mention the regrouping, so it cannot be detected automatically.
 
 ## 3. What this does not prove
-- **Render.** The service has not been created, so cloud-host access to NSE and Yahoo is unmeasured.
+- **Render.** When sections 1–3 ran, the service did not exist yet. See sections 4–5 for the deployed service: two connectivity samples, not long-run access.
 - **19 of 22 companies** are checked by identities and against screener, not against their signed PDFs by hand.
 - **LT's results PDF is image-only.** Its lending-cost line is checked against XBRL and screener, not the PDF.
 - **Insurers, and restatements other than the one found,** are not tested.
+- **Promise Ledger is not validated.** All 12 target transcripts are available and readable (`transcript-coverage.md`), but guidance is labelled for the latest quarter only (10 statements, 1 checkable against filed numbers). The other 9 transcripts have no extraction, and no LLM is called.
 - **Large swings are reproduced, not explained.** Some cards show them: DEEPAKNTR PAT +207% YoY; DIXON PBT +140% while EBITDA is −4%. Both match screener. The card does not yet explain why; that is the job of the filings and transcript layers.
 
 ## Reproduce
 ```
-.venv/bin/python -m pytest -q                 # 240 tests, offline
+.venv/bin/python -m pytest -q                 # 254 tests, offline
 .venv/bin/python -m finn.snapshot verify      # digest check
 .venv/bin/gunicorn finn.api:app --bind 127.0.0.1:8000
 ```
@@ -88,7 +89,7 @@ Service https://finn-api-9z4q.onrender.com, commit `c9ccac0`, snapshot `3c15b9d5
 
 A point-in-time observation: the Render IP was not blocked at that moment. It is not a guarantee against rate- or time-dependent blocking.
 
-## 5. Timestamp correction (local, snapshot `ff4868ac…`)
+## 5. Timestamp correction (snapshot `ff4868ac…`, deployed)
 
 **Defect:** `published_at` (results) and `broadcast_at` (announcements and transcripts) were served without an offset, e.g. `2026-10-08T22:07:33`, while `retrieved_at` was UTC.
 
@@ -100,3 +101,5 @@ A point-in-time observation: the Render IP was not blocked at that moment. It is
 - **Served response:** TCS revenue `published_at` = `2026-10-08T22:07:33+05:30`; POLYCAB Q2 FY27 transcript `broadcast_at` = `2026-10-19T16:39:28+05:30`.
 - **Snapshot diff (old against new):** the only changed columns are `sources.published_at` (66 rows) and `transcript_filings.broadcast_at` (13 rows). Every new value equals the old wall clock plus `+05:30`. 0 values lack an offset. All 942 observations, 66 integrity rows, 22 company rows and 12 coverage rows are unchanged.
 - **Tests:** `tests/test_timezones.py` (9 tests, including a UTC-aware value that must not be shifted, and a legacy naive database row), plus 5 API tests.
+- **Deployed service** (commit `ec315b3`, checked 2026-10-27 09:16–09:20 UTC from the development machine): `/health` digest `ff4868ac…`, `verified: true`, 22 companies; TCS revenue `73188.00`, 4 of 4 `published_at` with `+05:30`; POLYCAB transcripts `broadcast_at` with `+05:30` (Q2 FY27 `2026-10-19T16:39:28+05:30`). A second connectivity probe from Render at 09:17:49 UTC passed all four checks (NSE announcements 827 ms, results listing 197 ms, XBRL 200 ms, Yahoo 53 ms). Not re-checked after the redeploy: 404/405 responses (unchanged code) and cold start (service was warm; 23.6 s on the first deploy).
+- **At the deployed commit:** 254 tests passed offline; `snapshot verify` OK.

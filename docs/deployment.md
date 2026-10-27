@@ -1,10 +1,29 @@
 # FINN: Deployment (Render Free)
 
-**Status 2026-10-27: deployed** at https://finn-api-9z4q.onrender.com (commit `c9ccac0`, snapshot `3c15b9d5…` verified). Smoke test from outside: every endpoint gave the expected status; POST 405; first request after idle took 23.6 s (cold start), later ones 0.34–0.45 s.
+**Status 2026-10-27: deployed** at https://finn-api-9z4q.onrender.com. First deploy: commit `c9ccac0`, snapshot `3c15b9d5…`. Smoke test from outside: every endpoint gave the expected status; POST 405; first request after idle took 23.6 s (cold start), later ones 0.34–0.45 s.
 
-**Connectivity from Render, measured:** 2026-10-27 08:29 UTC, one probe from Render (`finn-api-9z4q`, Singapore, commit `c9ccac0`): NSE announcements 200 (19 filings / 30 days, 1,232 ms), NSE results listing 200 (14 filings, 188 ms), NSE archives XBRL 200 (280 facts, 124 ms), Yahoo chart 200 (5 bars, 45 ms). All parsed. This is a single sample: it shows the Render IP was not blocked at that moment, not that it never will be.
+**Redeployed 09:16 UTC:** commit `ec315b3` (timestamp fix), snapshot `ff4868ac…`. Live at about 20 s after the push. `/health`: `verified: true`, 22 companies. Checked live: TCS revenue `73188.00`, all 4 TCS `published_at` values end in `+05:30`, and POLYCAB transcript `broadcast_at` values end in `+05:30` (Q2 FY27 `2026-10-19T16:39:28+05:30`). The 404/405 responses were not re-checked after the redeploy; that code did not change.
 
-**Pending redeploy:** the timestamp fix and snapshot `ff4868ac…` exist locally only. The live service still serves `3c15b9d5…`, whose `published_at` / `broadcast_at` values have no offset. Push to redeploy (autoDeploy is on).
+**Connectivity from Render, measured:** two probes from Render (`finn-api-9z4q`, Singapore), both all four checks 200 and parsed:
+
+| Probe (UTC) | Commit | NSE announcements | NSE results listing | NSE archives XBRL | Yahoo chart |
+|---|---|---|---|---|---|
+| 08:29:57 | `c9ccac0` | 1,232 ms, 19 filings / 30 days | 188 ms, 14 filings | 124 ms, 280 facts | 45 ms, 5 bars |
+| 09:17:49 | `ec315b3` | 827 ms, 19 filings / 30 days | 197 ms, 14 filings | 200 ms, 280 facts | 53 ms, 5 bars |
+
+Two samples, 48 minutes apart, on one day: they show the Render IP was not blocked at those moments, not that it never will be.
+
+**Tests at the deployed commit:** 254 passed offline; `python -m finn.snapshot verify` OK (`ff4868acfaa6c15c` recomputed, stored and in the manifest).
+
+**Cold start:** 23.6 s for the first request after idle, measured once on the first deploy. Not re-measured after the redeploy (the service was already warm). Any frontend must show a loading state for this, and the URL should be opened once before a demo.
+
+## Remaining limitations (2026-10-27)
+- **NSE access from Render:** two passing samples on one day. Long-run, rate- or time-dependent blocking is unmeasured.
+- **Manual PDF verification:** 3 of 22 companies (TCS, HDFCBANK, POLYCAB; 44/44 values) are checked against signed results PDFs. The other 19 are checked by arithmetic identities and the screener cross-check only.
+- **Regrouped comparatives** are disclosed, not corrected (BAJFINANCE YoY 21.64% as filed vs 22.79% like-for-like).
+- **Promise Ledger:** not validated. 12/12 transcripts are available and readable, but guidance has been labelled for the latest quarter only (10 statements, 1 numerically checkable); the other 9 transcripts have no extraction, and no LLM is called.
+- **Snapshot freshness:** as of 2026-10-27; 17 of 22 companies' latest filed quarter is Jun-26.
+- **No frontend** is deployed; only the JSON API.
 
 ## What gets deployed
 A read-only JSON API (`finn/api.py`, plain WSGI, served by gunicorn) that serves the committed snapshot `snapshot/finn_snapshot.db`. Requests never fetch live data and never call an LLM, with one exception: `/api/v1/diagnostics/connectivity` is a deliberate live probe, rate limited to one run per 10 minutes per worker.
