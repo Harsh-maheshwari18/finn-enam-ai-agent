@@ -1,0 +1,107 @@
+{
+ "nse_ann_HDFCBANK.json": {
+  "sha256": "ed8b00298b524c4124cb1e1dd6e0e6327e806c0313efaa6c0b8c755249884529",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=HDFCBANK&from_date=28-08-2026&to_date=27-10-2026"
+ },
+ "nse_ann_POLYCAB.json": {
+  "sha256": "6f3519539c9e1f16eda6ee5a7ce38ab8f3e76f6512dd19b6c394e9fbf08bdb46",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=POLYCAB&from_date=28-08-2026&to_date=27-10-2026"
+ },
+ "nse_ann_TCS.json": {
+  "sha256": "b3d3b56ac5944e2b5bc1e70082375ab44bfbc2e085173211ebc711d22d47da55",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=TCS&from_date=28-08-2026&to_date=27-10-2026"
+ },
+ "nse_int_HDFCBANK.json": {
+  "sha256": "24d69addcd5b0927bcd59c1670f7f6056df02ec07775fc0e563acd2a5ea4295a",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://www.nseindia.com/api/integrated-filing-results?index=equities&symbol=HDFCBANK&period_ended=all&type=Integrated%20Filing-%20Financials"
+ },
+ "nse_int_POLYCAB.json": {
+  "sha256": "be4ac07463eadd149618fa41977c1c3d87faa45eabbd29e18189e3fc33b35fab",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://www.nseindia.com/api/integrated-filing-results?index=equities&symbol=POLYCAB&period_ended=all&type=Integrated%20Filing-%20Financials"
+ },
+ "nse_int_TCS.json": {
+  "sha256": "4a58cf0b95f550fa3f235f8d815c9da641cd6ee0c6e280757732cf4b417ec141",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://www.nseindia.com/api/integrated-filing-results?index=equities&symbol=TCS&period_ended=all&type=Integrated%20Filing-%20Financials"
+ },
+ "xbrl_HDFCBANK_30-JUN-2026_C.xml": {
+  "sha256": "7c5f4cfae145b0ac20dcbb7081c6a76488fb1ffea1b42e49ddd4a6f46d6cf38b",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_BANKING_1696123_18072026040126_WEB.xml",
+  "basis": "consolidated"
+ },
+ "xbrl_HDFCBANK_30-SEP-2025_C.xml": {
+  "sha256": "d7431b6f7c0c3e5386683b713a28e75485f31faf0908999f9964b5faa5d3a0de",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_BANKING_1553886_18102025082322_WEB.xml",
+  "basis": "consolidated"
+ },
+ "xbrl_HDFCBANK_30-SEP-2026_C.xml": {
+  "sha256": "41840bebf50eacb915fe9ddd2d7cd2bace3d6fffdaa0898a482bd56ddd94aa3b",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_BANKING_1740913_17102026054812_WEB.xml",
+  "basis": "consolidated"
+ },
+ "xbrl_POLYCAB_30-JUN-2026_C.xml": {
+  "sha256": "32dd9af89104cc954d65d4195c4452a87b043eff465bf73ffcd3a15671c94030",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1694176_16072026035916_WEB.xml",
+  "basis": "consolidated"
+ },
+ "xbrl_POLYCAB_30-SEP-2025_C.xml": {
+  "sha256": "acd6d5720ceb9f2c2e8b67c1712020e5dbd765c354d373710f5d03e0e3f853b6",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1552465_17102025061553_WEB.xml",
+  "basis": "consolidated"
+ },
+ "xbrl_POLYCAB_30-SEP-2026_C.xml": {
+  "sha256": "6476acf173e1896cf17159a578999aa455a3f25b9d22de9ba502097c8f3df47e",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1738868_15102026035523_WEB.xml",
+  "basis": "consolidated"
+ },
+ "xbrl_TCS_30-JUN-2026_C.xml": {
+  "sha256": "ef4034549b7f3acd942b08e89dff3df11eed3a9174fb720cfbc5e4a759925c60",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1690004_09072026063620_WEB.xml",
+  "basis": "consolidated"
+ },
+ "xbrl_TCS_30-SEP-2025_C.xml": {
+  "sha256": "625e7c0db736a1df077ea75ba45a3d5ee1a16047f88cc6304fb97ac2e51a97f2",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1543879_09102025115624_WEB.xml",
+  "basis": "consolidated"
+ },
+ "xbrl_TCS_30-SEP-2026_C.xml": {
+  "sha256": "613039552dfbe7ac779ef62340b5df844da05c3a2c8a2d943c69cf6fe862353c",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, unmodified)",
+  "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1734607_08102026100810_WEB.xml",
+  "basis": "consolidated"
+ },
+ "yahoo_TCS.NS_excerpt.json": {
+  "sha256": "79d4eb0317d3fdfb0b6c0192f69bb4d092282d26f131183a31813b04d3f95dec",
+  "retrieved": "2026-10-27",
+  "provenance": "fixture (real, TRIMMED to last 30 bars; not redistributable at scale)",
+  "url": "https://query1.finance.yahoo.com/v8/finance/chart/TCS.NS?range=2y&interval=1d"
+ }
+}

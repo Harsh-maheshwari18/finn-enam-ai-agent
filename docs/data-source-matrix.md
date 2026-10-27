@@ -1,0 +1,21 @@
+# FINN — Data Source Matrix
+
+Tested 2026-10-27 from the **local development machine only** (Windows/WSL2, residential network). No deployment host has been tested.
+
+Status key: **Verified** = real requests parsed and checked against an independent source · **Partial** = works, but a known gap remains · **Untested** = assumption · **Blocked** = observed refusal
+
+| Source | Purpose | Tested from | Result | Parsing reliability | Freshness | Restrictions observed | Fallback | Status |
+|---|---|---|---|---|---|---|---|---|
+| Yahoo chart API `query1.finance.yahoo.com/v8/finance/chart/{SYM}.NS` | EOD price/volume | Local | 200 for TCS, HDFCBANK, POLYCAB, ITC (.NS) and TCS.BO; 2y daily, 495 bars | High. **Last bar is intraday during market hours** (11:41 IST); zero-volume rows on non-trading dates; BSE series has null bars | EOD after 16:00 IST | None at ~1 req/s × 5 | Raw cache (last good copy, marked stale); NSE bhavcopy (untested) | **Verified** (local) |
+| NSE `api/corporate-announcements` | Push feed | Local | 200, no cookie needed; 87 filings / 60 days for 3 symbols | High. Fields: `seq_id`, `symbol`, `sm_isin`, `an_dt`, `desc`, `attchmntText`, `attchmntFile`, `hasXbrl`. **41% use vague labels** ("General Updates"/"Updates") | Minutes | None at 1.5s spacing. Homepage returns 403 to curl, but the API works | Raw cache; BSE is blocked | **Verified** (local) |
+| NSE `api/integrated-filing-results` | Results listing (XBRL links) | Local | 200; 12–16 filings per symbol (≈7 quarters × consolidated/standalone) for all 27 candidates; also BEL, CAMS | High | Filed same day as results | None | Legacy `api/corporates-financial-results` (stops at Dec-2024 for TCS) | **Verified** (local) |
+| NSE XBRL instance (`nsearchives…/xbrl/*.xml`) | Revenue/PBT/PAT + EBITDA inputs | Local | 200 for 9 consolidated filings (3 cos × 3 quarters) + BEL, CAMS | High for Ind-AS. **Filer mis-tagging found in HDFCBANK (banking taxonomy)**: minority interest booked as `ExceptionalItems` in 2 of 3 quarters | Immutable once filed | None | Signed results PDF (manual check); integrity checks flag inconsistencies | **Verified with known defect class** |
+| NSE iXBRL HTML rendering | Human-readable view of same filing | Local | 200 | Table scrape works but is redundant with the XML | Same | None | Not used | Not needed |
+| Signed results PDF (announcement attachment) | Golden-set verification; page refs | Local | 200 for TCS (22 pp), HDFCBANK (24 pp), POLYCAB (14 pp, 7 MB) | Text layer present. **Units differ by company** (crore vs ₹ million). HDFCBANK text layer prints 0 as "O" | Same day | None | — | **Verified** (manual) |
+| NSE concall transcript (announcement, `desc` = "Analysts/Institutional Investor Meet/Con. Call Updates", headline contains "Transcript") | Promise Ledger | Local | 200 for TCS (29 pp), HDFCBANK (17), POLYCAB (20) | Text extractable, 0 scanned pages. Artefacts: ligatures, "Ư"=ff, line breaks inside sentences | ~5–7 days after call | None | screener.in transcript links (secondary index; the TCS file is byte-identical) | **Verified** (3 cos, latest quarter only) |
+| NSE `api/annual-reports` | Annual report PDFs | Local | 200; TCS 17 records, HDFCBANK 18 | PDF text extractable (TCS 361 pp, HDFCBANK 678 pp), but **24s extraction each**. Some older years are .zip | Yearly | **HEAD returns 503, GET works** | screener.in AR links | **Verified** (2 cos) |
+| screener.in company page | Cross-check only; secondary transcript index | Local | 200 at ≥8s spacing; **429 at 1.2s spacing** | HTML scrape; quarterly table parsed | Daily | Rate limited | Not on critical path | **Partial** (cross-check only) |
+| BSE API `api.bseindia.com` | Alternative filings | Local | **Access Denied** (Akamai) | — | — | Blocked; not retried | NSE | **Blocked** |
+| LinkedIn | Management bio | — | Not attempted | — | — | ToS | Profile text in the Reg-30 filing (to be sampled) | Deliberately not used |
+| Anthropic API | Guidance extraction | — | **No credentials in environment** | — | — | — | No-LLM mode (deterministic numbers, rule classifier, human-labelled guidance demo) | **Blocked (credentials)** |
+| Any source **from a cloud host** | Deployment | — | Not tested | — | — | NSE commonly blocks datacentre IPs (**assumption**) | Local ingest → committed snapshot | **Untested** |

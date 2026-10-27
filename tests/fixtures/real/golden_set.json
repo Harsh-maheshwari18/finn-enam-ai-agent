@@ -1,0 +1,63 @@
+{
+  "_about": "Values transcribed by hand from the SIGNED results PDFs (primary, human-readable), page and unit as printed. Tests parse the XBRL fixtures independently and must reproduce these. Screener values are a secondary cross-check only. Retrieved 2026-10-27.",
+  "documents": {
+    "TCS_Q2FY27_PDF": {"url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_08102026153124_Post_BM_SE_Letter_fin.pdf", "sha256_prefix": "038ef1c48011", "page": 8, "statement": "Consolidated statement of profit and loss", "unit": "crores", "columns": {"2026-09-30": "Three months ended 30-Sep-2026", "2026-06-30": "Three months ended 30-Jun-2026", "2025-09-30": "Three months ended 30-Sep-2025"}},
+    "HDFCBANK_Q2FY27_PDF": {"url": "https://nsearchives.nseindia.com/corporate/HDFCBANK_17102026135520_OutcomeofBMResults_17oct2026.pdf", "sha256_prefix": "1a25f460842b", "page": 9, "statement": "Unaudited consolidated financial results", "unit": "crores", "columns": {"2026-09-30": "Quarter ended 30.09.2026", "2026-06-30": "Quarter ended 30.06.2026", "2025-09-30": "Quarter ended 30.09.2025"}, "pdf_text_quirk": "text layer renders digit 0 as letter O (e.g. '2O7OO.O3')"},
+    "POLYCAB_Q2FY27_PDF": {"url": "https://nsearchives.nseindia.com/corporate/POLYCAB_15102026125737_OutcomeofBoardMeeting.pdf", "page": 4, "statement": "Statement of unaudited consolidated financial results", "unit": "millions", "columns": {"2026-09-30": "Quarter ended 30-Sep-2026", "2026-06-30": "Quarter ended 30-Jun-2026", "2025-09-30": "Quarter ended 30-Sep-2025"}}
+  },
+  "observations": [
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2026-09-30", "line": "Revenue from operations", "metric": "revenue", "reported": "73188"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2026-09-30", "line": "Other income", "metric": "other_income", "reported": "1337"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2026-09-30", "line": "Finance costs", "metric": "finance_costs", "reported": "252"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2026-09-30", "line": "Depreciation and amortisation expense", "metric": "dna", "reported": "1262"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2026-09-30", "line": "PROFIT BEFORE EXCEPTIONAL ITEMS AND TAX", "metric": "pbt_pre_exceptional", "reported": "18638"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2026-09-30", "line": "PROFIT BEFORE TAX", "metric": "pbt", "reported": "18638"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2026-09-30", "line": "PROFIT FOR THE PERIOD", "metric": "pat", "reported": "13934"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2026-09-30", "line": "Profit attributable to Shareholders of the Company", "metric": "pat_owners", "reported": "13884"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2026-06-30", "line": "Revenue from operations", "metric": "revenue", "reported": "72275"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2026-06-30", "line": "Other income", "metric": "other_income", "reported": "1568"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2026-06-30", "line": "PROFIT BEFORE EXCEPTIONAL ITEMS AND TAX", "metric": "pbt_pre_exceptional", "reported": "18612"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2026-06-30", "line": "PROFIT BEFORE TAX", "metric": "pbt", "reported": "17944"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2026-06-30", "line": "PROFIT FOR THE PERIOD", "metric": "pat", "reported": "13420"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2025-09-30", "line": "Revenue from operations", "metric": "revenue", "reported": "65799"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2025-09-30", "line": "PROFIT BEFORE EXCEPTIONAL ITEMS AND TAX", "metric": "pbt_pre_exceptional", "reported": "17203"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2025-09-30", "line": "PROFIT BEFORE TAX", "metric": "pbt", "reported": "16068"},
+    {"symbol": "TCS", "doc": "TCS_Q2FY27_PDF", "period_end": "2025-09-30", "line": "PROFIT FOR THE PERIOD", "metric": "pat", "reported": "12131"},
+
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2026-09-30", "line": "1 Interest earned", "metric": "interest_earned", "reported": "95131.63"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2026-09-30", "line": "3 Total Income", "metric": "total_income", "reported": "129358.69"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2026-09-30", "line": "4 Interest expended", "metric": "interest_expended", "reported": "50667.43"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2026-09-30", "line": "7 Operating profit before provisions and contingencies", "metric": "ppop", "reported": "32871.54"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2026-09-30", "line": "8 Provisions (other than tax) and contingencies", "metric": "provisions", "reported": "4209.00"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2026-09-30", "line": "10 Profit from ordinary activities before tax and minority interest", "metric": "pbt", "reported": "28662.54", "note": "XBRL tag ProfitLossFromOrdinaryActivitiesBeforeTax says 27825.48 (minority interest 837.06 mis-tagged as ExceptionalItems)"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2026-09-30", "line": "16 Net profit for the period (14)-(15)", "metric": "pat", "reported": "20700.03"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2026-06-30", "line": "3 Total Income", "metric": "total_income", "reported": "133110.36"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2026-06-30", "line": "7 Operating profit before provisions and contingencies", "metric": "ppop", "reported": "30996.00"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2026-06-30", "line": "10 Profit from ordinary activities before tax", "metric": "pbt", "reported": "27193.16"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2026-06-30", "line": "16 Net profit for the period (14)-(15)", "metric": "pat", "reported": "19244.71"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2025-09-30", "line": "3 Total Income", "metric": "total_income", "reported": "118560.63"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2025-09-30", "line": "7 Operating profit before provisions and contingencies", "metric": "ppop", "reported": "30940.72"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2025-09-30", "line": "10 Profit from ordinary activities before tax", "metric": "pbt", "reported": "26658.89", "note": "XBRL says 25905.79 (minority 753.10 mis-tagged as ExceptionalItems)"},
+    {"symbol": "HDFCBANK", "doc": "HDFCBANK_Q2FY27_PDF", "period_end": "2025-09-30", "line": "16 Net profit for the period (14)-(15)", "metric": "pat", "reported": "19610.67"},
+
+    {"symbol": "POLYCAB", "doc": "POLYCAB_Q2FY27_PDF", "period_end": "2026-09-30", "line": "(a) Revenue from operations", "metric": "revenue", "reported": "98989.01"},
+    {"symbol": "POLYCAB", "doc": "POLYCAB_Q2FY27_PDF", "period_end": "2026-09-30", "line": "(b) Other income", "metric": "other_income", "reported": "883.67"},
+    {"symbol": "POLYCAB", "doc": "POLYCAB_Q2FY27_PDF", "period_end": "2026-09-30", "line": "(f) Finance costs", "metric": "finance_costs", "reported": "936.04"},
+    {"symbol": "POLYCAB", "doc": "POLYCAB_Q2FY27_PDF", "period_end": "2026-09-30", "line": "(g) Depreciation and amortisation expense", "metric": "dna", "reported": "1110.41"},
+    {"symbol": "POLYCAB", "doc": "POLYCAB_Q2FY27_PDF", "period_end": "2026-09-30", "line": "5) Profit before tax", "metric": "pbt", "reported": "13062.20"},
+    {"symbol": "POLYCAB", "doc": "POLYCAB_Q2FY27_PDF", "period_end": "2026-09-30", "line": "7) Profit for the period", "metric": "pat", "reported": "9899.97"},
+    {"symbol": "POLYCAB", "doc": "POLYCAB_Q2FY27_PDF", "period_end": "2026-06-30", "line": "(a) Revenue from operations", "metric": "revenue", "reported": "82097.32"},
+    {"symbol": "POLYCAB", "doc": "POLYCAB_Q2FY27_PDF", "period_end": "2026-06-30", "line": "5) Profit before tax", "metric": "pbt", "reported": "10582.23"},
+    {"symbol": "POLYCAB", "doc": "POLYCAB_Q2FY27_PDF", "period_end": "2026-06-30", "line": "7) Profit for the period", "metric": "pat", "reported": "7966.54"},
+    {"symbol": "POLYCAB", "doc": "POLYCAB_Q2FY27_PDF", "period_end": "2025-09-30", "line": "(a) Revenue from operations", "metric": "revenue", "reported": "64772.11"},
+    {"symbol": "POLYCAB", "doc": "POLYCAB_Q2FY27_PDF", "period_end": "2025-09-30", "line": "5) Profit before tax", "metric": "pbt", "reported": "9210.01"},
+    {"symbol": "POLYCAB", "doc": "POLYCAB_Q2FY27_PDF", "period_end": "2025-09-30", "line": "7) Profit for the period", "metric": "pat", "reported": "6929.59"}
+  ],
+  "screener_crosscheck_crore": {
+    "_note": "Secondary aggregator, fetched 2026-10-27. Divergences are explained, not resolved in screener's favour.",
+    "TCS": {"2026-09-30": {"revenue": 73188, "operating_profit": 18815, "pbt": 18638, "pat": 13934}, "2026-06-30": {"revenue": 72275, "operating_profit": 18556, "pbt": 17944, "pat": 13420}, "2025-09-30": {"revenue": 65799, "operating_profit": 17978, "pbt": 16068, "pat": 12131}},
+    "POLYCAB": {"2026-09-30": {"revenue": 9899, "operating_profit": 1422, "pbt": 1306, "pat": 990}, "2026-06-30": {"revenue": 8210, "operating_profit": 1136, "pbt": 1058, "pat": 797}, "2025-09-30": {"revenue": 6477, "operating_profit": 1021, "pbt": 921, "pat": 693}},
+    "HDFCBANK": {"2026-09-30": {"pbt": 28663, "net_profit": 21537}, "2026-06-30": {"pbt": 27193, "net_profit": 20383}, "2025-09-30": {"pbt": 26659, "net_profit": 20364},
+                 "_divergence": "screener 'Net Profit' for this bank = PDF line 14 (before minority interest); FINN PAT = PDF line 16 (after minority), the line the bank itself labels 'Net profit for the period'."}
+  }
+}
