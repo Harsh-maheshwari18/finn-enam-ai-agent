@@ -1,5 +1,7 @@
 # FINN: Deployment (Render Free)
 
+**Last verified deploy (2026-10-27): commit `960b448`, API 0.4.0, snapshot `c4e9ab86…`, `verified: true`.** App: https://finn-web-q1bw.onrender.com/ · API: https://finn-api-9z4q.onrender.com/health. Checked live after the push: 54/54 checks (API ledger records identical to the commit, frontend files byte-identical to `web/`, 17 Promise Ledger cards at 360×780 with every source link, 11 transcripts and 3 XBRL filings reachable with matching hashes). Later documentation-only commits redeploy the same code and snapshot. The LLM is disabled (`FINN_LLM_DISABLED=1`). The sections below are the deployment history, in order.
+
 **Status 2026-10-27: deployed** at https://finn-api-9z4q.onrender.com. First deploy: commit `c9ccac0`, snapshot `3c15b9d5…`. Smoke test from outside: every endpoint gave the expected status; POST 405; first request after idle took 23.6 s (an observation; Render's suspension was not checked in its logs), later ones 0.34–0.45 s.
 
 **Redeployed 09:16 UTC:** commit `ec315b3` (timestamp fix), snapshot `ff4868ac…`. Live at about 20 s after the push. `/health`: `verified: true`, 22 companies. Checked live: TCS revenue `73188.00`, all 4 TCS `published_at` values end in `+05:30`, and POLYCAB transcript `broadcast_at` values end in `+05:30` (Q2 FY27 `2026-10-19T16:39:28+05:30`). The 404/405 responses were not re-checked after the redeploy; that code did not change.
@@ -27,7 +29,8 @@ Any frontend must show a loading state for this, and the URL should be opened on
 - **NSE access from Render:** two passing samples on one day. Long-run, rate- or time-dependent blocking is unmeasured.
 - **Manual PDF verification:** 3 of 22 companies (TCS, HDFCBANK, POLYCAB; 44/44 values) are checked against signed results PDFs. The other 19 are checked by arithmetic identities and the screener cross-check only.
 - **Regrouped comparatives** are disclosed, not corrected (BAJFINANCE YoY 21.64% as filed vs 22.79% like-for-like).
-- **Promise Ledger:** not validated. 12/12 transcripts are available and readable, but guidance has been labelled for the latest quarter only (10 statements, 1 numerically checkable); the other 9 transcripts have no extraction, and no LLM is called.
+- **Promise Ledger:** implemented and deployed (`/api/v1/companies/{SYMBOL}/promises`; 17 records for TCS, POLYCAB and HDFCBANK across 4 calls each, every quote re-validated by the build). Records were selected and labelled by Claude (AI assistant); **only R01 (TCS 25% exit) has been reviewed by a person**, and R02–R17 have not. The other 19 companies show no ledger. See `promise-ledger.md`.
+- **Not built:** management-change bio, push notifications, on-demand research for tickers outside the committed snapshot.
 - **Snapshot freshness:** as of 2026-10-27; 17 of 22 companies' latest filed quarter is Jun-26.
 - **Frontend:** deployed (see Phase 4 below). Tested in headless Chromium at 360×780 only; no real phone, no Lighthouse.
 - **Inbox freshness:** the inbox ends at the snapshot build (filings to 27 Oct 15:22 IST, prices EOD 26 Oct); it is
@@ -120,6 +123,9 @@ A read-only JSON API (`finn/api.py`, plain WSGI, served by gunicorn) that serves
 | `GET /api/v1/companies` | 22 companies with validation level (`golden_verified` / `integrity_checked`) |
 | `GET /api/v1/companies/{SYMBOL}/results` | Results card. Every number carries URL, XBRL context, retrieval time |
 | `GET /api/v1/companies/{SYMBOL}/transcripts` | Transcript inventory (metadata only) |
+| `GET /api/v1/companies/{SYMBOL}/filings` | Last 30 days of NSE announcements for the company |
+| `GET /api/v1/companies/{SYMBOL}/promises` | Management Promise Ledger (TCS, POLYCAB, HDFCBANK; others `not_audited`) |
+| `GET /api/v1/signals` | Signal Inbox: windowed, ranked announcements and price/volume triggers (`docs/signal-rules.md`) |
 | `GET /api/v1/diagnostics/connectivity` | Live NSE announcements, NSE results listing, NSE archives XBRL and Yahoo chart, from the serving host |
 
 ## Configuration (already in the repo)
@@ -130,7 +136,7 @@ A read-only JSON API (`finn/api.py`, plain WSGI, served by gunicorn) that serves
 ## Manual steps (need your Render account)
 1. **Review and push** the Phase 3 changes. Render deploys from GitHub, so the snapshot, `render.yaml` and `requirements.txt` must be on `main`. You asked to review before any push.
 2. Render dashboard → **New → Blueprint** → connect GitHub → pick `Harsh-maheshwari18/finn-enam-ai-agent` → Render reads `render.yaml` → **Apply**. If the repo is private, grant Render's GitHub app access to it.
-3. Wait for the build. The log should end with `OK recomputed <digest> …` from the verify step, where `<digest>` is `content_digest` in `snapshot/manifest.json` (currently `ff4868acfaa6c15c…`).
+3. Wait for the build. The log should end with `OK recomputed <digest> …` from the verify step, where `<digest>` is `content_digest` in `snapshot/manifest.json` (currently `c4e9ab86424773ec…`).
 4. Smoke test, replacing the host:
    ```
    curl -s https://<service>.onrender.com/health

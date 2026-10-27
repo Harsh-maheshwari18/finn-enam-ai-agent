@@ -168,7 +168,7 @@ def render() -> str:
         "## Read this first",
         f"- **What you are reviewing.** `snapshot/promise_ledger.json`, built from snapshot `{bf['snapshot_digest'][:8]}…` (as of {bf['snapshot_as_of']}), "
         f"records file sha256 `{bf['records_sha256'][:12]}…` and audit file sha256 `{bf['audit_sha256'][:12]}…`.",
-        f"- **Who prepared it.** {ledger['audited_by']}. The same assistant wrote the labels, records and verdicts under review, "
+        f"- **Who prepared it.** {ledger['audited_by']}" + (f" (ledger-wide notice; {', '.join(done)} has since been reviewed by a person)" if done else "") + ". The same assistant wrote the labels, records and verdicts under review, "
         "so **this pack is not an independent review**. It lays the audit out for a person to check. Treat the reviewer questions as prompts, not conclusions.",
         "- **What is machine-checked.** The build admits a quote only if it appears on the cited page (exact match, or reversible whitespace or glyph repair; "
         "no fuzzy matching) and inside a turn of the cited speaker. The speaker's role must come from the same transcript. These checks prove the words are on the page. "
