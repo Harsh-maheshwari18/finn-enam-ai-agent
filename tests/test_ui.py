@@ -240,14 +240,15 @@ def test_promise_ledger_evidence_chain(page):
     cards = page.locator("[data-testid=promise]")
     assert cards.count() == 2
     card = page.locator("[data-testid=promise][data-id=TCS-ebit-exit-25]")
-    assert card.get_attribute("data-verdict") == "not_reaffirmed"
-    assert card.locator("[data-testid=verdict]").inner_text() == "Not reaffirmed"
+    assert card.get_attribute("data-verdict") == "pending"                  # "uphill task" is caution, not revision
+    assert card.locator("[data-testid=verdict]").inner_text() == "Awaiting outcome"
     assert "We want to exit at 25% plus" in card.locator("[data-testid=quote]").first.inner_text()
     href = card.locator("a").first.get_attribute("href")
     assert href.startswith("https://nsearchives.nseindia.com/") and href.endswith("#page=23")
     card.locator("summary").click()
     t = card.inner_text()
-    assert "Softened" in t and "Ruchi Mukhija (analyst" in t                # the question, labelled as the analyst's
+    assert "Not restated" in t and "Softened" not in t and "Ruchi Mukhija (analyst" in t   # the question, labelled as the analyst's
+    assert "uphill task" in t                                               # the cautionary answer is still shown
     assert "23.98%" in t and "not in the snapshot" in t                     # computed, and why it is not a verdict yet
     assert "date inferred by FINN" in t
     no_horizontal_scroll(page)

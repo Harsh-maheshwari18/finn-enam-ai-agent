@@ -31,14 +31,14 @@
      "quarter": "Q2 FY27",
      "page": 16,
      "speaker": "Samir Seksaria",
-     "stance": "softened",
+     "stance": "not_restated",
      "quote": "While it's an uphill task, we'll continue to endeavor to inch up on our margins.",
      "prompted_by": {
       "page": 16,
       "speaker": "Ruchi Mukhija",
       "quote": "In that context, how do we think about the margin commitment we had made around exiting FY27, at 25% plus EBIT margin range?"
      },
-     "note": "Asked directly about the 25% exit, the CFO did not restate the number."
+     "note": "Asked directly about the 25% exit, the CFO listed second-half headwinds and did not repeat the number. FINN reads 'uphill task' as cautionary context, not as an explicit revision or withdrawal of the 25% target."
     },
     {
      "quarter": "Q2 FY27",
@@ -54,8 +54,8 @@
      "note": "Second direct question. The answer gives direction ('inching margins higher') but does not repeat 25%; FINN counts that as not restated, not as weakening."
     }
    ],
-   "interpretation": "Stated once (Q1 FY27). Asked about it in the next call, the CFO called it 'an uphill task' and spoke of endeavouring to inch margins up, without repeating 25%; a second answer also gave no number. FINN records the explicit 'uphill task' answer as softening and the commitment as not reaffirmed. It is not a miss: Q4 FY27 has not been reported.",
-   "audit_note": "The quoted sentence does not name the margin; it answers a question about 'margins' going back to FY26 levels, and TCS's prepared remarks call the figure its 'operating margin' (24% in Q1 and Q2 FY27). The analyst's word 'EBIT' is not management's. FINN's (EBITDA - D&A) / revenue on the consolidated filing gives 23.96% and 23.98% for those quarters, which matches the 24% TCS states; TCS's own definition is not published in the snapshot, so the match is the only basis for the formula."
+   "interpretation": "Stated once (Q1 FY27). Asked about it in the next call, the CFO listed second-half headwinds (about 50 bps dilution from the MHP acquisition, furlough seasonality and continued ecosystem investments) and said 'While it's an uphill task, we'll continue to endeavor to inch up on our margins'. A second answer said near-term investment priorities continue. Neither answer repeats, revises or withdraws the 25% figure, so FINN treats both as cautionary context and the commitment as awaiting outcome until Q4 FY27 is reported. Risk note, not a verdict: management's own headwinds and the latest 23.98% make the target harder to reach.",
+   "audit_note": "The quoted sentence does not name the margin; it answers a question about 'margins' going back to FY26 levels, and TCS's prepared remarks call the figure its 'operating margin' (24% in Q1 and Q2 FY27). The analyst's word 'EBIT' is not management's. FINN's (EBITDA - D&A) / revenue on the consolidated filing gives 23.96% and 23.98% for those quarters, which matches the 24% TCS states; TCS's own definition is not published in the snapshot, so the match is the only basis for the formula. Corrected 2026-10-27 on the reviewer's instruction: an earlier version recorded the Q2 FY27 p.16 answer as 'softened' and the verdict as 'not reaffirmed'. The answer is cautionary but does not revise the 25% target. Not yet signed off by a person."
   },
   {
    "id": "TCS-aspiration-26-28",
@@ -75,12 +75,24 @@
     "stated": false
    },
    "statement": {
-    "quarter": "Q2 FY27",
-    "page": 15,
+    "quarter": "Q3 FY26",
+    "page": 23,
     "speaker": "Samir Seksaria",
-    "quote": "Overall, our long-term aspiration remains unchanged, continues to be 26% to 28%."
+    "quote": "But irrespective of that, while we will not shy away from making investments, we want to inch closer to our 26% to 28% band and we'll make all efforts to climb towards 26%."
    },
    "follow_ups": [
+    {
+     "quarter": "Q2 FY27",
+     "page": 15,
+     "speaker": "Samir Seksaria",
+     "stance": "restated",
+     "quote": "Overall, our long-term aspiration remains unchanged, continues to be 26% to 28%.",
+     "prompted_by": {
+      "page": 15,
+      "speaker": "Ravi Menon",
+      "quote": "To get back towards 26%, which is the aspirational margin, do you think that we'll be able to bring down subcontracting costs over time, or what are the key levers that could take you towards 26%?"
+     }
+    },
     {
      "quarter": "Q2 FY27",
      "page": 27,
@@ -89,8 +101,8 @@
      "quote": "See, we have always called 26%-28% as our guiding beacon, and we would not want to shift away from that."
     }
    ],
-   "interpretation": "Called an aspiration and a 'guiding beacon', with no date. It cannot be met or missed, so FINN shows the latest computed margin for context only.",
-   "audit_note": "An analyst also refers to the band in Q3 FY26 (p.23); that is a pointer, not management guidance."
+   "interpretation": "First stated in these calls in Q3 FY26 ('we want to inch closer to our 26% to 28% band') and restated twice in Q2 FY27, where it is called an aspiration and a 'guiding beacon'. No date is given in any of the three. It cannot be met or missed, so FINN shows the latest computed margin for context only.",
+   "audit_note": "Corrected 2026-10-27: an earlier version began the chronology at Q2 FY27 p.15 and described Q3 FY26 p.23 as an analyst pointer only. The analyst (Vibhor Singhal) asks about the band on p.23, but the CFO's answer on the same page also states it. The candidate filter did not propose that sentence; it is logged as a known miss."
   },
   {
    "id": "POLYCAB-wc-ebitda-11-13",
@@ -131,6 +143,13 @@
      "speaker": "Shashank Yagnick",
      "stance": "restated",
      "quote": "Consistent with our Project Spring roadmap, we continue to maintain our medium- to long-term margin guidance of 11% to 13% for this business."
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 12,
+     "speaker": "Shashank Yagnick",
+     "stance": "restated",
+     "quote": "But at the same time, also, Achal, I would put it that based on our long-term or medium- to long- term guidance of 11% to 13% under Project Spring, we definitely want to operate there."
     },
     {
      "quarter": "Q2 FY27",
@@ -238,6 +257,14 @@
      "stance": "explained",
      "quote": "So again, as per our Project Spring guidance, we've said that whatever we will pump, around 90% of that will go into Cable & Wire capacity expansion alone",
      "note": "How the capex is split (about 90% Cables & Wires, about 5% backward integration, 3-4% FMEG). Kept as part of this record rather than as a separate commitment."
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 6,
+     "speaker": "Aditya Nathany",
+     "stance": "reported",
+     "quote": "During the first half of the year, we incurred capital expenditures of INR 6.1 billion, reflecting our ongoing investments in capacity expansion, supply chain capabilities and future growth platforms.",
+     "note": "Management's own H1 FY27 figure; not in FINN's snapshot and not checked against the cash-flow statement. A half-year figure is not an annual outcome."
     }
    ],
    "interpretation": "Management reports FY26 capex inside the band. FINN's snapshot has no capex figure, so the yearly check is left to the filed annual cash-flow statement and is not made here."
@@ -267,12 +294,36 @@
    },
    "follow_ups": [
     {
+     "quarter": "Q3 FY26",
+     "page": 5,
+     "speaker": "Shashank Yagnick",
+     "stance": "reported",
+     "quote": "And correspondingly, given the use of letters of credit for raw material procurement, payable days were also higher, resulting in the working capital cycle to be at 27 days at the end of Q3 FY26.",
+     "note": "Management's own figure; not in FINN's snapshot and not checked. Same paragraph as the statement, just before it."
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 5,
+     "speaker": "Shashank Yagnick",
+     "stance": "reported",
+     "quote": "We continue to maintain a strong balance sheet with a net cash position of INR 41.9 billion, our working capital cycle has improved to 25 days in Quarter 4, primarily due to temporary increase in payable days arising from use of letter of credit for raw material procurement.",
+     "note": "Management's own figure; not in FINN's snapshot and not checked."
+    },
+    {
      "quarter": "Q4 FY26",
      "page": 5,
      "speaker": "Shashank Yagnick",
      "stance": "tightened",
      "quote": "On a normalized basis, we expect the working capital cycle to revert to our steady-state range of 45 to 50 days.",
      "note": "First statement of 45 to 50 days, one call after 50 to 55 days (Q3 FY26 p.5). Management calls it 'our steady-state range' and does not mention the earlier range or give a reason for the change. FINN reads a lower range in days as a tighter target; that the target was revised, rather than restated on a different basis, is FINN's reading."
+    },
+    {
+     "quarter": "Q1 FY27",
+     "page": 5,
+     "speaker": "Shashank Yagnick",
+     "stance": "reported",
+     "quote": "The average working capital cycle improved significantly to 15 days in Quarter 1 Financial Year 2027, aided by a temporary increase in payable days due to the use of letter of credit for raw material procurement.",
+     "note": "Management's own figure; not in FINN's snapshot and not checked."
     },
     {
      "quarter": "Q1 FY27",
@@ -285,12 +336,20 @@
      "quarter": "Q2 FY27",
      "page": 6,
      "speaker": "Aditya Nathany",
+     "stance": "reported",
+     "quote": "We also witnessed further improvement in our working capital efficiency, with the average working capital cycle reducing to approximately 11 days in second quarter fiscal '27.",
+     "note": "Management's own figure; not in FINN's snapshot and not checked."
+    },
+    {
+     "quarter": "Q2 FY27",
+     "page": 6,
+     "speaker": "Aditya Nathany",
      "stance": "restated",
      "quote": "As these benefits gradually normalize, we expect the working capital cycle to trend towards our long-term operating range of 45 to 50 days."
     }
    ],
-   "interpretation": "Expressed in days and never dated. The target field holds the range as first stated (50 to 55 days, Q3 FY26); from Q4 FY26 onwards management gives 45 to 50 days, recorded as a tightening in the follow-ups. FINN has no receivable, inventory or payable days in the snapshot and does not substitute a balance-sheet ratio, so neither range can be judged.",
-   "audit_note": "Chronology: Q3 FY26 p.5, 50 to 55 days; Q4 FY26 p.5, 45 to 50 days (tightened); Q1 FY27 p.5 and Q2 FY27 p.6, 45 to 50 days (restated). No call mentions 50 to 55 days again or explains the change. Corrected 2026-10-27: an earlier version put 45 to 50 days in the target field, which hid the original range."
+   "interpretation": "Expressed in days and never dated. The target field holds the range as first stated (50 to 55 days, Q3 FY26); from Q4 FY26 onwards management gives 45 to 50 days, recorded as a tightening in the follow-ups. Management's own reported cycle was 27, 25, 15 and 11 days in the four quarters, below both ranges, which it attributes to temporary payable days from letters of credit. Being below a range that management expects to normalise to is not a miss, and no date was given. FINN has no receivable, inventory or payable days in the snapshot and does not substitute a balance-sheet ratio, so neither range can be judged.",
+   "audit_note": "Chronology: Q3 FY26 p.5, 50 to 55 days; Q4 FY26 p.5, 45 to 50 days (tightened); Q1 FY27 p.5 and Q2 FY27 p.6, 45 to 50 days (restated). No call mentions 50 to 55 days again or explains the change. Corrected 2026-10-27: an earlier version put 45 to 50 days in the target field, which hid the original range. Reported cycle added 2026-10-27 at review: 27 days (Q3 FY26 p.5), 25 (Q4 FY26 p.5), 15 (Q1 FY27 p.5), 11 (Q2 FY27 p.6), all management's figures."
   },
   {
    "id": "POLYCAB-ehv-commissioning",
@@ -336,9 +395,10 @@
     "unit": "x market growth"
    },
    "horizon": {
-    "label": "each full year, no end date",
-    "period_end": null,
-    "stated": false
+    "label": "each year through FY30",
+    "period_end": "2030-03-31",
+    "stated": true,
+    "basis": "Q1 FY27 p.18: 'And we believe that will continue to happen until FY30.'"
    },
    "statement": {
     "quarter": "Q4 FY26",
@@ -361,14 +421,15 @@
      "speaker": "Shashank Yagnick",
      "stance": "restated",
      "quote": "Over maybe 2-3 next quarters, you will see a trend, and you should definitely see 1.5x of market growth.",
-     "note": "Adds a hedged near-term horizon ('maybe 2-3 next quarters', roughly to Q3-Q4 FY27). The record's horizon stays undated because the target itself is stated per full year."
+     "note": "Adds a hedged near-term horizon ('maybe 2-3 next quarters', roughly to Q3-Q4 FY27). The record's horizon is the FY30 end date management gives on p.18."
     },
     {
      "quarter": "Q1 FY27",
      "page": 18,
      "speaker": "Shashank Yagnick",
      "stance": "restated",
-     "quote": "We have guided that we'll continue to grow at 1.5x of market growth."
+     "quote": "We have guided that we'll continue to grow at 1.5x of market growth. And we still believe in that, and we have delivered that in the last 1-1.5 years ever since we have made that commitment. And we believe that will continue to happen until FY30.",
+     "note": "States the horizon: 'until FY30'."
     },
     {
      "quarter": "Q2 FY27",
@@ -378,7 +439,8 @@
      "quote": "What we have called out already, as an anchor to look into the volume growth, is that whatever the market grows, we will do 1.5x of that in cable and wires."
     }
    ],
-   "interpretation": "Needs a market growth figure and segment volume growth. Neither is in the snapshot, and FINN will not use an outside estimate of market growth. One statement uses GDP growth as the base instead, which is a different target."
+   "interpretation": "Stated as a commitment through FY30 (Q1 FY27 p.18), so it is awaiting outcome. FINN still cannot check it: it needs market growth and segment volume growth, neither of which is in the snapshot, and FINN will not use an outside estimate of market growth. Management describes it as a volume target (Q4 FY26 p.15, Q2 FY27 p.13). One statement uses GDP growth as the base instead, which is a different benchmark.",
+   "audit_note": "Corrected 2026-10-27: the horizon was 'each full year, no end date' and the verdict unverifiable. Management states 'until FY30' (Q1 FY27 p.18), so the horizon is now stated and the verdict pending, under the same rule as the capex and export records."
   },
   {
    "id": "POLYCAB-exports-10pct",
@@ -546,6 +608,27 @@
      "note": "Same call; direction only, no number."
     },
     {
+     "quarter": "Q3 FY26",
+     "page": 8,
+     "speaker": "Sashidhar Jagdishan",
+     "stance": "explained",
+     "quote": "I've given you a broad range because I don't want to box myself with a narrow range. But having said that, we have been operating in a range of around the 87%, 88% in the premerger level, before the merger. And so when I say 90%, of course, I would have meant somewhere around the plus or minus in that particular range of 90%, maybe around the 88%, 89%, etcetera or it could be 90% to 91% as well.",
+     "prompted_by": {
+      "page": 8,
+      "speaker": "Chintan",
+      "quote": "So Sashi, please did I hear you correctly when you said 85% to 90% by FY '27?"
+     },
+     "note": "Same call, answering a direct question about the FY27 range. Management qualifies how it reads its own range: 'a broad range', with '90%' meaning roughly 88% to 91%. This interprets the target; it does not change or withdraw it. The 91% end lies above the stated 90%."
+    },
+    {
+     "quarter": "Q3 FY26",
+     "page": 8,
+     "speaker": "Sashidhar Jagdishan",
+     "stance": "explained",
+     "quote": "So don't take it literally that we may be on the lower end of that range. It could be anywhere in that range. Practically speaking, it will be somewhere, if 90% is that range, then somewhere around the 90% is something that we'll be happy with.",
+     "note": "Later in the same answer, after 'where we will land for FY '26 and '27'. 'If 90% is that range' ties this sentence to the FY27 range. The next sentence gives the FY26 equivalent ('somewhere around the 95%'), which belongs to HDFCBANK-ldr-fy26-90-96 and is not used here."
+    },
+    {
      "quarter": "Q4 FY26",
      "page": 4,
      "speaker": "Sashidhar Jagdishan",
@@ -554,8 +637,52 @@
      "note": "Prepared remarks; the paragraph adds 'Hence, it's no longer a binding constraint.' The same view was expressed on the call that set the range (Q3 FY26 p.4), so this is not new softening. The 85% to 90% figure is not repeated."
     }
    ],
-   "interpretation": "Hedged when given ('maybe', 'I think', 'somewhere around'). Later calls call the ratio 'not a constraint', as the original call already did, and do not repeat the range. Not repeating a figure is not a withdrawal, so the commitment stays awaiting outcome until FY27 is reported. Loans and deposits are not in the snapshot.",
-   "audit_note": "Q4 FY26 p.9: an analyst says 'you said LDR is no longer kind of relevant or a constraint'. That paraphrase is a pointer only. Corrected 2026-10-27: an earlier version of this record called the Q4 FY26 remark 'softened' and the verdict 'not reaffirmed'; the review found the same wording on the original call."
+   "interpretation": "Hedged when given ('maybe', 'I think', 'somewhere around'). Later on the same call the CEO calls it 'a broad range' and says '90%' means roughly 88% to 91%, and that management would be 'happy with' somewhere around 90%. FINN keeps the stated 85% to 90% as the target and records that clarification as management's own reading of the range, not as a revision. Later calls call the ratio 'not a constraint', as the original call already did, and do not repeat the range. Not repeating a figure is not a withdrawal, so the commitment stays awaiting outcome until FY27 is reported. Loans and deposits are not in the snapshot.",
+   "audit_note": "Q4 FY26 p.9: an analyst says 'you said LDR is no longer kind of relevant or a constraint'. That paraphrase is a pointer only. Corrected 2026-10-27: an earlier version of this record called the Q4 FY26 remark 'softened' and the verdict 'not reaffirmed'; the review found the same wording on the original call. Q3 FY26 p.8 clarification added 2026-10-27 at review: two passages from the CEO's answer to a question about the FY27 range, both 'explained'. FY26-only sentences in the same answer are left to HDFCBANK-ldr-fy26-90-96."
+  },
+  {
+   "id": "HDFCBANK-ldr-fy26-90-96",
+   "symbol": "HDFCBANK",
+   "title": "Loan-to-deposit ratio in a range of 90% to 96% in FY26",
+   "kind": "explicit_numeric",
+   "scope": "bank-wide; standalone or consolidated not stated",
+   "metric": "loan_to_deposit_ratio",
+   "target": {
+    "low": 90,
+    "high": 96,
+    "unit": "%"
+   },
+   "horizon": {
+    "label": "FY26",
+    "period_end": "2026-03-31",
+    "stated": true
+   },
+   "statement": {
+    "quarter": "Q3 FY26",
+    "page": 6,
+    "speaker": "Sashidhar Jagdishan",
+    "quote": "We said we will try and be in a range of somewhere between 90% to 96% in the year FY '26, which is what we will be is what we are very confident about."
+   },
+   "follow_ups": [
+    {
+     "quarter": "Q3 FY26",
+     "page": 8,
+     "speaker": "Sashidhar Jagdishan",
+     "stance": "restated",
+     "quote": "But why I mentioned this, at least the trend lines that we are saying, it can be 96% for FY '26 or a 95. We are all right.",
+     "note": "Same call, in an answer about the FY27 range: the FY26 ratio 'can be 96% ... or a 95'."
+    },
+    {
+     "quarter": "Q4 FY26",
+     "page": 4,
+     "speaker": "Sashidhar Jagdishan",
+     "stance": "not_restated",
+     "quote": "The loan deposit ratio is not a constraint.",
+     "note": "First call after FY26 closed. The prepared remarks give no FY26 ratio and do not mention the range. FINN does not read that as a miss or a withdrawal."
+    }
+   ],
+   "interpretation": "Given on the Q3 FY26 call, one quarter before FY26 ended, as a step on a glide path management says it set earlier ('We said'), with 'very confident'. FY26 has closed, but FINN has no loan or deposit figures and found no FY26 ratio stated by management in the later calls, so it cannot say whether the range was achieved.",
+   "audit_note": "Added 2026-10-27 on the reviewer's instruction, after review preparation found it. The candidate filter did not propose the sentence (the p.6 label belongs to the FY27 sentence that follows it); it is logged as a known miss. It meets the same criteria as POLYCAB-dividend-payout-30: management speaker, the bank's own ratio, a numeric range with a stated year, a balance-sheet measure investors track, a separate target from the FY27 record, and not withdrawn in the same answer. The earlier statement it refers to ('We said') is outside the four audited calls."
   },
   {
    "id": "HDFCBANK-growth-vs-system-fy26",

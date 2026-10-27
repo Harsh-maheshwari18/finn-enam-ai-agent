@@ -5,14 +5,14 @@ Updated 2026-10-27 (Prompt 5, after the final review). Built offline with no LLM
 ## What it answers
 For each company: what did management commit to on an earnings call, what did they say about it on later calls, and can the outcome be checked against filed results?
 
-**The ledger is a curated selection, not a complete list.** It holds 16 records chosen by the criteria below from 78 management sentences labelled as commitments or commentary (35 explicit numeric, 14 measurable qualitative, 29 commentary). Statements that were left out are listed in the appendix with a reason.
+**The ledger is a curated selection, not a complete list.** It holds 17 records chosen by the criteria below from 78 management sentences labelled as commitments or commentary (35 explicit numeric, 14 measurable qualitative, 29 commentary). Statements that were left out are listed in the appendix with a reason.
 
 ## Pipeline
 | Step | Command | Output | Committed |
 |---|---|---|---|
 | 1. Candidates | `python -m finn.promises audit` | `data/derived/promise_candidates.json`, which contains transcript sentences | No (git-ignored) |
 | 2. Labels | written by hand | `config/promise_audit.json`: hash, page, speaker and label for each candidate. No text. Also the relabel log and the known misses | Yes |
-| 3. Records | written by hand | `config/promise_ledger.json`: 16 records with short quotes | Yes |
+| 3. Records | written by hand | `config/promise_ledger.json`: 17 records with short quotes | Yes |
 | 4. Build | `python -m finn.promises build` | `snapshot/promise_ledger.json` | Yes |
 | 5. Review pack | `python scripts/promise_review_pack.py` (`--check` to verify) | `docs/promise-ledger-human-review.md`, generated from step 4 plus the hand-written prompts in `config/promise_review_questions.json` | Yes |
 
@@ -21,9 +21,9 @@ For each company: what did management commit to on an earnings call, what did th
 |---|---|---|
 | Candidates | **164** | Sentences from the 12 transcripts that pair a forward-looking word with a financial topic. They are proposals only |
 | Audit labels | **164** (one per candidate) | analyst 44 · explicit numeric 35 · measurable qualitative 14 · commentary 29 · actual report 12 · not guidance 30 |
-| Known misses | **5** | Real commitments the filter did not propose, found by reading (listed in `promise_audit.json`) |
-| Ledger records | **16** | Selected commitments (criteria below) |
-| Quotes inside the records | **55** | 16 statements, 34 follow-ups and 5 analyst questions. Every one is re-validated by the build |
+| Known misses | **7** | Real commitments the filter did not propose, found by reading (listed in `promise_audit.json`). Two were found during review preparation on 2026-10-27 |
+| Ledger records | **17** | Selected commitments (criteria below) |
+| Quotes inside the records | **69** | 17 statements, 45 follow-ups and 7 analyst questions (67 distinct texts). Every one is re-validated by the build. Before the review corrections of 2026-10-27 there were 55 (16, 34 and 5) |
 
 Correction: the final review first described the 15 original records as "50 quotes: 15 statements, 25 follow-ups and 10 analyst questions". The 50 was right, but the split was 15, 30 and 5.
 
@@ -83,9 +83,9 @@ The ledger's speaker pattern accepts single-letter initials (`K Krithivasan:`), 
 ## Results
 | Company | Records | Not reaffirmed | Awaiting outcome | Can't be checked |
 |---|---|---|---|---|
-| TCS | 2 | 1: 25% operating-margin exit ("an uphill task", Q2 FY27 p.16) | 0 | 1: 26–28% aspiration |
-| POLYCAB | 9 | 1: EHV plant moved from end-CY2026 to FY28 | 5: W&C 11–13% FY30, FMEG 8–10% FY30, capex ₹12–16 bn a year, exports above 10% FY30, dividend payout above 30% FY2030 | 3: working-capital days, C&W 1.5× market, EPC margin |
-| HDFCBANK | 5 | 0 | 2: LDR 85–90% FY27; FY27 "top line" growth faster than the system | 3: FY26 growth in line with the system, MSME about 18–20% (or 21%), margin "change" in two quarters |
+| TCS | 2 | 0 | 1: 25% operating-margin exit by Q4 FY27 (inferred) | 1: 26–28% aspiration |
+| POLYCAB | 9 | 1: EHV plant moved from end-CY2026 to FY28 | 6: W&C 11–13% FY30, FMEG 8–10% FY30, capex ₹12–16 bn a year, C&W 1.5× market through FY30, exports above 10% FY30, dividend payout above 30% FY2030 | 2: working-capital days, EPC margin |
+| HDFCBANK | 6 | 0 | 2: LDR 85–90% FY27; FY27 "top line" growth faster than the system | 4: LDR 90–96% FY26, FY26 growth in line with the system, MSME about 18–20% (or 21%), margin "change" in two quarters |
 
 No record is met or missed.
 
@@ -97,7 +97,7 @@ No record is met or missed.
 | HDFCBANK growth titles | "loan growth" | "'top line' growth" | Management said "top line growth" and, on the same call (p.8), separated it from loan growth. The measure is undefined, so FINN does not choose one |
 | HDFCBANK MSME title | 18% to 21% | about 18% to 20% (or 21%) | Shows management's exact words ("18% to 20%, 21%"). The target field keeps the widest reading |
 | HDFCBANK margin record title | "to improve relative to peers" | "'You will see that change' in margins over the next two quarters" | Management did not state a direction |
-| TCS 25% exit | follow-ups softened, softened | softened, `not_restated` | Only the "uphill task" answer is explicit. The verdict stays **not reaffirmed** on that statement alone |
+| TCS 25% exit | follow-ups softened, softened | softened, `not_restated` | Only the "uphill task" answer is explicit. The verdict stayed **not reaffirmed** on that statement alone (revised again at review, below) |
 | TCS titles | "EBIT margin" | "operating margin" | TCS's prepared remarks say "operating margin"; "EBIT" is the analyst's word |
 | POLYCAB W&C 11–13% | — | scope and basis note | Management reports the segment at EBIT (13.3%, 14.2%) and guides on EBITDA. The two are not compared |
 | POLYCAB C&W 1.5× | 2 follow-ups | 4 | Added Q4 FY26 p.15 (base is GDP growth, a different benchmark) and Q1 FY27 p.9 (hedged "maybe 2-3 next quarters" horizon) |
@@ -105,6 +105,20 @@ No record is met or missed.
 | POLYCAB dividend payout | not in the ledger | **new record**, pending | Meets every criterion (appendix item 4) |
 | POLYCAB working-capital days | target field 45–50 days | target **50–55 days**, as in the statement; 45–50 recorded as the Q4 FY26 tightening | The statement (Q3 FY26 p.5) says 50 to 55 days. Putting the later range in the target hid the original. Verdict unchanged (unverifiable) |
 | POLYCAB exports audit note | "The p.5 sentence was missed" | "The p.8 sentence" | The sentence is on Q4 FY26 p.8, which the statement and `known_misses` both cite. No POLYCAB transcript has an export target on p.5 |
+
+### Corrections made during review preparation (2026-10-27)
+These were made on the reviewer's instruction while working through the review pack. They are **not** a person's sign-off: every record stays marked as not yet reviewed by a person.
+
+| Item | Before | After | Why |
+|---|---|---|---|
+| TCS 25% exit | `softened`, `not_restated`; **not reaffirmed** | `not_restated`, `not_restated`; **pending** | "While it's an uphill task, we'll continue to endeavor to inch up on our margins" (Q2 FY27 p.16) is cautionary context: it neither repeats nor revises the 25% target. The risk note (MHP dilution, furlough seasonality, investment priorities, the latest 23.98%), the margin-formula caveat and the inferred Q4 FY27 horizon are kept |
+| TCS 26–28% aspiration | statement Q2 FY27 p.15 | statement **Q3 FY26 p.23** (CFO); p.15 becomes a follow-up | The audit note called p.23 analyst-only, but the CFO's answer on that page also states the band. Logged as a known miss. Verdict unchanged (unverifiable) |
+| POLYCAB C&W 1.5× | horizon "each full year, no end date"; unverifiable | "each year through FY30", stated; **pending** | Management says "we believe that will continue to happen until FY30" (Q1 FY27 p.18) |
+| POLYCAB working-capital days | 3 follow-ups | 7 | Management's reported cycle (27, 25, 15, 11 days) added as `reported`, unchecked. Verdict unchanged (unverifiable) |
+| POLYCAB W&C 11–13% | 4 follow-ups | 5 | Added the Q1 FY27 p.12 restatement |
+| POLYCAB capex | 2 follow-ups | 3 | Added management's H1 FY27 figure (INR 6.1 bn), unchecked |
+| HDFCBANK FY27 LDR 85–90% | 3 follow-ups | 5 | Added the CEO's Q3 FY26 p.8 answer to a direct question about the FY27 range, as two `explained` follow-ups: "a broad range", with "90%" meaning roughly 88% to 91%, and "somewhere around the 90%" being acceptable. Management's reading of its own range, not a revision: the 85–90% target and the pending verdict are unchanged. FY26-only sentences from the same answer stay with the FY26 record |
+| HDFCBANK FY26 LDR 90–96% | not in the ledger | **new record**, unverifiable | "We said we will try and be in a range of somewhere between 90% to 96% in the year FY '26, which is what we will be is what we are very confident about" (Q3 FY26 p.6, CEO), repeated on p.8. It meets the same criteria as the dividend record: management speaker, the bank's own ratio, a numeric range with a stated year, an investor-tracked balance-sheet measure, a separate target from the FY27 record, not withdrawn in the same answer. FY26 has closed, FINN holds no loan or deposit figures and no FY26 ratio was found in the later calls, so it is neither met nor missed. Logged as a known miss |
 | Every record | — | `scope` field | Scope is explicit and enforced by the build |
 
 The relabelling is logged in `promise_audit.json` (`relabels`, `record_kind_changes`):
@@ -133,12 +147,12 @@ Other commitment-labelled candidates are restatements already attached to a reco
 The labels, records, relabels and this selection were written by **Claude (AI assistant)** from the extracted PDF text on 2026-10-27. The build checks quotes, pages, speakers and roles, but **no person has reviewed the judgements** (labels, stances, scopes, selection). The UI and the data both say so. `docs/promise-ledger-human-review.md` sets out every record, with a checklist and a question for the reviewer. It is generated from the ledger, and every record in it is marked pending.
 
 ## Tests
-- `tests/test_promises.py`: 31 tests.
+- `tests/test_promises.py`: 34 tests.
   - Committed artefacts: digest and input hashes match, no exclusions, every quote is management speech with a page and an NSE URL, no confidence fields, the TCS series is right, segment and days guidance is never computed, the verdict table holds, the relabel log matches the labels, the HDFCBANK verdicts do not rest on omission, every record has a scope and only consolidated scope is computed.
   - Verdict rules on SYNTHETIC records: neutral stances never withdraw or clear; a segment-scope record with a computable metric name is not computed.
   - API: ok, not_audited, 404, stale, missing.
   - Five tests use the real PDFs and skip without `data/raw`: the build reproduces the committed ledger exactly; the quote check rejects a paraphrase, a wrong page, a wrong speaker and an analyst cited as management; roles; analyst labels against roles; a tampered record is excluded.
-  - Review pack: the committed pack equals a fresh generation and contains every quote and page link; every record is marked pending, and no box is ticked. The working-capital record keeps its original range, and the exports note cites p.8.
+  - Review pack: the committed pack equals a fresh generation and contains every quote and page link; every record is marked pending, and no box is ticked. The working-capital record keeps its original range and shows the reported cycle, the exports note cites p.8, the FY26 LDR record is unverifiable (not missed), the C&W horizon is quoted, and the TCS aspiration starts at Q3 FY26 p.23.
 - `tests/test_guidance_llm.py`: a new test pins the Prompt 2 fixture's corrected segment label for the POLYCAB 11–13% band. The 14.37% cases in the band-logic test are kept and marked as synthetic inputs, not POLYCAB outcomes.
 - `tests/test_ui.py`: 3 new browser tests:
   - the TCS evidence chain;
@@ -152,5 +166,5 @@ The labels, records, relabels and this selection were written by **Claude (AI as
 - A commitment made before Q3 FY26 is seen only if it is restated in these calls.
 - "Exit FY27" is read as Q4 FY27, and the UI marks that date as inferred. TCS's own margin definition is not in the snapshot; the formula is justified only by reproducing TCS's stated figures.
 - Management's own figures are shown as reported, not checked against filed statements: POLYCAB FY26 capex ₹14.8 bn, exports 5.4% and payout about 27.2%; HDFCBANK MSME 22.3%.
-- The candidate filter missed 5 commitments that were found by reading. Recall is below 100%, and the 10/10 figure from Prompt 2 was measured on the set the filter was tuned on.
+- The candidate filter missed 7 commitments that were found by reading. Recall is below 100%, and the 10/10 figure from Prompt 2 was measured on the set the filter was tuned on.
 - The Prompt 2 fixture (`tests/fixtures/real/guidance_experiment.json`) still holds partial page text from 14 transcript pages (TCS 5, POLYCAB 7, HDFCBANK 2), committed in Prompt 2. That predates this phase and is unchanged.

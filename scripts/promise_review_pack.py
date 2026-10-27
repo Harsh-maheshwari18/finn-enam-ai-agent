@@ -134,11 +134,13 @@ def render() -> str:
     off_page = sum(1 for f in fus if f.get("prompted_by") and f["prompted_by"]["page"] != f["page"])
     found = sum(1 for _, r in recs if not str(r["statement"].get("candidate_label", "")).startswith("not proposed"))
     eligible = tot["explicit_numeric"] + tot["measurable_qualitative"] + tot["commentary"]
-    added = [r for _, r in recs if "Added 2026-10-27" in (r.get("audit_note") or "")]
     bf = ledger["built_from"]
     same = Counter(r["statement"]["quote"] for _, r in recs)
     shared = " and ".join(rn[r["id"]] for _, r in recs if same[r["statement"]["quote"]] > 1)
     xrec = sum(1 for _, r in recs if r["outcome"].get("series"))
+    seen = Counter(q["quote"] for _, r in recs for q in quotes(r))
+    repeats = "; ".join(f"“{t[:60]}{'…' if len(t) > 60 else ''}” in " + " and ".join(rn[r["id"]] for _, r in recs if any(q["quote"] == t for q in quotes(r)))
+                        for t, n in seen.items() if n > 1)
 
     md = [
         "# Promise Ledger: human review pack", "",
@@ -154,12 +156,13 @@ def render() -> str:
         "no fuzzy matching) and inside a turn of the cited speaker. The speaker's role must come from the same transcript. These checks prove the words are on the page. "
         "They **do not** prove the judgements: kind, stance, scope, horizon, verdict and selection. Those are what this review is for.",
         "- **What it does not contain.** No transcript text beyond the short quotes. Open the PDF links to read each quote in context.", "",
-        "## Why 16 records, not 15",
-        f"The first review covered 15 records. The final corrections added **{', '.join(r['id'] for r in added)}** ({', '.join(rn[r['id']] for r in added)}). "
-        "That commitment was in a transcript the audit had already read, but the candidate filter missed it (no dividend keyword). "
-        "It was found while checking the omitted commitments and meets the same criteria as every other record: management speaker; "
-        "this company's future; a measurable target (more than 30% payout) with a stated horizon (FY2030); an outcome investors track; "
-        "not a restatement of another record; and not withdrawn in the same answer. It passes the same build checks. Like the others, it awaits review.", "",
+        f"## Why {len(recs)} records, not 15",
+        f"The first review covered 15 records. {len(prompts['additions'])} were added later. Each was in a transcript the audit had already read, "
+        "but the candidate filter missed it. Each meets the same criteria as every other record: management speaker; this company's future; "
+        "a measurable target with a stated horizon; an outcome investors track; not a restatement of another record; and not withdrawn in the same answer. "
+        "Each passes the same build checks and, like the others, awaits review.", ""]
+    md += [f"- **{x['record']}** («{x['record']}»): {x['why']}" for x in prompts["additions"]]
+    md += ["",
         "## Counts and what each one measures", "",
         "| Figure | Count | Unit |", "|---|--:|---|",
         f"| Ledger records | {len(recs)} | Commitments selected for the ledger |",
@@ -167,7 +170,7 @@ def render() -> str:
         f"| Labels eligible to be records | {eligible} | explicit numeric {tot['explicit_numeric']} + measurable qualitative {tot['measurable_qualitative']} + commentary {tot['commentary']} |",
         f"| Known misses | {len(audit['known_misses'])} | Real commitments the filter did not propose, found by reading |",
         f"| Quotes in the ledger | {len(allq)} | {len(recs)} statements + {len(fus)} follow-ups + {len(asked)} analyst questions. Each is re-checked by the build |",
-        f"| Distinct quote texts | {len({q['quote'] for q in allq})} | Two records share one statement ({shared}) |",
+        f"| Distinct quote texts | {len({q['quote'] for q in allq})} | {len(allq) - len({q['quote'] for q in allq})} quote(s) appear in more than one record: {repeats} |",
         f"| Source links on the live cards | {len(shown)} | One per statement and follow-up ({len(recs)} + {len(fus)}). Analyst questions show their page number but have no link of their own; {off_page} of the {len(asked)} are on a different page from the answer they prompted |",
         f"| Distinct transcript pages cited | {len({(q['url'], q['page']) for q in allq})} | Pages holding at least one quote, in {len({q['url'] for q in allq})} of the 12 transcripts |",
         f"| Transcript links in this pack | {len(allq) + len(recs)} | One per quote ({len(allq)}) + one per row of the summary table ({len(recs)}) |",
@@ -176,7 +179,9 @@ def render() -> str:
         "- \"50 quotes: 15 statements, 25 follow-ups and 10 analyst questions\" was how the first review described the 15 original records. "
         "The total was right, but the split was 15, 30 and 5. The final corrections then added 1 statement (the dividend record) and 4 follow-ups "
         "(the LDR \"not a constraint\" remark from Q3 FY26 p.4, two C&W 1.5× answers and the capex split), which gives 55.",
-        "- \"56 source links\" in one verification report was an arithmetic error. The rendered cards held 50 links, the number given above.", "",
+        "- \"56 source links\" in one verification report was an arithmetic error. The cards then held 50 links.",
+        "- Before the review corrections of 2026-10-27 the ledger held 16 records and 55 quotes (16 statements, 34 follow-ups, 5 analyst questions), "
+        "and the cards held 50 links. The corrections added one record and further follow-ups (listed in the next section), which gives the figures above.", "",
         "## Corrections made before this review", "",
         "| Record | Correction |", "|---|---|"]
     md += [f"| {c['record']} ({rn[c['record']]}) | {cell(c['what'])} |" for c in prompts["corrections_before_review"]]
@@ -226,18 +231,32 @@ def render() -> str:
            "2. **Two HDFCBANK verdicts revised from not reaffirmed to pending («HDFCBANK-ldr-85-90», «HDFCBANK-growth-vs-system-fy27»).** The LDR \"not a constraint\" remark had already been made on the call that set the range (Q3 FY26 p.4), "
            "and the growth answers contain no weakening language. Both are now `not_restated`, a neutral stance, so the verdict is *pending*. "
            "A reviewer who reads those answers as weakening should mark **Needs correction**; the verdicts would then return to *not reaffirmed*.",
-           "3. **TCS 25% exit («TCS-ebit-exit-25»)** rests on one explicit statement: \"While it's an uphill task\" (Q2 FY27 p.16), recorded as `softened`. "
-           "The second answer (p.21) is `not_restated`. If p.16 is also judged neutral, the verdict becomes *pending*.",
-           "4. **Analyst words versus management commitments.** Analysts' paraphrases of guidance (for example \"you said LDR is no longer kind of relevant\", "
+           "3. **TCS 25% exit («TCS-ebit-exit-25») changed from not reaffirmed to pending on the reviewer's instruction.** \"While it's an uphill task\" (Q2 FY27 p.16) "
+           "is now read as cautionary context, not an explicit revision or withdrawal of the 25% target, so both Q2 FY27 answers are `not_restated`. "
+           "The risk note (MHP dilution, furlough seasonality, investment priorities, the latest 23.98%) is kept, as is the margin-formula caveat. "
+           "\"Exit\" is still read as Q4 FY27, marked as inferred. A reviewer who reads p.16 as an explicit softening should mark **Needs correction**.",
+           "4. **Record added: HDFCBANK FY26 LDR of 90% to 96% («HDFCBANK-ldr-fy26-90-96»).** In the same answer that gives the FY27 range (Q3 FY26 p.6), the CEO says "
+           "\"we will try and be in a range of somewhere between 90% to 96% in the year FY '26, which is… what we are very confident about\", and repeats it on p.8. "
+           "The filter did not propose the sentence. It meets the inclusion criteria (see the start of this pack). FY26 has closed, but FINN holds no loan or deposit "
+           "figures and management states no FY26 ratio in the later calls, so it is **unverifiable**: not met, not missed, not withdrawn.",
+           "5. **Chronology and horizon corrections from the review.** TCS 26–28% («TCS-aspiration-26-28») now starts at the CFO's Q3 FY26 p.23 answer, which the audit had "
+           "called analyst-only. POLYCAB C&W 1.5× («POLYCAB-cw-growth-1.5x») now has the horizon management states (\"until FY30\", Q1 FY27 p.18), so it is *pending*, "
+           "not *unverifiable*. POLYCAB working capital («POLYCAB-working-capital-days») now shows management's reported cycle (27, 25, 15, 11 days) as unchecked context. "
+           "Each verdict change follows FINN's existing rules; none rests on silence.",
+           "6. **HDFCBANK FY27 LDR clarified, not revised («HDFCBANK-ldr-85-90»).** Answering a direct question about the FY27 range (Q3 FY26 p.8), the CEO calls it \"a broad range\", "
+           "says 90% means \"maybe around the 88%, 89%… or 90% to 91%\", and that \"somewhere around the 90%\" would satisfy management. Both passages are now `explained` follow-ups. "
+           "The stated 85% to 90% stays the target; the verdict stays *pending*. Open point: management's own reading (up to 91%) reaches above the stated range.",
+           "7. **Analyst words versus management commitments.** Analysts' paraphrases of guidance (for example \"you said LDR is no longer kind of relevant\", "
            "or \"exiting FY27, at 25% plus EBIT margin\") appear only as the question behind a management answer. They never set a target or a stance. "
            "\"EBIT\" in the TCS record title was replaced by \"operating margin\", management's term.",
-           "5. **Ambiguous horizons, units and incomplete outcome data. FINN stated an assumption in each case rather than deciding:**",
+           "8. **Ambiguous horizons, units and incomplete outcome data. FINN stated an assumption in each case rather than deciding:**",
            "   - TCS \"exit\" read as Q4 FY27 (inferred, marked in the UI);",
            "   - TCS operating margin taken as (EBITDA − D&A) / revenue, justified only because it reproduces TCS's stated 25.2%, 24% and 24%;",
            "   - HDFCBANK \"top line growth\" left undefined («HDFCBANK-growth-vs-system-fy26», «HDFCBANK-growth-vs-system-fy27»);",
            "   - HDFCBANK MSME \"18% to 20%, 21%\" recorded as 18–21% («HDFCBANK-msme-growth»);",
            "   - POLYCAB working capital: original 50–55 days kept as the target, the later 45–50 recorded as a tightening («POLYCAB-working-capital-days»);",
-           "   - POLYCAB C&W 1.5× market growth kept apart from \"1.5x of GDP growth\" («POLYCAB-cw-growth-1.5x»);",
+           "   - POLYCAB C&W 1.5× market growth kept apart from \"1.5x of GDP growth\"; management describes it as a volume target («POLYCAB-cw-growth-1.5x»);",
+           "   - HDFCBANK FY26 LDR: whether \"we will try… very confident\" is a commitment or an aspiration («HDFCBANK-ldr-fy26-90-96»);",
            "   - POLYCAB dividend payout base (which profit) not stated («POLYCAB-dividend-payout-30»);",
            "   - POLYCAB BharatNet \"maybe INR 800 crores to INR 1,000 crores\" kept as commentary and not made a record;",
            "   - no outcome is computed for segment margins, working-capital days, capex, exports, payout, LDR, MSME growth, growth against the system or peer margins, because the snapshot does not hold them on a comparable basis.", "",

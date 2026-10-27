@@ -31,6 +31,18 @@
    "quarter": "Q4 FY26",
    "page": 9,
    "why": "'...towards our stated objective of exceeding 30% by FY 2030.' (dividend payout) has no topic keyword for dividends. Found in the final review while checking omitted commitments."
+  },
+  {
+   "symbol": "TCS",
+   "quarter": "Q3 FY26",
+   "page": 23,
+   "why": "'...we want to inch closer to our 26% to 28% band and we'll make all efforts to climb towards 26%.' is the CFO's answer on the page where the analyst's question was labelled; the filter did not propose the answer sentence. Found in the review of TCS-aspiration-26-28, 2026-10-27."
+  },
+  {
+   "symbol": "HDFCBANK",
+   "quarter": "Q3 FY26",
+   "page": 6,
+   "why": "'We said we will try and be in a range of somewhere between 90% to 96% in the year FY '26...' was not proposed by the filter; the explicit_numeric label on this page is the FY27 sentence that follows. Found in the review of HDFCBANK-ldr-85-90, 2026-10-27."
   }
  ],
  "items": [

@@ -105,8 +105,10 @@ def test_tcs_ebit_margin_is_computed_from_filed_values():
     assert [(x["period_end"], x["value"]) for x in o["series"]] == [
         ("2025-09-30", 25.18), ("2026-06-30", 23.96), ("2026-09-30", 23.98)]
     assert o["status"] == "pending"                               # Q4 FY27 is not reported: never "missed"
-    assert r["verdict"]["status"] == "not_reaffirmed"
-    assert [f["stance"] for f in r["follow_ups"]] == ["softened", "not_restated"]    # "uphill task" is the explicit one
+    # "uphill task" is cautionary context, not a revision of the 25% target: no decisive stance, so pending (review 2026-10-27)
+    assert r["verdict"]["status"] == "pending"
+    assert [f["stance"] for f in r["follow_ups"]] == ["not_restated", "not_restated"]
+    assert "uphill task" in r["interpretation"] and "MHP" in r["interpretation"]   # the risk note is kept
     assert r["horizon"]["stated"] is False                        # "exit" -> Q4 FY27 is FINN's reading, said so
 
 
@@ -123,12 +125,13 @@ def test_segment_and_days_guidance_is_never_compared_with_consolidated_numbers()
 def test_verdicts_on_the_real_records():
     v = {r["id"]: r["verdict"]["status"] for _, r in ALL}
     assert v == {
-        "TCS-ebit-exit-25": "not_reaffirmed", "TCS-aspiration-26-28": "unverifiable",
+        "TCS-ebit-exit-25": "pending", "TCS-aspiration-26-28": "unverifiable",
         "POLYCAB-wc-ebitda-11-13": "pending", "POLYCAB-fmeg-ebitda-8-10": "pending", "POLYCAB-capex-12-16bn": "pending",
         "POLYCAB-working-capital-days": "unverifiable", "POLYCAB-ehv-commissioning": "not_reaffirmed",
-        "POLYCAB-cw-growth-1.5x": "unverifiable", "POLYCAB-exports-10pct": "pending", "POLYCAB-epc-margin": "unverifiable",
+        "POLYCAB-cw-growth-1.5x": "pending", "POLYCAB-exports-10pct": "pending", "POLYCAB-epc-margin": "unverifiable",
         "POLYCAB-dividend-payout-30": "pending",
-        "HDFCBANK-ldr-85-90": "pending", "HDFCBANK-growth-vs-system-fy26": "unverifiable",
+        "HDFCBANK-ldr-85-90": "pending", "HDFCBANK-ldr-fy26-90-96": "unverifiable",
+        "HDFCBANK-growth-vs-system-fy26": "unverifiable",
         "HDFCBANK-growth-vs-system-fy27": "pending", "HDFCBANK-msme-growth": "unverifiable",
         "HDFCBANK-margin-change-2q": "unverifiable"}
     assert "met" not in v.values() and "missed" not in v.values()
@@ -137,8 +140,11 @@ def test_verdicts_on_the_real_records():
 def test_working_capital_record_keeps_the_original_range_and_its_revision():
     wc = next(r for _, r in ALL if r["id"] == "POLYCAB-working-capital-days")
     assert "50 to 55 days" in wc["statement"]["quote"] and (wc["target"]["low"], wc["target"]["high"]) == (50, 55)
-    first = wc["follow_ups"][0]
+    first = next(f for f in wc["follow_ups"] if f["stance"] in promises.DECISIVE)
     assert first["stance"] == "tightened" and "45 to 50 days" in first["quote"] and "50 to 55" in first["note"]
+    reported = [f for f in wc["follow_ups"] if f["stance"] == "reported"]
+    assert [f["quarter"] for f in reported] == ["Q3 FY26", "Q4 FY26", "Q1 FY27", "Q2 FY27"]   # management's own cycle, unchecked
+    assert all("not checked" in f["note"] for f in reported)
     assert wc["verdict"]["status"] == "unverifiable"                # undated, and days are not in the snapshot
 
 
@@ -148,12 +154,41 @@ def test_audit_notes_cite_the_statement_page_they_describe():
     assert any(m["symbol"] == "POLYCAB" and m["page"] == 8 and "exports" in m["why"] for m in AUDIT["known_misses"])
 
 
+def test_fy26_ldr_record_is_unverifiable_not_missed():
+    r = next(r for _, r in ALL if r["id"] == "HDFCBANK-ldr-fy26-90-96")
+    assert r["statement"]["page"] == 6 and "90% to 96% in the year FY '26" in r["statement"]["quote"]
+    assert r["statement"]["role"] == "management" and r["horizon"]["period_end"] == "2026-03-31"
+    assert r["outcome"]["method"] == "not_computed"
+    assert r["verdict"]["status"] == "unverifiable" and "horizon has passed" in r["verdict"]["reason"]
+    assert any(m["symbol"] == "HDFCBANK" and m["page"] == 6 for m in AUDIT["known_misses"])
+
+
+def test_fy27_ldr_clarification_is_recorded_without_changing_the_target():
+    r = next(r for _, r in ALL if r["id"] == "HDFCBANK-ldr-85-90")
+    assert (r["target"]["low"], r["target"]["high"]) == (85, 90) and r["statement"]["page"] == 6
+    p8 = [f for f in r["follow_ups"] if f["quarter"] == "Q3 FY26" and f["page"] == 8]
+    assert [f["stance"] for f in p8] == ["explained", "explained"]              # interpretation, never withdrawal
+    assert "broad range" in p8[0]["quote"] and p8[0]["prompted_by"]["role"] == "analyst"
+    assert not any("FY '26" in f["quote"] for f in p8)                         # FY26 figures stay on the FY26 record
+    assert r["verdict"]["status"] == "pending"
+
+
+def test_horizon_and_chronology_corrections_from_the_review():
+    by = {r["id"]: r for _, r in ALL}
+    cw = by["POLYCAB-cw-growth-1.5x"]
+    assert cw["horizon"]["stated"] is True and cw["horizon"]["period_end"] == "2030-03-31"
+    assert any("until FY30" in f["quote"] for f in cw["follow_ups"])            # the horizon is quoted, not inferred
+    asp = by["TCS-aspiration-26-28"]
+    assert (asp["statement"]["quarter"], asp["statement"]["page"]) == ("Q3 FY26", 23)
+    assert asp["statement"]["speaker"] == "Samir Seksaria" and asp["statement"]["role"] == "management"
+
+
 def test_audit_labels_cover_every_candidate():
     a = LEDGER["audit"]
     assert a["candidates"] == a["labelled"] == 164
     assert a["unlabelled_candidates"] == [] and a["labels_without_candidate"] == []
     assert a["labels"]["analyst"] == 44
-    assert len(a["known_misses"]) == 5
+    assert len(a["known_misses"]) == 7
     assert a["labels"] == {"analyst": 44, "explicit_numeric": 35, "measurable_qualitative": 14, "commentary": 29,
                            "actual_report": 12, "not_guidance": 30}
 
